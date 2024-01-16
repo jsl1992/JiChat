@@ -59,12 +59,18 @@ public class CommonResult<T> implements Serializable {
     public static <T> CommonResult<T> error(ErrorCodeEnum errorCodeEnum) {
         return error(errorCodeEnum.getCode(), errorCodeEnum.getMsg());
     }
+    public static <Void> CommonResult<Void> success() {
+        CommonResult<Void> result = new CommonResult<>();
+        result.code = ErrorCodeEnum.SUCCESS.getCode();
+        result.msg = "success";
+        return result;
+    }
 
     public static <T> CommonResult<T> success(T data) {
         CommonResult<T> result = new CommonResult<>();
         result.code = ErrorCodeEnum.SUCCESS.getCode();
         result.data = data;
-        result.msg = "";
+        result.msg = "success";
         return result;
     }
 

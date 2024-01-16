@@ -15,6 +15,9 @@
 
     <modules>
         <module>common-framework</module>
+        <module>jichat-spring-boot-starter-web</module>
+        <module>jichat-spring-boot-starter-swagger</module>
+        <module>jichat-spring-boot-starter-mybatis</module>
     </modules>
 
 
