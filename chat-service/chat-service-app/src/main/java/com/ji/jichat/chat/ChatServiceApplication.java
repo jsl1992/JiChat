@@ -3,6 +3,7 @@ package com.ji.jichat.chat;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 /**
  * 启动程序
@@ -11,6 +12,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @author xiangan
  */
 @SpringBootApplication
+@EnableDiscoveryClient
 @MapperScan("com.ji.mall.product.mapper")
 public class ChatServiceApplication {
 

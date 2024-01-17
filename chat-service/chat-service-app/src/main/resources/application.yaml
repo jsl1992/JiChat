@@ -6,7 +6,7 @@ server:
 spring:
   # Application 的配置项
   application:
-    name: management-web
+    name: chat-service
   # Profile 的配置项
   profiles:
     active: dev
@@ -17,8 +17,9 @@ spring:
 
   # Swagger 配置项
 swagger:
-  title: JiChat Chat后台-接口
-  description: 提供管理员管理的所有功能
+  title: JiChat Chat-接口
+  description: 实现客户端和服务端连接功能
+  author: ji
   version: 1.0.0
   base-package: com.ji.jichat.chat.controller
 

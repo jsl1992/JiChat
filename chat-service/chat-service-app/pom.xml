@@ -11,42 +11,32 @@
 
     <artifactId>chat-service-app</artifactId>
 
-  <dependencies>
-      <dependency>
-          <groupId>com.ji.jichat</groupId>
-          <artifactId>chat-service-api</artifactId>
-          <version>1.0</version>
-      </dependency>
+    <dependencies>
+        <dependency>
+            <groupId>com.ji.jichat</groupId>
+            <artifactId>chat-service-api</artifactId>
+            <version>1.0</version>
+        </dependency>
 
-      <dependency>
-          <groupId>com.ji.jichat</groupId>
-          <artifactId>jichat-spring-boot-starter-web</artifactId>
-          <version>1.0</version>
-      </dependency>
+        <dependency>
+            <groupId>com.ji.jichat</groupId>
+            <artifactId>jichat-spring-boot-starter-web</artifactId>
+            <version>1.0</version>
+        </dependency>
 
-      <dependency>
-          <groupId>com.ji.jichat</groupId>
-          <artifactId>jichat-spring-boot-starter-swagger</artifactId>
-          <version>1.0</version>
-      </dependency>
 
-      <dependency>
-          <groupId>com.ji.jichat</groupId>
-          <artifactId>jichat-spring-boot-starter-mybatis</artifactId>
-          <version>1.0</version>
-      </dependency>
+        <dependency>
+            <groupId>com.ji.jichat</groupId>
+            <artifactId>jichat-spring-boot-starter-mybatis</artifactId>
+            <version>1.0</version>
+        </dependency>
 
-      <dependency>
-          <groupId>com.ji.jichat</groupId>
-          <artifactId>jichat-spring-boot-starter-mybatis</artifactId>
-          <version>1.0</version>
-      </dependency>
 
-      <dependency>
-          <groupId>io.netty</groupId>
-          <artifactId>netty-all</artifactId>
-      </dependency>
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-all</artifactId>
+        </dependency>
 
-  </dependencies>
+    </dependencies>
 
 </project>

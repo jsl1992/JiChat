@@ -10,15 +10,10 @@ spring:
     nacos:
       # Nacos 服务发现与注册配置
       discovery:
-        namespace: dev # Nacos 命名空间
-        server-addr: 192.168.1.90:8848
+        namespace: dev_1024 # Nacos 命名空间
+        server-addr: 192.168.137.130:8848
 
-# Dubbo 配置项
-dubbo:
-  # Dubbo 注册中心
-  registry:
-    #    address: spring-cloud://400-infra.server.iocoder.cn:8848 # 指定 Dubbo 服务注册中心的地址
-    address: nacos://192.168.1.90:8848?namespace=dev # 指定 Dubbo 服务注册中心的地址
+
 
 # XXL-Job 配置项
 xxl:
