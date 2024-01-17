@@ -1,0 +1,33 @@
+# 服务器的配置项
+server:
+  port: 18080
+  servlet:
+    context-path: /chat-api/
+spring:
+  # Application 的配置项
+  application:
+    name: management-web
+  # Profile 的配置项
+  profiles:
+    active: dev
+    # Spring Boot 2.1 需要设定
+    allow-bean-definition-overriding: true
+
+
+
+  # Swagger 配置项
+swagger:
+  title: JiChat Chat后台-接口
+  description: 提供管理员管理的所有功能
+  version: 1.0.0
+  base-package: com.ji.jichat.chat.controller
+
+
+#tcp服务配置
+tcpServer:
+  tcpPort: 7066
+  httpPort: ${server.port}
+  bossThreadCount: 1
+  # workerThreadCount: 4
+  keepalive: true
+  backlog: 32768

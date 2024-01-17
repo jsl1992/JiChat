@@ -1,4 +1,4 @@
-package com.ji.jichat.config;
+package com.ji.jichat.swagger.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 

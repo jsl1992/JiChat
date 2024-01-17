@@ -3,7 +3,7 @@ package com.ji.jichat.web.util;
 
 
 import com.ji.jichat.web.core.constant.CommonMallConstants;
-import com.ji.mall.common.framework.vo.CommonResult;
+import framework.pojo.CommonResult;
 
 import javax.servlet.ServletRequest;
 import java.util.Date;

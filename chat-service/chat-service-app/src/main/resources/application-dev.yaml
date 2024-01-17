@@ -1,0 +1,36 @@
+spring:
+  # 数据源配置项
+  datasource:
+    url: jdbc:mysql://localhost:3306/jimall_system?useSSL=false&useUnicode=true&characterEncoding=UTF-8&serverTimezone=CTT
+    driver-class-name: com.mysql.jdbc.Driver
+    username: root
+    password: root
+
+  cloud:
+    nacos:
+      # Nacos 服务发现与注册配置
+      discovery:
+        namespace: dev # Nacos 命名空间
+        server-addr: 192.168.1.90:8848
+
+# Dubbo 配置项
+dubbo:
+  # Dubbo 注册中心
+  registry:
+    #    address: spring-cloud://400-infra.server.iocoder.cn:8848 # 指定 Dubbo 服务注册中心的地址
+    address: nacos://192.168.1.90:8848?namespace=dev # 指定 Dubbo 服务注册中心的地址
+
+# XXL-Job 配置项
+xxl:
+  job:
+    admin:
+      addresses: http://127.0.0.1:9099/
+    executor:
+      appname: ${spring.application.name}
+      logpath: /data/applogs/xxl-job/
+    accessToken:
+
+
+
+outside-ip: 192.168.77.130
+inner-ip: 192.168.77.130

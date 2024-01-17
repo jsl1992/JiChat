@@ -1,4 +1,4 @@
-package com.ji.jichat.config;
+package com.ji.jichat.swagger.config;
 
 import com.github.xiaoymin.knife4j.spring.annotations.EnableKnife4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;

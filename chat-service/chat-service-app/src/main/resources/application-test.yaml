@@ -1,0 +1,81 @@
+spring:
+  # 数据源配置项
+  datasource:
+    url: jdbc:mysql://localhost:3306/jimall_system?useSSL=false&useUnicode=true&characterEncoding=UTF-8&serverTimezone=CTT
+    driver-class-name: com.mysql.jdbc.Driver
+    username: root
+    password: root
+
+  cloud:
+    nacos:
+      # Nacos 服务发现与注册配置
+      discovery:
+        namespace: local # Nacos 命名空间
+        server-addr: 192.168.150.138:8848
+  # Redis 配置
+  redis:
+    host: localhost
+    port: 6379
+    database: 0
+
+  # 配置真实数据源
+  shardingsphere:
+    datasource:
+      # 配置第 1 个数据源
+      ds0:
+        driver-class-name: com.mysql.jdbc.Driver
+        jdbc-url: jdbc:mysql://localhost:3306/jimall_system?useSSL=false&useUnicode=true&characterEncoding=UTF-8&serverTimezone=CTT
+        password: root
+        type: com.zaxxer.hikari.HikariDataSource
+        username: root
+#      ds1:
+#        driver-class-name: com.mysql.jdbc.Driver
+#        jdbc-url: jdbc:mysql://localhost:3306/ds1
+#        password: root
+#        type: com.zaxxer.hikari.HikariDataSource
+#        username: root
+      names: ds0
+    rules:
+      sharding:
+        sharding-algorithms:
+          database_inline:
+            props:
+              algorithm-expression: ds_${user_id % 2}
+            type: INLINE
+          table_inline:
+            props:
+              algorithm-expression: t_order_${order_id % 2}
+            type: INLINE
+        tables:
+          t_order:
+            actual-data-nodes: ds$->{0..1}.t_order$->{0..1}
+            database-strategy:
+              standard:
+                sharding-algorithm-name: database_inline
+                sharding-column: user_id
+            table-strategy:
+              standard:
+                sharding-algorithm-name: table_inline
+                sharding-column: order_id
+#    props:
+#      sql:
+#        show: true
+
+
+# Dubbo 配置项
+dubbo:
+  # Dubbo 注册中心
+  registry:
+    #    address: spring-cloud://400-infra.server.iocoder.cn:8848 # 指定 Dubbo 服务注册中心的地址
+    address: nacos://192.168.150.138:8848?namespace=local # 指定 Dubbo 服务注册中心的地址
+
+
+# XXL-Job 配置项
+xxl:
+  job:
+#    enabled: true # 本地开发时，关闭 XXL-Job
+    admin:
+      addresses: http://127.0.0.1:8080/xxl-job-admin
+    executor:
+      appname: ${spring.application.name}
+    accessToken:
