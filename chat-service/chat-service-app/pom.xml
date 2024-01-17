@@ -42,6 +42,12 @@
             <artifactId>netty-all</artifactId>
         </dependency>
 
+        <!-- Spring AMQP -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-amqp</artifactId>
+        </dependency>
+
     </dependencies>
 
 </project>

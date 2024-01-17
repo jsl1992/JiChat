@@ -15,15 +15,11 @@ spring:
 
 
 
-# XXL-Job 配置项
-xxl:
-  job:
-    admin:
-      addresses: http://127.0.0.1:9099/
-    executor:
-      appname: ${spring.application.name}
-      logpath: /data/applogs/xxl-job/
-    accessToken:
+  rabbitmq:
+    host: 192.168.137.130
+    port: 5672
+    username: dream
+    password: 123456
 
 
 
