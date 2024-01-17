@@ -11,9 +11,38 @@
 
     <artifactId>user-service-app</artifactId>
 
-    <properties>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
-    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>com.ji.jichat</groupId>
+            <artifactId>chat-service-api</artifactId>
+            <version>1.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.ji.jichat</groupId>
+            <artifactId>jichat-spring-boot-starter-web</artifactId>
+            <version>1.0</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>com.ji.jichat</groupId>
+            <artifactId>jichat-spring-boot-starter-mybatis</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.ji.jichat</groupId>
+            <artifactId>jichat-spring-boot-starter-swagger</artifactId>
+            <version>1.0</version>
+        </dependency>
+
+
+        <!-- Spring AMQP -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-amqp</artifactId>
+        </dependency>
+
+    </dependencies>
 
 </project>

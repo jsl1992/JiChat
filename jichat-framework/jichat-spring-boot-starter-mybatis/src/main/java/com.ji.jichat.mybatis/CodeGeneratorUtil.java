@@ -1,4 +1,4 @@
-package com.ji.common.mybatis;
+package com.ji.jichat.mybatis;
 
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.generator.AutoGenerator;
@@ -29,14 +29,14 @@ public class CodeGeneratorUtil {
     private static final String author = "jisl";
 
     //数据库
-    private static final String url = "jdbc:mysql://192.168.137.130:3306/jichat_user?allowPublicKeyRetrieval=true&useSSL=false";
+    private static final String url = "jdbc:mysql://192.168.137.130:3306/jichat_user?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8";
     private static final String driverName = "com.mysql.cj.jdbc.Driver";
     private static final String userName = "root";
     private static final String password = "root";
     //需要生成的表(多张表用","分隔,例如:"t_user,t_role")
     private static final String tableNames = "t_user,t_device";
     //模块地址
-    private static final String module_path = "/chat-service/chat-service-app";
+    private static final String module_path = "/user-service/user-service-app";
     //包名
     private static final String package_name = "com.ji.jichat.user";
 
@@ -144,7 +144,7 @@ public class CodeGeneratorUtil {
         // 配置模板
         TemplateConfig templateConfig = new TemplateConfig();
         //控制 不生成 controller
-        templateConfig.setController("").setXml(null);
+//        templateConfig.setController("").setXml(null);
         mpg.setTemplate(templateConfig);
 
         // 5.策略配置
