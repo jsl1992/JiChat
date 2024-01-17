@@ -2,7 +2,6 @@ package framework.pojo;
 
 
 import cn.hutool.core.lang.Assert;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import framework.enums.ErrorCodeEnum;
 import framework.exception.ServiceException;
 import lombok.Data;
@@ -35,18 +34,6 @@ public class CommonResult<T> implements Serializable {
      */
     private String msg;
 
-    /**
-     * 将传入的 result 对象，转换成另外一个泛型结果的对象
-     * <p>
-     * 因为 A 方法返回的 CommonResult 对象，不满足调用其的 B 方法的返回，所以需要进行转换。
-     *
-     * @param result 传入的 result 对象
-     * @param <T>    返回的泛型
-     * @return 新的 CommonResult 对象
-     */
-    public static <T> CommonResult<T> error(CommonResult<?> result) {
-        return error(result.getCode(), result.getMsg());
-    }
 
     public static <T> CommonResult<T> error(Integer code, String message) {
         Assert.isTrue(!Objects.equals(ErrorCodeEnum.SUCCESS.getCode(), code), "code 必须是错误的！");
@@ -59,6 +46,7 @@ public class CommonResult<T> implements Serializable {
     public static <T> CommonResult<T> error(ErrorCodeEnum errorCodeEnum) {
         return error(errorCodeEnum.getCode(), errorCodeEnum.getMsg());
     }
+
     public static <Void> CommonResult<Void> success() {
         CommonResult<Void> result = new CommonResult<>();
         result.code = ErrorCodeEnum.SUCCESS.getCode();
@@ -74,18 +62,12 @@ public class CommonResult<T> implements Serializable {
         return result;
     }
 
-    public static boolean isSuccess(Integer code) {
+    private static boolean isSuccess(Integer code) {
         return Objects.equals(code, ErrorCodeEnum.SUCCESS.getCode());
     }
 
-    @JsonIgnore // 避免 jackson 序列化
-    public boolean isSuccess() {
+    private boolean isSuccess() {
         return isSuccess(code);
-    }
-
-    @JsonIgnore // 避免 jackson 序列化
-    public boolean isError() {
-        return !isSuccess();
     }
 
     // ========= 和 Exception 异常体系集成 =========
@@ -101,18 +83,5 @@ public class CommonResult<T> implements Serializable {
         throw new ServiceException(code, msg);
     }
 
-    /**
-     * 判断是否有异常。如果有，则抛出 {@link ServiceException} 异常
-     * 如果没有，则返回 {@link #data} 数据
-     */
-    @JsonIgnore // 避免 jackson 序列化
-    public T getCheckedData() {
-        checkError();
-        return data;
-    }
-
-    public static <T> CommonResult<T> error(ServiceException serviceException) {
-        return error(serviceException.getCode(), serviceException.getMessage());
-    }
 
 }

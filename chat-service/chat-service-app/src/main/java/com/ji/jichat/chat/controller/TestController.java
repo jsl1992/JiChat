@@ -1,35 +1,24 @@
 package com.ji.jichat.chat.controller;
 
 
-import com.alibaba.fastjson.JSONObject;
-
 import framework.pojo.CommonResult;
-import org.springframework.web.bind.annotation.PostMapping;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
-
 @RestController
+@Api(tags = {"测试Controller "})
 @RequestMapping("/test")
 public class TestController {
 
 
-    @PostMapping("/test")
-    public CommonResult<Void> test() {
-        return CommonResult.success();
+    @GetMapping("/test")
+    @ApiOperation("test")
+    public CommonResult<String> test() {
+        return CommonResult.success("成功");
     }
 
-    public static void main(String[] args) {
-        String aa = "12asfsf";
-        String secretkey = "D829954D2335CD47A31C41A774B934DC";
-        String iv = "43695068911831192233933895229435";
-        try {
-            String b = iv;
 
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 }
