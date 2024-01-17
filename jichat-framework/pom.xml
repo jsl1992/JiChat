@@ -6,20 +6,19 @@
     <parent>
         <artifactId>jichat-parent</artifactId>
         <groupId>com.ji.jichat</groupId>
-        <version>${revision}</version>
+        <version>1.0</version>
     </parent>
-    <artifactId>jichat-common</artifactId>
-    <version>${revision}</version>
+    <artifactId>jichat-framework</artifactId>
+    <version>1.0</version>
     <packaging>pom</packaging>
 
 
     <modules>
-        <module>common-framework</module>
+        <module>jichat-common</module>
         <module>jichat-spring-boot-starter-web</module>
         <module>jichat-spring-boot-starter-swagger</module>
         <module>jichat-spring-boot-starter-mybatis</module>
     </modules>
-
 
 
 </project>

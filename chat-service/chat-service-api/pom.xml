@@ -5,7 +5,7 @@
     <parent>
         <artifactId>chat-service</artifactId>
         <groupId>com.ji.jichat</groupId>
-        <version>0.0.1</version>
+        <version>1.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -14,8 +14,8 @@
     <dependencies>
         <dependency>
             <groupId>com.ji.jichat</groupId>
-            <artifactId>common-framework</artifactId>
-            <version>0.0.1</version>
+            <artifactId>jichat-common</artifactId>
+            <version>1.0</version>
         </dependency>
 
         <!-- 工具类相关 -->

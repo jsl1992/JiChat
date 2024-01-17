@@ -6,7 +6,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.ji.jichat</groupId>
     <artifactId>jichat-dependencies</artifactId>
-    <version>${revision}</version>
+    <version>1.0</version>
     <packaging>pom</packaging>
 
     <name>JiChat Dependencies</name>
@@ -15,7 +15,6 @@
 
     <!-- 统一依赖管理 -->
     <properties>
-        <revision>0.0.1</revision>
         <spring.boot.version>2.2.4.RELEASE</spring.boot.version>
         <spring.cloud.version>Hoxton.SR1</spring.cloud.version>
         <spring.cloud.alibaba.version>2.2.1.RELEASE</spring.cloud.alibaba.version>

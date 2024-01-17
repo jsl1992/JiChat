@@ -5,7 +5,7 @@
     <parent>
         <artifactId>chat-service</artifactId>
         <groupId>com.ji.jichat</groupId>
-        <version>0.0.1</version>
+        <version>1.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -15,31 +15,31 @@
       <dependency>
           <groupId>com.ji.jichat</groupId>
           <artifactId>chat-service-api</artifactId>
-          <version>0.0.1</version>
+          <version>1.0</version>
       </dependency>
 
       <dependency>
           <groupId>com.ji.jichat</groupId>
           <artifactId>jichat-spring-boot-starter-web</artifactId>
-          <version>0.0.1</version>
+          <version>1.0</version>
       </dependency>
 
       <dependency>
           <groupId>com.ji.jichat</groupId>
           <artifactId>jichat-spring-boot-starter-swagger</artifactId>
-          <version>0.0.1</version>
+          <version>1.0</version>
       </dependency>
 
       <dependency>
           <groupId>com.ji.jichat</groupId>
           <artifactId>jichat-spring-boot-starter-mybatis</artifactId>
-          <version>0.0.1</version>
+          <version>1.0</version>
       </dependency>
 
       <dependency>
           <groupId>com.ji.jichat</groupId>
           <artifactId>jichat-spring-boot-starter-mybatis</artifactId>
-          <version>0.0.1</version>
+          <version>1.0</version>
       </dependency>
 
       <dependency>

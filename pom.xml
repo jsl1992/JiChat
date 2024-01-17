@@ -13,7 +13,7 @@
     <groupId>com.ji.jichat</groupId>
     <artifactId>jichat-parent</artifactId>
     <packaging>pom</packaging>
-    <version>${revision}</version>
+    <version>1.0</version>
 
     <name>JiCHat</name>
     <description>JiCHat IM开源产品</description>
@@ -27,7 +27,6 @@
 
     <!-- 属性 -->
     <properties>
-        <revision>0.0.1</revision>
         <java.version>1.8</java.version>
         <!-- Maven 相关 -->
         <maven.compiler.source>${java.version}</maven.compiler.source>
@@ -43,10 +42,11 @@
     <modules>
 
 
-        <module>jichat-common</module>
+        <module>jichat-framework</module>
         <module>chat-service</module>
         <module>user-service</module>
         <module>jichat-dependencies</module>
+        <module>jichat-gateway</module>
     </modules>
 
     <dependencyManagement>
@@ -54,7 +54,7 @@
             <dependency>
                 <groupId>com.ji.jichat</groupId>
                 <artifactId>jichat-dependencies</artifactId>
-                <version>${revision}</version>
+                <version>1.0</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
