@@ -26,19 +26,19 @@ public class CodeGeneratorUtil {
     //示例值
 
     //作者
-    private static final String author = "ji";
+    private static final String author = "jisl";
 
     //数据库
-    private static final String url = "jdbc:mysql://localhost:3306/jimall_product?useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=UTC";
+    private static final String url = "jdbc:mysql://192.168.137.130:3306/jichat_user?allowPublicKeyRetrieval=true&useSSL=false";
     private static final String driverName = "com.mysql.cj.jdbc.Driver";
     private static final String userName = "root";
     private static final String password = "root";
     //需要生成的表(多张表用","分隔,例如:"t_user,t_role")
-    private static final String tableNames = "product_spu,product_sku,product_attr_key,product_attr_value,product_category,product_brand";
+    private static final String tableNames = "t_user,t_device";
     //模块地址
-    private static final String module_path = "/product-service/product-service-app";
+    private static final String module_path = "/chat-service/chat-service-app";
     //包名
-    private static final String package_name = "com.ji.mall.product";
+    private static final String package_name = "com.ji.jichat.user";
 
 
     public static void main(String[] args) {
