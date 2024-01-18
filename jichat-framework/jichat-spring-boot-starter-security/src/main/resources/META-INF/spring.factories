@@ -1,2 +1,3 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  com.ji.jichat.security.admin.config.SecurityAutoConfiguration
+  com.ji.jichat.security.admin.config.SecurityAutoConfiguration,\
+  com.ji.jichat.security.admin.config.SecurityRpcAutoConfiguration

@@ -10,8 +10,10 @@ spring:
   # Profile 的配置项
   profiles:
     active: dev
-    # Spring Boot 2.1 需要设定
-    allow-bean-definition-overriding: true
+
+  main:
+    allow-circular-references: true # 允许循环依赖，因为项目是三层架构，无法避免这个情况。
+    allow-bean-definition-overriding: true # 允许 Bean 覆盖，例如说 Dubbo 或者 Feign 等会存在重复定义的服务
 
 # MyBatis Plus 配置项
 mybatis-plus:

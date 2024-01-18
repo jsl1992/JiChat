@@ -2,19 +2,18 @@ package com.ji.jichat.user.controller;
 
 
 import com.ji.jichat.common.annotions.RequiresNone;
+import com.ji.jichat.common.pojo.CommonResult;
 import com.ji.jichat.user.api.UserRpc;
 import com.ji.jichat.user.api.dto.AuthLoginDTO;
 import com.ji.jichat.user.api.dto.UserRegisterDTO;
 import com.ji.jichat.user.api.vo.AuthLoginVO;
 import com.ji.jichat.user.api.vo.LoginUser;
 import com.ji.jichat.user.service.IUserService;
-import com.ji.jichat.common.pojo.CommonResult;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import javax.annotation.security.PermitAll;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
