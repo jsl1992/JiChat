@@ -3,6 +3,7 @@ package com.ji.jichat.user.service;
 import com.ji.jichat.user.api.dto.AuthLoginDTO;
 import com.ji.jichat.user.api.dto.UserRegisterDTO;
 import com.ji.jichat.user.api.vo.AuthLoginVO;
+import com.ji.jichat.user.api.vo.LoginUser;
 import com.ji.jichat.user.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -21,4 +22,6 @@ public interface IUserService extends IService<User> {
     AuthLoginVO refreshToken(String refreshToken);
 
     void register(UserRegisterDTO dto);
+
+    LoginUser getLoginUserByLoginKey(String loginKey);
 }

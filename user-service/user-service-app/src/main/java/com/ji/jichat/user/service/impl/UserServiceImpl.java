@@ -44,7 +44,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     private IDeviceService deviceService;
 
     @Resource
-    private RedisTemplate<String, Object> redisTemplate;
+    private RedisTemplate<String, LoginUser> redisTemplate;
 
     @Override
     public AuthLoginVO login(AuthLoginDTO loginDTO) {
@@ -101,7 +101,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         if (Objects.isNull(loginKey)) {
             throw new ServiceException("无效的刷新令牌");
         }
-        LoginUser loginUser = (LoginUser) redisTemplate.opsForValue().get(CacheConstant.LOGIN_USER + loginKey);
+        LoginUser loginUser = redisTemplate.opsForValue().get(CacheConstant.LOGIN_USER + loginKey);
         if (Objects.isNull(loginUser)) {
             throw new ServiceException("无效的刷新令牌");
         }
@@ -126,6 +126,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
                 .createTime(new Date()).createUser(dto.getUsername()).updateUser(dto.getUsername()).updateTime(new Date())
                 .build();
         save(user);
+    }
+
+    @Override
+    public LoginUser getLoginUserByLoginKey(String loginKey) {
+        final LoginUser loginUser = redisTemplate.opsForValue().get(CacheConstant.LOGIN_USER + loginKey);
+        return loginUser;
     }
 
     private void loginDevice(AuthLoginDTO loginDTO, User user) {

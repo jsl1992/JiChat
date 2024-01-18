@@ -6,6 +6,7 @@ public enum ErrorCodeEnum {
     // ========== 客户端错误段 ==========
     BAD_REQUEST(400, "请求参数不正确"),
     UNAUTHORIZED(401, "账号未登录"),
+    TOKEN_EXPIRES(402, "token过期"),
     FORBIDDEN(403, "没有该操作权限"),
     NOT_FOUND(404, "请求未找到"),
     METHOD_NOT_ALLOWED(405, "请求方法不正确"),

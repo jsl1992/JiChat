@@ -2,9 +2,11 @@ package com.ji.jichat.user.controller;
 
 
 import com.ji.jichat.common.annotions.RequiresNone;
+import com.ji.jichat.user.api.UserRpc;
 import com.ji.jichat.user.api.dto.AuthLoginDTO;
 import com.ji.jichat.user.api.dto.UserRegisterDTO;
 import com.ji.jichat.user.api.vo.AuthLoginVO;
+import com.ji.jichat.user.api.vo.LoginUser;
 import com.ji.jichat.user.service.IUserService;
 import com.ji.jichat.common.pojo.CommonResult;
 import io.swagger.annotations.ApiImplicitParam;
@@ -26,7 +28,7 @@ import javax.validation.Valid;
  */
 @RestController
 @RequestMapping("/user")
-public class UserController {
+public class UserController implements UserRpc {
 
     @Resource
     private IUserService userService;
@@ -66,4 +68,8 @@ public class UserController {
     }
 
 
+    @Override
+    public CommonResult<LoginUser> getLoginUserByLoginKey(String loginKey) {
+        return CommonResult.success(userService.getLoginUserByLoginKey(loginKey));
+    }
 }

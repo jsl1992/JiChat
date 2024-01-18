@@ -83,5 +83,10 @@ public class CommonResult<T> implements Serializable {
         throw new ServiceException(code, msg);
     }
 
+    public T getCheckedData() {
+        checkError();
+        return data;
+    }
+
 
 }

@@ -20,6 +20,12 @@
 
         <dependency>
             <groupId>com.ji.jichat</groupId>
+            <artifactId>user-service-api</artifactId>
+            <version>1.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.ji.jichat</groupId>
             <artifactId>jichat-spring-boot-starter-web</artifactId>
             <version>1.0</version>
         </dependency>
