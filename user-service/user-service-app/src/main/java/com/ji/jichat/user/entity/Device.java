@@ -3,8 +3,8 @@ package com.ji.jichat.user.entity;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.util.Date;
 import java.io.Serializable;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+
+import lombok.*;
 
 /**
  * <p>
@@ -17,6 +17,9 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @TableName("t_device")
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Device implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -37,7 +40,7 @@ public class Device implements Serializable {
     private String deviceName;
 
     /**
-     * 设备类型（0手机 1电脑 2平板）
+     * 设备类型（1手机 2电脑 3平板）
      */
     private Integer deviceType;
 

@@ -1,8 +1,7 @@
 package com.ji.jichat.chat.mq.consumer;
 
-import framework.constants.RabbitMQConstants;
+import com.ji.jichat.common.constants.RabbitMQConstants;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component

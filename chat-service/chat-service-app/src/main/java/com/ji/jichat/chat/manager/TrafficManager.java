@@ -6,7 +6,7 @@ import com.ji.jichat.chat.enums.CommandCodeEnum;
 import com.ji.jichat.chat.enums.MessageTypeEnum;
 import com.ji.jichat.chat.netty.ChannelRepository;
 import com.ji.jichat.chat.utils.ByteUtil;
-import framework.exception.ServiceException;
+import com.ji.jichat.common.exception.ServiceException;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFutureListener;
 import lombok.extern.slf4j.Slf4j;

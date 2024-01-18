@@ -15,13 +15,14 @@ spring:
 
 # MyBatis Plus 配置项
 mybatis-plus:
-  #  configuration:
-  #    map-underscore-to-camel-case: true # 虽然默认为 true ，但是还是显示去指定下。
+  configuration:
+    map-underscore-to-camel-case: true # 虽然默认为 true ，但是还是显示去指定下。
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   global-config:
     db-config:
-      id-type: auto
       logic-delete-value: null # 逻辑已删除值(默认为 1)
       logic-not-delete-value: 0 # 逻辑未删除值(默认为 0)
+      logic-delete-field: del_flag
   mapper-locations: classpath:mapper/*.xml
   # 实体类扫描路径
   type-aliases-package: com.ji.jichat.user.entity

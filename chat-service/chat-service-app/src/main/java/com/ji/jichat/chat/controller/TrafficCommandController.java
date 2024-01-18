@@ -1,7 +1,7 @@
 package com.ji.jichat.chat.controller;
 
 
-import framework.pojo.CommonResult;
+import com.ji.jichat.common.pojo.CommonResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;

@@ -2,7 +2,7 @@ package com.ji.jichat.chat.controller;
 
 
 import com.ji.jichat.chat.mq.producer.MessageProducer;
-import framework.pojo.CommonResult;
+import com.ji.jichat.common.pojo.CommonResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.GetMapping;

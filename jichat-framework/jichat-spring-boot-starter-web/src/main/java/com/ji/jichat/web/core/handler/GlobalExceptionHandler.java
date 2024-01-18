@@ -1,9 +1,9 @@
 package com.ji.jichat.web.core.handler;
 
 
-import framework.enums.ErrorCodeEnum;
-import framework.exception.ServiceException;
-import framework.pojo.CommonResult;
+import com.ji.jichat.common.enums.ErrorCodeEnum;
+import com.ji.jichat.common.exception.ServiceException;
+import com.ji.jichat.common.pojo.CommonResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -151,7 +151,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(value = Exception.class)
     public CommonResult globalExceptionHandler(HttpServletRequest req, Exception ex) {
-        // 返回 ERROR CommonResult
+        logger.info("[globalExceptionHandler]", ex);
         return CommonResult.error(ErrorCodeEnum.UNKNOWN.getCode(), ex.getMessage());
     }
 

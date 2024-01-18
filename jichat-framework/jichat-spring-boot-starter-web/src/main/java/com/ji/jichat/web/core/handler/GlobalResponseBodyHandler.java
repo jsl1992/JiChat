@@ -3,7 +3,7 @@ package com.ji.jichat.web.core.handler;
 
 import com.ji.jichat.web.util.CommonWebUtil;
 
-import framework.pojo.CommonResult;
+import com.ji.jichat.common.pojo.CommonResult;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
 import org.springframework.http.server.ServerHttpRequest;

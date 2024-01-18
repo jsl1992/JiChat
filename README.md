@@ -5,4 +5,5 @@ JiChat IM
 
 文档地址:
     nacos:http://192.168.137.130:8848/
-    swagger: http://localhost:18080/chat-api/doc.html#/home
+    chat swagger: http://localhost:18080/chat-api/doc.html#/home
+    user swagger: http://localhost:18081/user-api/doc.html#/home

@@ -1,6 +1,6 @@
 package com.ji.jichat.chat.mq;
 
-import framework.constants.RabbitMQConstants;
+import com.ji.jichat.common.constants.RabbitMQConstants;
 import org.springframework.amqp.core.Queue;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
