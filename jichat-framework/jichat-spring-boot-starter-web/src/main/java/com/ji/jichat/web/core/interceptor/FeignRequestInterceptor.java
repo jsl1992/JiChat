@@ -1,6 +1,7 @@
 package com.ji.jichat.web.core.interceptor;
 
 
+import com.ji.jichat.web.core.constant.CommonWebConstants;
 import com.ji.jichat.web.core.constant.TraceSpanContext;
 import com.ji.jichat.web.util.HttpContextUtil;
 import feign.RequestInterceptor;
@@ -21,9 +22,9 @@ public class FeignRequestInterceptor implements RequestInterceptor {
         {
             HttpServletRequest httpServletRequest = HttpContextUtil.getHttpServletRequest();
             if (Objects.nonNull(httpServletRequest)) {
-                String authentication = httpServletRequest.getHeader("Authorization");
+                String authentication = httpServletRequest.getHeader(CommonWebConstants.AUTHORIZATION);
                 if (Objects.nonNull(authentication)) {
-                    requestTemplate.header("Authorization", authentication);
+                    requestTemplate.header(CommonWebConstants.AUTHORIZATION, authentication);
                 }
                 requestTemplate.header(TraceSpanContext.TRACE_ID, TraceSpanContext.getTriceId());
             }

@@ -2,12 +2,12 @@ package com.ji.jichat.security.admin.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-@ConfigurationProperties("mall.security.admin")
+@ConfigurationProperties("security.admin")
 public class SecurityProperties {
 
     private static final String[] DEFAULT_IGNORE_PATHS = new String[]{
             // Swagger 相关
-            "/doc.html", "/swagger-resources",  "/swagger-resources/**", "/webjars/**",
+            "/doc.html", "/swagger-resources", "/swagger-resources/**", "/webjars/**",
             // Actuator 相关
     };
 

@@ -15,4 +15,7 @@ public interface CommonWebConstants {
     String REQUEST_ATTR_ACCESS_START_TIME = "JiChat_access_start_time";
 
 
+    String AUTHORIZATION = "Authorization";
+
+
 }

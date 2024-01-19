@@ -4,16 +4,11 @@ package com.ji.jichat.web.config;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
-
 import com.ji.jichat.web.core.aspect.AccessLogAspect;
 import com.ji.jichat.web.core.handler.GlobalExceptionHandler;
 import com.ji.jichat.web.core.handler.GlobalResponseBodyHandler;
-import com.ji.jichat.web.core.interceptor.AccessLogInterceptor;
 import com.ji.jichat.web.core.interceptor.FeignRequestInterceptor;
 import com.ji.jichat.web.core.servlet.CorsFilter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -22,7 +17,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.nio.charset.Charset;
@@ -38,7 +32,6 @@ import java.util.List;
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
 public class CommonWebAutoConfiguration implements WebMvcConfigurer {
 
-    private Logger logger = LoggerFactory.getLogger(getClass());
 
     // ========== 全局处理器 ==========
 
@@ -56,12 +49,6 @@ public class CommonWebAutoConfiguration implements WebMvcConfigurer {
 
     // ========== 拦截器相关 ==========
 
-    @Bean
-//    @ConditionalOnClass(name = {"cn.iocoder.mall.systemservice.rpc.systemlog.SystemExceptionLogRpc", "org.apache.dubbo.config.annotation.Reference"})
-    @ConditionalOnMissingBean(AccessLogInterceptor.class)
-    public AccessLogInterceptor accessLogInterceptor() {
-        return new AccessLogInterceptor();
-    }
 
     @Bean
     @ConditionalOnMissingBean(AccessLogAspect.class)
@@ -75,15 +62,6 @@ public class CommonWebAutoConfiguration implements WebMvcConfigurer {
         return new FeignRequestInterceptor();
     }
 
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        try {
-            registry.addInterceptor(this.accessLogInterceptor());
-            logger.info("[addInterceptors][加载 AccessLogInterceptor 拦截器完成]");
-        } catch (NoSuchBeanDefinitionException e) {
-            logger.warn("[addInterceptors][无法获取 AccessLogInterceptor 拦截器，因此不启动 AccessLog 的记录]");
-        }
-    }
 
     // ========== 过滤器相关 ==========
 
