@@ -14,8 +14,7 @@ public class CommonWebUtil {
         return (String) request.getAttribute(CommonWebConstants.REQUEST_ATTR_ACCESS_START_TRACE_ID);
     }
 
-    public static void setTraceSpan(HttpServletRequest request) {
-        TraceSpanContext.storeTraceSpan(request);
+    public static void setTraceId(HttpServletRequest request) {
         request.setAttribute(CommonWebConstants.REQUEST_ATTR_ACCESS_START_TRACE_ID, TraceSpanContext.getTriceId());
     }
 
@@ -27,5 +26,6 @@ public class CommonWebUtil {
     public static long getAccessStartTime(HttpServletRequest request) {
         return (long) request.getAttribute(CommonWebConstants.REQUEST_ATTR_ACCESS_START_TIME);
     }
+
 
 }

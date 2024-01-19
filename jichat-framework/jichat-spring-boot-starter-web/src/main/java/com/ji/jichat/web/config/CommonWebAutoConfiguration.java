@@ -9,6 +9,7 @@ import com.ji.jichat.web.core.aspect.AccessLogAspect;
 import com.ji.jichat.web.core.handler.GlobalExceptionHandler;
 import com.ji.jichat.web.core.handler.GlobalResponseBodyHandler;
 import com.ji.jichat.web.core.interceptor.AccessLogInterceptor;
+import com.ji.jichat.web.core.interceptor.FeignRequestInterceptor;
 import com.ji.jichat.web.core.servlet.CorsFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,6 +67,12 @@ public class CommonWebAutoConfiguration implements WebMvcConfigurer {
     @ConditionalOnMissingBean(AccessLogAspect.class)
     public AccessLogAspect accessLogAspect() {
         return new AccessLogAspect();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(FeignRequestInterceptor.class)
+    public FeignRequestInterceptor feignRequestInterceptor() {
+        return new FeignRequestInterceptor();
     }
 
     @Override

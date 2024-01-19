@@ -68,7 +68,7 @@ public class UserController implements UserRpc {
 
 
     @Override
-    public CommonResult<LoginUser> getLoginUserByLoginKey(String loginKey) {
+    public CommonResult<LoginUser> getLoginUserByLoginKey(@RequestParam String loginKey) {
         return CommonResult.success(userService.getLoginUserByLoginKey(loginKey));
     }
 }

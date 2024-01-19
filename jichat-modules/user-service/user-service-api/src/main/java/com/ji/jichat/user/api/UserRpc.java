@@ -7,6 +7,7 @@ import com.ji.jichat.user.api.vo.LoginUser;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * 商品 SPU Rpc 接口
@@ -17,7 +18,7 @@ public interface UserRpc {
 
     @ApiOperation("获取登录用户")
     @GetMapping(value = "/getLoginUserByLoginKey")
-    CommonResult<LoginUser> getLoginUserByLoginKey(String loginKey);
+    CommonResult<LoginUser> getLoginUserByLoginKey(@RequestParam String loginKey);
 
 
 }

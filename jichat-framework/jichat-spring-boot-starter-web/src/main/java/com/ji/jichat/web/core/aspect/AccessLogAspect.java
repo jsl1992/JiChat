@@ -42,16 +42,16 @@ public class AccessLogAspect {
     @Before("point()")
     public void before(JoinPoint join) {
         HttpServletRequest request = HttpContextUtil.getHttpServletRequest();
+        TraceSpanContext.storeTraceSpan(request);
         CommonWebUtil.setAccessStartTime(request);
-        CommonWebUtil.setTraceSpan(request);
+        CommonWebUtil.setTraceId(request);
         final String paramStr = isJsonRequest(request) ? JSON.toJSONString(join.getArgs()) : Arrays.toString(join.getArgs());
         log.info("请求路径:[ {} ],请求IP:[ {} ],参数:{}", request.getRequestURL().toString(), ServletUtil.getClientIP(request), paramStr);
     }
 
     @AfterReturning(pointcut = "point()")
     public void afterReturn() {
-        long nano = System.nanoTime() - CommonWebUtil.getAccessStartTime(HttpContextUtil.getHttpServletRequest());
-        final long timer = TimeUnit.NANOSECONDS.toMillis(nano);
+        final long timer =  System.currentTimeMillis() -CommonWebUtil.getAccessStartTime(HttpContextUtil.getHttpServletRequest());
         if (timer > LONG_TIME) {
             log.info("异常耗时: {} ms", timer);
         }
