@@ -8,7 +8,7 @@ import org.slf4j.MDC;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- *跟踪标识
+ * 跟踪标识
  * TRACE_ID（跟踪标识）和 SPAN_ID（跨度标识）是在分布式系统中用于跟踪和监控请求流的标识符
  */
 @Slf4j
@@ -16,7 +16,6 @@ public class TraceSpanContext {
 
     public static final String TRACE_ID = "X-B3-TraceId";
     public static final String SPAN_ID = "X-B3-SpanId";
-    public static final String SERVICE_REQUEST_URI = "X-SERVICE-REQUEST-URI";
 
     public static void storeTraceSpan(HttpServletRequest request) {
         String traceId = request.getHeader(TRACE_ID);
@@ -26,7 +25,6 @@ public class TraceSpanContext {
         String spanId = createSpanId();
         MDC.put(TRACE_ID, traceId);
         MDC.put(SPAN_ID, spanId);
-        MDC.put(SERVICE_REQUEST_URI, request.getRequestURL().toString());
     }
 
 
