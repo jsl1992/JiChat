@@ -13,6 +13,13 @@ spring:
     # Spring Boot 2.1 需要设定
     allow-bean-definition-overriding: true
 
+feign:
+  client:
+    config:
+      default:
+        #         // 设置连接超时时间和读取超时时间，单位为毫秒
+        connectTimeout: 5000
+        readTimeout: 15000
 
 
   # Swagger 配置项
@@ -32,3 +39,4 @@ tcpServer:
   # workerThreadCount: 4
   keepalive: true
   backlog: 32768
+

@@ -38,11 +38,11 @@ public class TestController {
         return CommonResult.success("成功");
     }
 
-    @GetMapping("/getLoginUserByLoginKey")
-    @ApiOperation("getLoginUserByLoginKey")
-    public CommonResult<LoginUser> getLoginUserByLoginKey(String loginKey) {
+    @GetMapping("/rpcTest")
+    @ApiOperation("rpcTest")
+    public CommonResult<LoginUser> rpcTest(String loginKey) {
         final CommonResult<LoginUser> loginUserCommonResult = userRpc.getLoginUserByLoginKey(loginKey);
-        return CommonResult.success(loginUserCommonResult.getData());
+        return CommonResult.success(loginUserCommonResult.getCheckedData());
     }
 
 

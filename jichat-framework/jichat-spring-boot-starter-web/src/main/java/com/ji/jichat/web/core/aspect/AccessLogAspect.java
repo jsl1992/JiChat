@@ -46,7 +46,7 @@ public class AccessLogAspect {
         CommonWebUtil.setAccessStartTime(request);
         CommonWebUtil.setTraceId(request);
         final String paramStr = isJsonRequest(request) ? JSON.toJSONString(join.getArgs()) : Arrays.toString(join.getArgs());
-        log.info("请求路径:[ {} ],请求IP:[ {} ],参数:{}", request.getRequestURL().toString(), ServletUtil.getClientIP(request), paramStr);
+        log.info("请求路径:[{}],请求IP:[{}],参数:{}", request.getRequestURL().toString(), ServletUtil.getClientIP(request), paramStr);
     }
 
     @AfterReturning(pointcut = "point()")

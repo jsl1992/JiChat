@@ -29,6 +29,15 @@ mybatis-plus:
   # 实体类扫描路径
   type-aliases-package: com.ji.jichat.user.entity
 
+feign:
+  client:
+    config:
+      default:
+        #         // 设置连接超时时间和读取超时时间，单位为毫秒
+        connectTimeout: 5000
+        readTimeout: 15000
+
+
   # Swagger 配置项
 swagger:
   title: JiChat User-接口
@@ -36,5 +45,7 @@ swagger:
   author: ji
   version: 1.0.0
   base-package: com.ji.jichat.user.controller
+
+
 
 

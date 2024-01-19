@@ -1,7 +1,10 @@
 package com.ji.jichat.security.admin.utils;
 
 import cn.hutool.core.util.IdUtil;
+import com.ji.jichat.common.enums.ErrorCodeEnum;
+import com.ji.jichat.common.exception.ServiceException;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
@@ -37,14 +40,12 @@ public class JwtUtil {
     public static String generateJwt(String subject, Date expiration) {
         Date now = new Date();
         // 创建JWT并设置Claims
-        String jwt = Jwts.builder()
+        return Jwts.builder()
                 .setSubject(subject)
                 .setIssuedAt(now)
                 .setExpiration(expiration)
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
                 .compact();
-
-        return jwt;
     }
 
 
@@ -56,6 +57,8 @@ public class JwtUtil {
                     .parseClaimsJws(token)
                     .getBody();
             return claims;
+        } catch (ExpiredJwtException e) {
+            throw new ServiceException(ErrorCodeEnum.TOKEN_EXPIRES);
         } catch (Exception e) {
             // JWT验证失败
             return null;

@@ -6,6 +6,7 @@ import com.ji.jichat.common.enums.ErrorCodeEnum;
 import com.ji.jichat.common.exception.ServiceException;
 import com.ji.jichat.security.admin.core.context.UserContext;
 import com.ji.jichat.security.admin.utils.JwtUtil;
+import com.ji.jichat.web.core.constant.CommonWebConstants;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +32,7 @@ public class SecurityInterceptor extends HandlerInterceptorAdapter {
             return true;
         }
         // 获得访问令牌
-        String accessToken = request.getHeader("Authorization");
+        String accessToken = request.getHeader(CommonWebConstants.AUTHORIZATION);
         if (StringUtils.isEmpty(accessToken)) {
             throw new ServiceException(ErrorCodeEnum.UNAUTHORIZED);
         }
