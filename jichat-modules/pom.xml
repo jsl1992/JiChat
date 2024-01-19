@@ -9,12 +9,10 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>chat-service</artifactId>
+    <artifactId>jichat-modules</artifactId>
     <packaging>pom</packaging>
-    <version>1.0</version>
     <modules>
-        <module>chat-service-api</module>
-        <module>chat-service-app</module>
+        <module>chat-service</module>
+        <module>user-service</module>
     </modules>
-
 </project>

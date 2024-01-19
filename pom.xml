@@ -40,13 +40,10 @@
     </properties>
 
     <modules>
-
-
         <module>jichat-framework</module>
-        <module>chat-service</module>
-        <module>user-service</module>
         <module>jichat-dependencies</module>
         <module>jichat-gateway</module>
+        <module>jichat-modules</module>
     </modules>
 
     <dependencyManagement>

@@ -8,8 +8,6 @@ import com.ji.jichat.chat.utils.ByteUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
-
 /**
  * 没有执行Processor
  *
