@@ -13,8 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Objects;
 
-public class ServletUtils {
-    private ServletUtils() {
+public class HttpContextUtil {
+    private HttpContextUtil() {
     }
 
     public static HttpServletRequest getHttpServletRequest() {

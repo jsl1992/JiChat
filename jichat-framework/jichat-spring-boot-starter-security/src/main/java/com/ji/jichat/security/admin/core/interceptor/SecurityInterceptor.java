@@ -4,29 +4,24 @@ package com.ji.jichat.security.admin.core.interceptor;
 import com.ji.jichat.common.annotions.RequiresNone;
 import com.ji.jichat.common.enums.ErrorCodeEnum;
 import com.ji.jichat.common.exception.ServiceException;
-import com.ji.jichat.common.pojo.CommonResult;
 import com.ji.jichat.security.admin.core.context.UserContext;
 import com.ji.jichat.security.admin.utils.JwtUtil;
-import com.ji.jichat.user.api.UserRpc;
-import com.ji.jichat.user.api.vo.LoginUser;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Objects;
 
 public class SecurityInterceptor extends HandlerInterceptorAdapter {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
 
 
-    @Resource
-    private UserRpc userRpc;
+//    @Resource
+//    private UserRpc userRpc;
 
 
     @Override
@@ -44,11 +39,11 @@ public class SecurityInterceptor extends HandlerInterceptorAdapter {
         if (StringUtils.isEmpty(loginKey)) {
             throw new ServiceException(ErrorCodeEnum.TOKEN_EXPIRES);
         }
-        final CommonResult<LoginUser> loginUserCommonResult = userRpc.getLoginUserByLoginKey(loginKey);
-        final LoginUser loginUser = loginUserCommonResult.getCheckedData();
-        if (Objects.isNull(loginUser)) {
-            throw new ServiceException();
-        }
+//        final CommonResult<LoginUser> loginUserCommonResult = userRpc.getLoginUserByLoginKey(loginKey);
+//        final LoginUser loginUser = loginUserCommonResult.getCheckedData();
+//        if (Objects.isNull(loginUser)) {
+//            throw new ServiceException();
+//        }
         return true;
     }
 

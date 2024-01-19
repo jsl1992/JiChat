@@ -42,7 +42,7 @@ public class TestController {
     @ApiOperation("getLoginUserByLoginKey")
     public CommonResult<LoginUser> getLoginUserByLoginKey(String loginKey) {
         final CommonResult<LoginUser> loginUserCommonResult = userRpc.getLoginUserByLoginKey(loginKey);
-        return CommonResult.success(loginUserCommonResult.getCheckedData());
+        return CommonResult.success(loginUserCommonResult.getData());
     }
 
 

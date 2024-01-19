@@ -1,8 +1,7 @@
 package com.ji.jichat.security.admin.rpc;
 
 
-import com.ji.jichat.user.api.vo.LoginUser;
-import com.ji.jichat.web.util.ServletUtils;
+import com.ji.jichat.web.util.HttpContextUtil;
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
 
@@ -19,7 +18,7 @@ public class LoginUserRequestInterceptor implements RequestInterceptor {
     @Override
     public void apply(RequestTemplate requestTemplate) {
         {
-            HttpServletRequest httpServletRequest = ServletUtils.getHttpServletRequest();
+            HttpServletRequest httpServletRequest = HttpContextUtil.getHttpServletRequest();
             if (Objects.nonNull(httpServletRequest)) {
                 String authentication = httpServletRequest.getHeader("Authorization");
                 if (Objects.nonNull(authentication)) {

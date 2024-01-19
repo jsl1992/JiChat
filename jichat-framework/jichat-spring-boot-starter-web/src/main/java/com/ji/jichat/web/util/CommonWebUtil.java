@@ -1,45 +1,31 @@
 package com.ji.jichat.web.util;
 
 
-
-import com.ji.jichat.web.core.constant.CommonMallConstants;
-import com.ji.jichat.common.pojo.CommonResult;
+import com.ji.jichat.web.core.constant.CommonWebConstants;
+import com.ji.jichat.web.core.constant.TraceSpanContext;
 
 import javax.servlet.ServletRequest;
-import java.util.Date;
+import javax.servlet.http.HttpServletRequest;
 
 public class CommonWebUtil {
 
-    public static Integer getUserId(ServletRequest request) {
-        return (Integer) request.getAttribute(CommonMallConstants.REQUEST_ATTR_USER_ID_KEY);
+
+    public static String getTraceId(ServletRequest request) {
+        return (String) request.getAttribute(CommonWebConstants.REQUEST_ATTR_ACCESS_START_TRACE_ID);
     }
 
-    public static void setUserId(ServletRequest request, Integer userId) {
-        request.setAttribute(CommonMallConstants.REQUEST_ATTR_USER_ID_KEY, userId);
+    public static void setTraceSpan(HttpServletRequest request) {
+        TraceSpanContext.storeTraceSpan(request);
+        request.setAttribute(CommonWebConstants.REQUEST_ATTR_ACCESS_START_TRACE_ID, TraceSpanContext.getTriceId());
     }
 
-    public static Integer getUserType(ServletRequest request) {
-        return (Integer) request.getAttribute(CommonMallConstants.REQUEST_ATTR_USER_TYPE_KEY);
+
+    public static void setAccessStartTime(HttpServletRequest request) {
+        request.setAttribute(CommonWebConstants.REQUEST_ATTR_ACCESS_START_TIME, System.currentTimeMillis());
     }
 
-    public static void setUserType(ServletRequest request, Integer userType) {
-        request.setAttribute(CommonMallConstants.REQUEST_ATTR_USER_TYPE_KEY, userType);
-    }
-
-    public static CommonResult getCommonResult(ServletRequest request) {
-        return (CommonResult) request.getAttribute(CommonMallConstants.REQUEST_ATTR_COMMON_RESULT);
-    }
-
-    public static void setCommonResult(ServletRequest request, CommonResult result) {
-        request.setAttribute(CommonMallConstants.REQUEST_ATTR_COMMON_RESULT, result);
-    }
-
-    public static void setAccessStartTime(ServletRequest request, Date startTime) {
-        request.setAttribute(CommonMallConstants.REQUEST_ATTR_ACCESS_START_TIME, startTime);
-    }
-
-    public static Date getAccessStartTime(ServletRequest request) {
-        return (Date) request.getAttribute(CommonMallConstants.REQUEST_ATTR_ACCESS_START_TIME);
+    public static long getAccessStartTime(HttpServletRequest request) {
+        return (long) request.getAttribute(CommonWebConstants.REQUEST_ATTR_ACCESS_START_TIME);
     }
 
 }

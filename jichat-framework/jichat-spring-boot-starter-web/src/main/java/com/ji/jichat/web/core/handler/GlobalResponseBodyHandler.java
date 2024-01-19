@@ -4,6 +4,7 @@ package com.ji.jichat.web.core.handler;
 import com.ji.jichat.web.util.CommonWebUtil;
 
 import com.ji.jichat.common.pojo.CommonResult;
+import com.ji.jichat.web.util.HttpContextUtil;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
 import org.springframework.http.server.ServerHttpRequest;
@@ -40,7 +41,8 @@ public class GlobalResponseBodyHandler implements ResponseBodyAdvice {
     public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class selectedConverterType,
                                   ServerHttpRequest request, ServerHttpResponse response) {
         // 记录 Controller 结果
-        CommonWebUtil.setCommonResult(((ServletServerHttpRequest) request).getServletRequest(), (CommonResult) body);
+        CommonResult commonResult = (CommonResult) body;
+        commonResult.setTraceId(CommonWebUtil.getTraceId(HttpContextUtil.getHttpServletRequest()));
         return body;
     }
 

@@ -13,7 +13,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @SpringBootApplication
 @EnableDiscoveryClient
 @MapperScan("com.ji.jichat.user.mapper")
-@EnableFeignClients(basePackages = "com.ji.jichat")
+//@EnableFeignClients(basePackages = "com.ji.jichat")
 public class UserServiceApplication {
 
     public static void main(String[] args) {

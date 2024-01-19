@@ -18,7 +18,7 @@ import com.ji.jichat.user.entity.User;
 import com.ji.jichat.user.mapper.UserMapper;
 import com.ji.jichat.user.service.IDeviceService;
 import com.ji.jichat.user.service.IUserService;
-import com.ji.jichat.web.util.ServletUtils;
+import com.ji.jichat.web.util.HttpContextUtil;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -56,7 +56,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         if (Objects.equals(user.getStatus(), CommonStatusEnum.DISABLE.getStatus())) {
             throw new ServiceException("登录失败，账号被禁用");
         }
-        final String clientIP = cn.hutool.extra.servlet.ServletUtil.getClientIP(ServletUtils.getHttpServletRequest());
+        final String clientIP = cn.hutool.extra.servlet.ServletUtil.getClientIP(HttpContextUtil.getHttpServletRequest());
         final Date now = new Date();
         user.setOnlineStatus(OnlineStatus.ONLINE.getCode());
         user.setLoginIp(clientIP);
@@ -133,7 +133,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     }
 
     private void loginDevice(AuthLoginDTO loginDTO, User user) {
-        final String clientIP = cn.hutool.extra.servlet.ServletUtil.getClientIP(ServletUtils.getHttpServletRequest());
+        final String clientIP = cn.hutool.extra.servlet.ServletUtil.getClientIP(HttpContextUtil.getHttpServletRequest());
         final Date now = new Date();
         final Device onlineDevice = deviceService.getOne(new LambdaQueryWrapper<Device>().eq(Device::getUserId, user.getId())
                 .eq(Device::getDeviceType, loginDTO.getDeviceType()).eq(Device::getOnlineStatus, OnlineStatus.ONLINE.getCode()));

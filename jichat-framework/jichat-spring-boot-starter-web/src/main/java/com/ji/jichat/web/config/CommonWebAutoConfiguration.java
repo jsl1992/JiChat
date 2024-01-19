@@ -5,6 +5,7 @@ import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
 
+import com.ji.jichat.web.core.aspect.AccessLogAspect;
 import com.ji.jichat.web.core.handler.GlobalExceptionHandler;
 import com.ji.jichat.web.core.handler.GlobalResponseBodyHandler;
 import com.ji.jichat.web.core.interceptor.AccessLogInterceptor;
@@ -59,6 +60,12 @@ public class CommonWebAutoConfiguration implements WebMvcConfigurer {
     @ConditionalOnMissingBean(AccessLogInterceptor.class)
     public AccessLogInterceptor accessLogInterceptor() {
         return new AccessLogInterceptor();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(AccessLogAspect.class)
+    public AccessLogAspect accessLogAspect() {
+        return new AccessLogAspect();
     }
 
     @Override

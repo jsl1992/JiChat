@@ -4,9 +4,9 @@
     <property name="log.path" value="log"/>
     <property name="log.maxHistory" value="15"/>
     <property name="log.colorPattern"
-              value="%d{yyyy-MM-dd HH:mm:ss}| %X{TRACE-ID} | %highlight(%-5level) | [%thread] | %boldCyan(%logger) : %msg%n"/>
+              value="%d{yyyy-MM-dd HH:mm:ss}[%X{X-B3-TraceId},%X{X-B3-SpanId}] %highlight(%-5level) | [%thread] | %boldCyan(%logger) : %msg%n"/>
     <property name="log.pattern"
-              value=" %d{yyyy-MM-dd HH:mm:ss.SSS}|%X{TRACE-ID} %contextName [%thread] %-5level %logger{36} - %msg%n"/>
+              value=" %d{yyyy-MM-dd HH:mm:ss.SSS}[%X{X-B3-TraceId},%X{X-B3-SpanId}] %contextName [%thread] %-5level %logger{36} - %msg%n"/>
 
     <!--输出到控制台-->
     <appender name="console" class="ch.qos.logback.core.ConsoleAppender">

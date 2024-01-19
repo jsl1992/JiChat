@@ -28,21 +28,9 @@ import javax.validation.ConstraintViolationException;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    // TODO 芋艿，应该还有其它的异常，需要进行翻译
-
-//    /**
-//     * 异常总数 Metrics
-//     */
-//    private static final Counter EXCEPTION_COUNTER = Metrics.counter("mall.exception.total");
 
     private Logger logger = LoggerFactory.getLogger(getClass());
 
-    @Value("${spring.application.name}")
-    private String applicationName;
-
-//    // TODO 目前存在一个问题，如果未引入 system-rpc-api 依赖，GlobalExceptionHandler 会报类不存在。未来封装出 Repository 解决该问题
-//    @Reference(version = "${dubbo.consumer.SystemExceptionLogRpc.version}")
-//    private SystemExceptionLogRpc systemExceptionLogRpc;
 
     /**
      * 处理 SpringMVC 请求参数缺失
@@ -141,7 +129,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(value = ServiceException.class)
     public CommonResult serviceExceptionHandler(ServiceException ex) {
-        logger.info("[serviceExceptionHandler]", ex);
+        logger.warn("[serviceExceptionHandler]", ex);
         return CommonResult.error(ex.getCode(), ex.getMessage());
     }
 
@@ -151,12 +139,9 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(value = Exception.class)
     public CommonResult globalExceptionHandler(HttpServletRequest req, Exception ex) {
-        logger.info("[globalExceptionHandler]", ex);
+        logger.warn("[globalExceptionHandler]", ex);
         return CommonResult.error(ErrorCodeEnum.UNKNOWN.getCode(), ex.getMessage());
     }
-
-
-
 
 
 }

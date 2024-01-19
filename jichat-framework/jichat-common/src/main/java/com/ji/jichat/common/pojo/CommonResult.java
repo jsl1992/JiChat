@@ -34,6 +34,8 @@ public class CommonResult<T> implements Serializable {
      */
     private String msg;
 
+    private String traceId;
+
 
     public static <T> CommonResult<T> error(Integer code, String message) {
         Assert.isTrue(!Objects.equals(ErrorCodeEnum.SUCCESS.getCode(), code), "code 必须是错误的！");
@@ -83,9 +85,13 @@ public class CommonResult<T> implements Serializable {
         throw new ServiceException(code, msg);
     }
 
-    public T getCheckedData() {
-        checkError();
-        return data;
+//    public T getCheckedData() {
+//        checkError();
+//        return data;
+//    }
+
+    public void setTraceId(String traceId) {
+        this.traceId = traceId;
     }
 
 
