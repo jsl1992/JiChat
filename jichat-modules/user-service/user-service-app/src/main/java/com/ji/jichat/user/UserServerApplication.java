@@ -1,26 +1,22 @@
-package com.ji.jichat.chat;
+package com.ji.jichat.user;
+
 
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
-import org.springframework.cloud.openfeign.EnableFeignClients;
 
 /**
- * 启动程序
- * 交调设备项目
- *
- * @author xiangan
+ * @author jisl on 2024/1/17 19:16
  */
 @SpringBootApplication
 @EnableDiscoveryClient
-@MapperScan("com.ji.mall.product.mapper")
-@EnableFeignClients(basePackages = "com.ji.jichat")
-public class ChatServiceApplication {
+@MapperScan("com.ji.jichat.user.mapper")
+//@EnableFeignClients(basePackages = "com.ji.jichat")
+public class UserServerApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(ChatServiceApplication.class, args);
+        SpringApplication.run(UserServerApplication.class, args);
     }
 
 }
-
