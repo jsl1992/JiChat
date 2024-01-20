@@ -1,4 +1,4 @@
-package com.ji.jichat.chat.kit;
+package com.ji.jichat.user.kit;
 
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.RandomUtil;

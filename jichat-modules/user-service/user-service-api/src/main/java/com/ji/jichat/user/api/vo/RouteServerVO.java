@@ -1,4 +1,4 @@
-package com.ji.jichat.chat.api.vo;
+package com.ji.jichat.user.api.vo;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -6,8 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.Date;
 
 @ApiModel("路由TCP服务")
 @Data

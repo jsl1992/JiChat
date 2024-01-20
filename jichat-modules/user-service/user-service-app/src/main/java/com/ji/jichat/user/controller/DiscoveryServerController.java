@@ -1,15 +1,14 @@
-package com.ji.jichat.chat.controller;
+package com.ji.jichat.user.controller;
 
 
 import cn.hutool.core.util.IdUtil;
-import com.ji.jichat.chat.api.vo.RouteServerVO;
-import com.ji.jichat.chat.kit.ConsistentHashing;
+
 import com.ji.jichat.common.pojo.CommonResult;
+import com.ji.jichat.user.api.vo.RouteServerVO;
+import com.ji.jichat.user.kit.ConsistentHashing;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,10 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/discoveryServer/")
 @Slf4j
 public class DiscoveryServerController {
-//
-//    @Resource
-//    private IDeviceComparisonService deviceComparisonService;
-//
 
 
     @PostMapping("/routeServer")

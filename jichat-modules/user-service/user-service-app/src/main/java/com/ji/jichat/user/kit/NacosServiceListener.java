@@ -1,15 +1,13 @@
-package com.ji.jichat.chat.kit;
+package com.ji.jichat.user.kit;
 
 import com.alibaba.nacos.api.exception.NacosException;
 import com.alibaba.nacos.api.naming.NamingFactory;
 import com.alibaba.nacos.api.naming.NamingService;
 import com.alibaba.nacos.api.naming.listener.NamingEvent;
-import com.alibaba.nacos.api.naming.pojo.Instance;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
 import java.util.List;
 import java.util.Properties;
 import java.util.stream.Collectors;
@@ -24,8 +22,7 @@ public class NacosServiceListener {
     @Value("${spring.cloud.nacos.discovery.namespace}")
     private String namespace;
 
-    @Value("${spring.application.name}")
-    private String serviceName;
+    private String serviceName="chat-service";
 
 
     @PostConstruct
