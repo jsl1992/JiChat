@@ -26,8 +26,8 @@ public class UserContext {
         return get() == null ? "未获取到用户名" : get().getUsername();
     }
 
-    public static String getNickname() {
-        return get() == null ? "未获取到用户昵称" : get().getNickname();
+    public static String getLoginKey() {
+        return  get().getLoginKey();
     }
 
     public static Long getUserId() {

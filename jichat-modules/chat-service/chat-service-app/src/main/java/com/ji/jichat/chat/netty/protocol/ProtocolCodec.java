@@ -2,15 +2,19 @@ package com.ji.jichat.chat.netty.protocol;
 
 import cn.hutool.core.io.checksum.CRC16;
 
-import com.ji.jichat.chat.dto.Message;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.ji.jichat.chat.enums.MessageTypeEnum;
 import com.ji.jichat.chat.utils.ByteUtil;
 import com.ji.jichat.chat.utils.CRC16Util;
+import com.ji.jichat.common.pojo.DownMessage;
+import com.ji.jichat.common.pojo.UpMessage;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.InetSocketAddress;
+import java.nio.charset.StandardCharsets;
 
 
 /**
@@ -27,11 +31,10 @@ public class ProtocolCodec {
     public static final int PACKAGE_TAIL = 0xEEEE;
 
 
-    public static void encode(ByteBuf byteBuf, Message downMessage) {
+    public static void encode(ByteBuf byteBuf, DownMessage downMessage) {
         byte[] packageHead = ByteUtil.intToBytes(PACKAGE_HEAD);
         byte[] packageTail = ByteUtil.intToBytes(PACKAGE_TAIL);
-
-        final byte[] content = downMessage.content;
+        final byte[] content = downMessage.getContent().getBytes(StandardCharsets.UTF_8);
         final byte[] pkLenBytes = ByteUtil.intToBytes(content.length);
         final byte[] crcContent = ByteUtil.mergeBytes(pkLenBytes, content);
         byte[] packageCRC = CRC16Util.CRC16Bytes(crcContent);
@@ -40,7 +43,6 @@ public class ProtocolCodec {
 //        // 写入字节数组长度
         byteBuf.writeBytes(pkLenBytes);
         byteBuf.writeBytes(content);
-        byteBuf.writeBytes(packageCRC);
         byteBuf.writeBytes(packageTail);
 ////        // 读取ByteBuf中的字节到byte数组
 //        byte[] bytes = new byte[byteBuf.readableBytes()];
@@ -49,16 +51,12 @@ public class ProtocolCodec {
     }
 
 
-    public static Message decode(ByteBuf byteBuf) {
-        int contentLen = byteBuf.getShortLE(2);
+    public static UpMessage decode(ByteBuf byteBuf) {
+        int contentLen = byteBuf.getInt(2);
         byte[] content = new byte[contentLen];
         byteBuf.getBytes(4, content); // 从位置4开始读取contentLen个字节的数据
-        final String commandCode = ByteUtil.byteToHexString(content[0]);
         // 获取命令码
-        final Message message = new Message();
-        message.setCode(commandCode);
-        message.setType(MessageTypeEnum.UP.getCode());
-        message.setContent(content);
+        final UpMessage message = JSON.parseObject(new String(content, StandardCharsets.UTF_8), UpMessage.class);
         return message;
     }
 

@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 @Component
 public class StrategyContext {
 
-    private Map<String, CommandStrategy> commandStrategyMap;
+    private Map<Integer, CommandStrategy> commandStrategyMap;
 
     // spring中，在使用@Autowired注解注入list集合的时候，并不会根据List类型去容器中查找，而是根据list集合的元素类型，从spring容器中找到所有的实现类，放在list集合中，然后注入到bean中
     @Resource
@@ -33,10 +33,10 @@ public class StrategyContext {
     public void buildMap() {
 //        将来完善下，可以加入是否禁用等
         commandStrategyMap = commandStrategyList.stream()
-            .collect(Collectors.toMap(operationStrategy -> operationStrategy.getCommandCode().getCode(), Function.identity()));
+                .collect(Collectors.toMap(operationStrategy -> operationStrategy.getCommandCode().getCode(), Function.identity()));
     }
 
-    public CommandStrategy getProcessor(String code) {
+    public CommandStrategy getProcessor(Integer code) {
         return commandStrategyMap.getOrDefault(code, noCommandProcessor);
     }
 

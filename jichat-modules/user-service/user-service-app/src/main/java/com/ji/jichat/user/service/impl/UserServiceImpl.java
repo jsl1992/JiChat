@@ -13,8 +13,10 @@ import com.ji.jichat.user.api.dto.AuthLoginDTO;
 import com.ji.jichat.user.api.dto.UserRegisterDTO;
 import com.ji.jichat.user.api.vo.AuthLoginVO;
 import com.ji.jichat.user.api.vo.LoginUser;
+import com.ji.jichat.user.api.vo.RouteServerVO;
 import com.ji.jichat.user.entity.Device;
 import com.ji.jichat.user.entity.User;
+import com.ji.jichat.user.kit.ConsistentHashing;
 import com.ji.jichat.user.mapper.UserMapper;
 import com.ji.jichat.user.service.IDeviceService;
 import com.ji.jichat.user.service.IUserService;
@@ -76,7 +78,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         final String refreshToken = JwtUtil.generateRefreshToken(loginKey);
         final AuthLoginVO authLoginVO = AuthLoginVO.builder()
                 .userId(user.getId()).accessToken(accessToken).refreshToken(refreshToken)
-                .expiresTime(accessTokenExpirationTime)
+                .expiresTime(accessTokenExpirationTime).routeServerVO(routeServer(loginKey))
                 .build();
         cacheLoginUer(user, loginKey, deviceType);
         return authLoginVO;
@@ -130,6 +132,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     public LoginUser getLoginUserByLoginKey(String loginKey) {
         final LoginUser loginUser = redisTemplate.opsForValue().get(CacheConstant.LOGIN_USER + loginKey);
         return loginUser;
+    }
+
+    @Override
+    public RouteServerVO routeServer(String loginKey) {
+        final String node = ConsistentHashing.getNode(loginKey);
+        final String[] ipAndPort = node.split(":");
+        final RouteServerVO routeServerVO = RouteServerVO.builder().loginKey(loginKey)
+                .innerIp(ipAndPort[0]).outsideIp(ipAndPort[0]).port(ipAndPort[1])
+                .build();
+        return routeServerVO;
     }
 
     private void loginDevice(AuthLoginDTO loginDTO, User user) {

@@ -1,8 +1,8 @@
 package com.ji.jichat.chat.strategy;
 
 
-import com.ji.jichat.chat.dto.Message;
 import com.ji.jichat.chat.enums.CommandCodeEnum;
+import com.ji.jichat.common.pojo.UpMessage;
 
 /**
  * 支付 PayService(统一的支付Service方便将来扩展)
@@ -19,7 +19,7 @@ public interface CommandStrategy {
        * @param message 消息
       * @author jishenglong on 2023/8/16 9:45
       **/
-    byte[] execute(Message message);
+    String execute(UpMessage message);
 
 
 }

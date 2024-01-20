@@ -1,10 +1,10 @@
 package com.ji.jichat.chat.strategy.receive;
 
 
-import com.ji.jichat.chat.dto.Message;
 import com.ji.jichat.chat.enums.CommandCodeEnum;
 import com.ji.jichat.chat.strategy.CommandStrategy;
 import com.ji.jichat.chat.utils.ByteUtil;
+import com.ji.jichat.common.pojo.UpMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -24,8 +24,8 @@ public class NoCommandProcessor implements CommandStrategy {
     }
 
     @Override
-    public byte[] execute(Message message) {
-        log.warn("当前执行:{}没有相关处理类,内容:{}", message.getCode(), ByteUtil.bytesToHexString(message.content));
-        return message.content;
+    public String execute(UpMessage message) {
+        log.warn("当前执行:{}没有相关处理类,内容:{}", message.getCode(), message.getContent());
+        return message.getContent();
     }
 }

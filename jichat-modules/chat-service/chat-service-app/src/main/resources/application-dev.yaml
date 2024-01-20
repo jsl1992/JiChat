@@ -21,6 +21,10 @@ spring:
     username: dream
     password: 123456
 
+  redis:
+    host: 192.168.137.130
+    port: 6379
+    password: 123456
 
 
 outside-ip: 192.168.77.130

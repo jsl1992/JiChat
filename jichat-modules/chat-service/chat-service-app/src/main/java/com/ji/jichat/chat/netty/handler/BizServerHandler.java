@@ -1,20 +1,20 @@
 package com.ji.jichat.chat.netty.handler;
 
 
-
-import com.ji.jichat.chat.dto.Message;
+import cn.hutool.core.bean.BeanUtil;
+import com.ji.jichat.chat.netty.ChannelRepository;
 import com.ji.jichat.chat.strategy.CommandStrategy;
 import com.ji.jichat.chat.strategy.StrategyContext;
-import io.netty.channel.ChannelFutureListener;
-import io.netty.channel.ChannelHandler;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInboundHandlerAdapter;
+import com.ji.jichat.common.pojo.DownMessage;
+import com.ji.jichat.common.pojo.UpMessage;
+import io.netty.channel.*;
 import io.netty.util.ReferenceCountUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicLong;
 
 @Slf4j
@@ -22,7 +22,7 @@ import java.util.concurrent.atomic.AtomicLong;
 @Qualifier("bizServerHandler")
 //@ChannelHandler.Sharable 用于标识一个可以在多个 Channel 上共享使用的 ChannelHandler
 @ChannelHandler.Sharable
-public class BizServerHandler extends ChannelInboundHandlerAdapter {
+public class BizServerHandler extends SimpleChannelInboundHandler<UpMessage> {
 
     public static final String NAME = "BizServerHandler";
 
@@ -34,14 +34,20 @@ public class BizServerHandler extends ChannelInboundHandlerAdapter {
 
 
     @Override
-    public void channelRead(ChannelHandlerContext ctx, Object obj) {
+    public void channelRead0(ChannelHandlerContext ctx, UpMessage message) {
         final long start = System.currentTimeMillis();
-        Message message = (Message) obj;
+        if (Objects.isNull(ChannelRepository.get(message.getLoginKey()))) {
+//            用户已经退出登录了，那么tcp连接也要关闭。
+            ctx.channel().close();
+            return;
+        }
         try {
             final CommandStrategy processor = strategyContext.getProcessor(message.getCode());
-            final byte[] returnContent = processor.execute(message);
+            final String returnContent = processor.execute(message);
+            final DownMessage downMessage = BeanUtil.toBean(message, DownMessage.class);
+            downMessage.setContent(returnContent);
             message.setContent(returnContent);
-            ctx.channel().writeAndFlush(message).addListener((ChannelFutureListener) future -> {
+            ctx.channel().writeAndFlush(downMessage).addListener((ChannelFutureListener) future -> {
                 final long time = System.currentTimeMillis() - start;
                 if (!future.isSuccess()) {
                     log.error("业务处理回复相机失败,ip=[{}],code=[{}],耗时[{}]ms", message.getClientIp(), message.getCode(), time);

@@ -1,6 +1,7 @@
 package com.ji.jichat.chat.netty.handler;
 
 
+import com.ji.jichat.web.core.constant.TraceSpanContext;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -16,25 +17,25 @@ public class MdcLoggingHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
-//        SpanContext.storeSpan();
+        TraceSpanContext.storeTraceSpan();
         ctx.fireChannelRead(msg);
     }
 
     @Override
-    public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
+    public void channelReadComplete(ChannelHandlerContext ctx) {
         ctx.fireChannelReadComplete();
-//        SpanContext.cleanSpan();
+        TraceSpanContext.removeTraceSpan();
     }
 
     @Override
-    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
         ctx.fireExceptionCaught(cause);
-//        SpanContext.cleanSpan();
+        TraceSpanContext.removeTraceSpan();
     }
 
     @Override
     public void channelUnregistered(ChannelHandlerContext ctx) throws Exception {
         super.channelUnregistered(ctx);
-//        SpanContext.cleanSpan();
+        TraceSpanContext.removeTraceSpan();
     }
 }

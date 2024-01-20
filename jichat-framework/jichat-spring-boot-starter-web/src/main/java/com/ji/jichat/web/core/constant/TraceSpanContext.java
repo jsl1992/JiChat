@@ -27,6 +27,13 @@ public class TraceSpanContext {
         MDC.put(SPAN_ID, spanId);
     }
 
+    public static void storeTraceSpan() {
+        String traceId = createTraceId();
+        String spanId = createSpanId();
+        MDC.put(TRACE_ID, traceId);
+        MDC.put(SPAN_ID, spanId);
+    }
+
 
     public static void removeTraceSpan() {
         try {
