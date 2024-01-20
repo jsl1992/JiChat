@@ -86,11 +86,11 @@ public class CommonResult<T> implements Serializable {
         throw new ServiceException(code, msg);
     }
 
-    @JSONField(serialize = false) // 避免序列化
-    public T getCheckedData() {
-        checkError();
-        return data;
-    }
+//    @JSONField(serialize = false) // 避免序列化
+//    public T getCheckedData() {
+//        checkError();
+//        return data;
+//    }
 
     public void setTraceId(String traceId) {
         this.traceId = traceId;

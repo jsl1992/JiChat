@@ -2,7 +2,6 @@ package com.ji.jichat.web.core.aspect;
 
 import cn.hutool.extra.servlet.ServletUtil;
 import com.alibaba.fastjson.JSON;
-import com.ji.jichat.web.core.constant.TraceSpanContext;
 import com.ji.jichat.web.util.CommonWebUtil;
 import com.ji.jichat.web.util.HttpContextUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +17,6 @@ import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
-import java.util.concurrent.TimeUnit;
 
 /**
  * 统一日志处理
@@ -42,22 +40,17 @@ public class AccessLogAspect {
     @Before("point()")
     public void before(JoinPoint join) {
         HttpServletRequest request = HttpContextUtil.getHttpServletRequest();
-        TraceSpanContext.storeTraceSpan(request);
-        CommonWebUtil.setAccessStartTime(request);
-        CommonWebUtil.setTraceId(request);
         final String paramStr = isJsonRequest(request) ? JSON.toJSONString(join.getArgs()) : Arrays.toString(join.getArgs());
         log.info("请求路径:[{}],请求IP:[{}],参数:{}", request.getRequestURL().toString(), ServletUtil.getClientIP(request), paramStr);
     }
 
     @AfterReturning(pointcut = "point()")
     public void afterReturn() {
-        final long timer =  System.currentTimeMillis() -CommonWebUtil.getAccessStartTime(HttpContextUtil.getHttpServletRequest());
+        final long timer = System.currentTimeMillis() - CommonWebUtil.getAccessStartTime(HttpContextUtil.getHttpServletRequest());
         if (timer > LONG_TIME) {
             log.info("异常耗时: {} ms", timer);
         }
-        TraceSpanContext.cleanTraceSpan();
     }
-
 
     /**
      * 判断本次请求的数据类型是否为json

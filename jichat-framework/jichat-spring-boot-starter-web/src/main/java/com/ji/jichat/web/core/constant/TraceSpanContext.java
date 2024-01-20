@@ -28,7 +28,7 @@ public class TraceSpanContext {
     }
 
 
-    public static void cleanTraceSpan() {
+    public static void removeTraceSpan() {
         try {
             MDC.clear();
         } catch (Exception e) {

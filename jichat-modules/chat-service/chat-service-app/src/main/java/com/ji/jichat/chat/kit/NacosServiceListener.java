@@ -41,9 +41,8 @@ public class NacosServiceListener {
                 final NamingEvent namingEvent = (NamingEvent) event;
                 System.out.println("服务个数:" + namingEvent.getInstances().size());
                 System.out.println("服务列表:" + namingEvent.getInstances());
-                for (Instance instance : namingEvent.getInstances()) {
-                    ConsistentHashing.addNode(instance.getIp() + ":" + instance.getPort());
-                }
+                final List<String> curInstances = namingEvent.getInstances().stream().map(t -> t.getIp() + ":" + t.getPort()).collect(Collectors.toList());
+                ConsistentHashing.addNode(curInstances);
             }
         });
     }

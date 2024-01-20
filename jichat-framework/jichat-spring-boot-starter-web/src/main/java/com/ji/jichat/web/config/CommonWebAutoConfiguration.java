@@ -8,7 +8,10 @@ import com.ji.jichat.web.core.aspect.AccessLogAspect;
 import com.ji.jichat.web.core.handler.GlobalExceptionHandler;
 import com.ji.jichat.web.core.handler.GlobalResponseBodyHandler;
 import com.ji.jichat.web.core.interceptor.FeignRequestInterceptor;
+import com.ji.jichat.web.core.interceptor.TraceSpanInterceptor;
 import com.ji.jichat.web.core.servlet.CorsFilter;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -17,6 +20,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.nio.charset.Charset;
@@ -30,6 +34,7 @@ import java.util.List;
  **/
 @Configuration
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
+@Slf4j
 public class CommonWebAutoConfiguration implements WebMvcConfigurer {
 
 
@@ -60,6 +65,23 @@ public class CommonWebAutoConfiguration implements WebMvcConfigurer {
     @ConditionalOnMissingBean(FeignRequestInterceptor.class)
     public FeignRequestInterceptor feignRequestInterceptor() {
         return new FeignRequestInterceptor();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(TraceSpanInterceptor.class)
+    public TraceSpanInterceptor traceSpanInterceptor() {
+        return new TraceSpanInterceptor();
+    }
+
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        try {
+            registry.addInterceptor(this.traceSpanInterceptor()).order(Ordered.HIGHEST_PRECEDENCE);
+            log.info("[addInterceptors][加载 TraceSpanInterceptor 拦截器完成]");
+        } catch (NoSuchBeanDefinitionException e) {
+            log.warn("[addInterceptors][无法获取 TraceSpanInterceptor 拦截器，因此不启动 TraceSpan 的记录]");
+        }
     }
 
 

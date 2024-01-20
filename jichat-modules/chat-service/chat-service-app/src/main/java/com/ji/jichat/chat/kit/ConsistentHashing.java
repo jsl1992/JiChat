@@ -3,50 +3,62 @@ package com.ji.jichat.chat.kit;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.RandomUtil;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.SortedMap;
-import java.util.TreeMap;
+import java.util.*;
 
 /**
  * 一致性hash
  *
  * @author jisl on 2023/12/27 10#08
  **/
-public class  ConsistentHashing {
+public class ConsistentHashing {
 
-    private final static SortedMap<Long, String> ring = new TreeMap<>();
-    private static final int VIRTUAL_NODES = 500; // 每个物理节点对应的虚拟节点数量
+    private final static TreeMap<Long, String> RING = new TreeMap<>();
+    private final static List<String> NODES = new ArrayList<>();
+    private static final int VIRTUAL_NODES = 10; // 每个物理节点对应的虚拟节点数量
+    private final static String DELIMITER = "#";
 
     public static void addNode(String node) {
 //        真实节点对应虚拟节点，增加hash均衡。
         for (int i = 0; i < VIRTUAL_NODES; i++) {
-            String virtualNode = node + "#" + i; // 创建虚拟节点
+            String virtualNode = node + DELIMITER + i; // 创建虚拟节点
             long hash = hash(virtualNode);
-            ring.put(hash, virtualNode);
+            RING.put(hash, node);
+        }
+    }
+
+    public static void addNode(List<String> nodes) {
+//        节点变化，先清空旧的节点。再添加。
+        NODES.clear();
+        NODES.addAll(nodes);
+//        维护的一致性hash也是
+        RING.clear();
+        for (String node : nodes) {
+            addNode(node);
         }
     }
 
     public static void removeNode(String node) {
         for (int i = 0; i < VIRTUAL_NODES; i++) {
-            String virtualNode = node + "#" + i; // 创建虚拟节点
+            String virtualNode = node + DELIMITER + i; // 创建虚拟节点
             long hash = hash(virtualNode);
-            ring.remove(hash);
+            RING.remove(hash);
         }
     }
 
+    private static String getNode() {
+        return NODES.get(RandomUtil.randomInt(NODES.size()));
+    }
+
+
     public static String getNode(String data) {
-        if (ring.isEmpty()) {
-            return null;
+        if (RING.isEmpty()) {
+            return getNode();
         }
-
         long hash = hash(data);
-        SortedMap<Long, String> tailMap = ring.tailMap(hash);
-
-        if (tailMap.isEmpty()) {
-            return ring.get(ring.firstKey());
-        }
-        return tailMap.get(tailMap.firstKey()).split("#")[0];
+//        获取比当前hash小的key
+        long key = Objects.isNull(RING.floorKey(hash)) ? RING.firstKey() : RING.floorKey(hash);
+        String node = RING.get(key);
+        return node;
     }
 
     private static long hash(String key) {
@@ -63,7 +75,7 @@ public class  ConsistentHashing {
         return Math.abs(hash);
     }
 
-    public static void showMap(ArrayList<String> dataList) {
+    private static void showMap(ArrayList<String> dataList) {
         final HashMap<String, Integer> cnt = new HashMap<>();
         for (String data : dataList) {
             String node = getNode(data);

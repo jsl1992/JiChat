@@ -42,7 +42,8 @@ public class TestController {
     @ApiOperation("rpcTest")
     public CommonResult<LoginUser> rpcTest(String loginKey) {
         final CommonResult<LoginUser> loginUserCommonResult = userRpc.getLoginUserByLoginKey(loginKey);
-        return CommonResult.success(loginUserCommonResult.getCheckedData());
+        loginUserCommonResult.checkError();
+        return CommonResult.success(loginUserCommonResult.getData());
     }
 
 

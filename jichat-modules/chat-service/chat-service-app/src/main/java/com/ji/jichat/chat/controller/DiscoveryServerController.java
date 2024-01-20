@@ -2,6 +2,7 @@ package com.ji.jichat.chat.controller;
 
 
 import cn.hutool.core.util.IdUtil;
+import com.ji.jichat.chat.api.vo.RouteServerVO;
 import com.ji.jichat.chat.kit.ConsistentHashing;
 import com.ji.jichat.common.pojo.CommonResult;
 import io.swagger.annotations.Api;
@@ -26,15 +27,17 @@ public class DiscoveryServerController {
 //    private IDeviceComparisonService deviceComparisonService;
 //
 
-    @Value("${server.port}")
-    private Integer port;
 
     @PostMapping("/routeServer")
     @ApiOperation("路由服务")
-    public CommonResult<String> routeServer() {
+    public CommonResult<RouteServerVO> routeServer() {
 //        异步方法，防止定时器调用超时
         final String node = ConsistentHashing.getNode(IdUtil.simpleUUID());
-        return CommonResult.success(node);
+        final String[] ipAndPort = node.split(":");
+        final RouteServerVO routeServerVO = RouteServerVO.builder()
+                .innerIp(ipAndPort[0]).outsideIp(ipAndPort[0]).port(ipAndPort[1])
+                .build();
+        return CommonResult.success(routeServerVO);
     }
 
 
