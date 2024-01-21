@@ -2,6 +2,7 @@ package com.ji.jichat.user.service.impl;
 
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.crypto.digest.BCrypt;
+import cn.hutool.extra.servlet.ServletUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ji.jichat.common.constants.CacheConstant;
@@ -13,7 +14,7 @@ import com.ji.jichat.user.api.dto.AuthLoginDTO;
 import com.ji.jichat.user.api.dto.UserRegisterDTO;
 import com.ji.jichat.user.api.vo.AuthLoginVO;
 import com.ji.jichat.user.api.vo.LoginUser;
-import com.ji.jichat.user.api.vo.RouteServerVO;
+import com.ji.jichat.user.api.vo.UserChatServerVO;
 import com.ji.jichat.user.entity.Device;
 import com.ji.jichat.user.entity.User;
 import com.ji.jichat.user.kit.ConsistentHashing;
@@ -58,7 +59,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         if (Objects.equals(user.getStatus(), CommonStatusEnum.DISABLE.getStatus())) {
             throw new ServiceException("登录失败，账号被禁用");
         }
-        final String clientIP = cn.hutool.extra.servlet.ServletUtil.getClientIP(HttpContextUtil.getHttpServletRequest());
+        final String clientIP = ServletUtil.getClientIP(HttpContextUtil.getHttpServletRequest());
         final Date now = new Date();
         user.setOnlineStatus(OnlineStatus.ONLINE.getCode());
         user.setLoginIp(clientIP);
@@ -78,7 +79,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         final String refreshToken = JwtUtil.generateRefreshToken(loginKey);
         final AuthLoginVO authLoginVO = AuthLoginVO.builder()
                 .userId(user.getId()).accessToken(accessToken).refreshToken(refreshToken)
-                .expiresTime(accessTokenExpirationTime).routeServerVO(routeServer(loginKey))
+                .expiresTime(accessTokenExpirationTime)
                 .build();
         cacheLoginUer(user, loginKey, deviceType);
         return authLoginVO;
@@ -108,6 +109,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
         final User user = getById(loginUser.getUserId());
         final AuthLoginVO authLoginVO = buildAuthLoginVO(user, loginUser.getDeviceType());
+//        同时将tcp连接的redis时间也刷新
+        redisTemplate.expire(CacheConstant.LOGIN_USER_CHAT_SERVER + loginUser.getUserId() + "_" + loginUser.getDeviceType(), 8, TimeUnit.DAYS);
         //新的token创建完毕，将旧的loginKey作废
         redisTemplate.delete(CacheConstant.LOGIN_USER + loginKey);
         return authLoginVO;
@@ -135,21 +138,23 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     }
 
     @Override
-    public RouteServerVO routeServer(String loginKey) {
-        final String node = ConsistentHashing.getNode(loginKey);
+    public UserChatServerVO routeServer(LoginUser loginUser) {
+        final String node = ConsistentHashing.getNode(loginUser.getLoginKey());
         final String[] ipAndPort = node.split(":");
-        final RouteServerVO routeServerVO = RouteServerVO.builder().loginKey(loginKey)
-                .innerIp(ipAndPort[0]).outsideIp(ipAndPort[0]).port(ipAndPort[1])
+//       todo 需要将nacos的内网和http端口找到对应的服务，找到返回外网ip和tcp端口
+        final UserChatServerVO userChatServerVO = UserChatServerVO.builder()
+                .userId(loginUser.getUserId())
+                .deviceType(loginUser.getDeviceType())
+                .ip(ipAndPort[0]).port(Integer.valueOf(ipAndPort[0]))
                 .build();
-        return routeServerVO;
+        return userChatServerVO;
     }
 
     private void loginDevice(AuthLoginDTO loginDTO, User user) {
-        final String clientIP = cn.hutool.extra.servlet.ServletUtil.getClientIP(HttpContextUtil.getHttpServletRequest());
+        final String clientIP = ServletUtil.getClientIP(HttpContextUtil.getHttpServletRequest());
         final Date now = new Date();
         final Device onlineDevice = deviceService.getOne(new LambdaQueryWrapper<Device>().eq(Device::getUserId, user.getId())
                 .eq(Device::getDeviceType, loginDTO.getDeviceType()).eq(Device::getOnlineStatus, OnlineStatus.ONLINE.getCode()));
-
         if (Objects.nonNull(onlineDevice)) {
             //同一个设备类型在线，那么要把前面登录的设备下线。
             onlineDevice.setOnlineStatus(OnlineStatus.OFFLINE.getCode());
@@ -170,6 +175,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
             device.setCreateTime(now);
             deviceService.save(device);
         } else {
+            device.setId(dbDevice.getId());
             deviceService.updateById(device);
         }
     }

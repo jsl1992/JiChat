@@ -2,19 +2,20 @@ package com.ji.jichat.chat.netty.handler;
 
 
 import cn.hutool.core.bean.BeanUtil;
-import com.ji.jichat.chat.netty.ChannelRepository;
 import com.ji.jichat.chat.strategy.CommandStrategy;
 import com.ji.jichat.chat.strategy.StrategyContext;
 import com.ji.jichat.common.pojo.DownMessage;
 import com.ji.jichat.common.pojo.UpMessage;
-import io.netty.channel.*;
+import io.netty.channel.ChannelFutureListener;
+import io.netty.channel.ChannelHandler;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.util.ReferenceCountUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-import java.util.Objects;
 import java.util.concurrent.atomic.AtomicLong;
 
 @Slf4j
@@ -36,11 +37,6 @@ public class BizServerHandler extends SimpleChannelInboundHandler<UpMessage> {
     @Override
     public void channelRead0(ChannelHandlerContext ctx, UpMessage message) {
         final long start = System.currentTimeMillis();
-        if (Objects.isNull(ChannelRepository.get(message.getLoginKey()))) {
-//            用户已经退出登录了，那么tcp连接也要关闭。
-            ctx.channel().close();
-            return;
-        }
         try {
             final CommandStrategy processor = strategyContext.getProcessor(message.getCode());
             final String returnContent = processor.execute(message);

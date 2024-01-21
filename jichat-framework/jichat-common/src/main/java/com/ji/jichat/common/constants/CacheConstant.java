@@ -5,11 +5,12 @@ package com.ji.jichat.common.constants;
  */
 public class CacheConstant {
 
-    public static final String CHARSET = "UTF-8";
 
 
 
     public static final String LOGIN_USER = "user:loginUser:";
+
+    public static final String LOGIN_USER_CHAT_SERVER = "user:loginUser:chatServer";
 
     /**
      * messageId存储自增

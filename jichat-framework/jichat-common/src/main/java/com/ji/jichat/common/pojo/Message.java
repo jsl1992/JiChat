@@ -14,8 +14,6 @@ public abstract class Message {
      */
     private Long userId;
 
-    private String loginKey;
-
 
     private Integer deviceType;
 

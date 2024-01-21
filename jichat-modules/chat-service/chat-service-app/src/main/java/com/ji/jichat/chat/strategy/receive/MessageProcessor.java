@@ -30,7 +30,6 @@ public class MessageProcessor implements CommandStrategy {
     @Override
     public String execute(UpMessage message) {
         final String content = message.getContent();
-
         return message.getContent();
     }
 }

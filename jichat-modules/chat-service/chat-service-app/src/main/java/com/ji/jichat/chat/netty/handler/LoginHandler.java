@@ -1,13 +1,13 @@
 package com.ji.jichat.chat.netty.handler;
 
 import com.alibaba.fastjson.JSONObject;
-import com.ji.jichat.chat.api.vo.UserChatServerVO;
 import com.ji.jichat.chat.core.config.TcpServerConfig;
 import com.ji.jichat.chat.enums.CommandCodeEnum;
 import com.ji.jichat.chat.netty.ChannelRepository;
 import com.ji.jichat.common.constants.CacheConstant;
 import com.ji.jichat.common.pojo.UpMessage;
 import com.ji.jichat.security.admin.utils.JwtUtil;
+import com.ji.jichat.user.api.vo.UserChatServerVO;
 import com.ji.jichat.user.api.vo.LoginUser;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandler;
@@ -45,10 +45,11 @@ public class LoginHandler extends SimpleChannelInboundHandler<UpMessage> {
 
     @Override
     public void channelRead0(ChannelHandlerContext ctx, UpMessage msg) throws Exception {
-        final Channel channel = ChannelRepository.get(msg.getLoginKey());
+        final String key = msg.getUserId() + "_" + msg.getDeviceType();
+        final Channel channel = ChannelRepository.get(key);
         if (channel == null && !msg.isMatch(CommandCodeEnum.LOGIN.getCode())) {
             //之前没有登录，且当前编码不是登录那么需要返回异常
-            log.debug("第[{}]次收到连接[{},{}]未登录,丢弃请求msg=[{}]", ++count, ctx.channel().remoteAddress(), msg.getLoginKey(), msg);
+            log.debug("第[{}]次收到连接[{},{}]未登录,丢弃请求msg=[{}]", ++count, ctx.channel().remoteAddress(), key, msg);
             if (count >= MAX_NO_LOGIN_PROTOCOL_COUNT) {
                 log.error("连接[{}]超过最大未登录发送连接次数[{}],关闭连接", ctx.channel().remoteAddress(), MAX_NO_LOGIN_PROTOCOL_COUNT);
                 ctx.channel().close();
@@ -62,28 +63,26 @@ public class LoginHandler extends SimpleChannelInboundHandler<UpMessage> {
         }
         log.debug("收到连接[{}] 登录请求msg=[{}]", ctx.channel().remoteAddress(), msg);
         final LoginUser loginUser = getLoginUser(msg);
-        if (Objects.isNull(loginUser) || Objects.equals(loginUser.getLoginKey(), msg.getLoginKey())) {
+        if (Objects.isNull(loginUser)) {
             log.warn("连接[{}]登录请求token为空,关闭连接", ctx.channel().remoteAddress());
             ctx.channel().close();
             return;
         }
-        ChannelRepository.put(msg.getLoginKey(), ctx.channel());
+//        存在redis里的用户服务缓存过期，那么也要将 ChannelRepository里的服务删除
+        ChannelRepository.put(key, ctx.channel());
         final UserChatServerVO userChatServerVO = UserChatServerVO.builder()
-                .httpPort(tcpServerConfig.getHttpPort()).tcpPort(tcpServerConfig.getTcpPort())
-                .outsideIp(tcpServerConfig.getOutsideIp()).innerIp(tcpServerConfig.getInnerIp())
+                .userId(loginUser.getUserId()).deviceType(loginUser.getDeviceType())
+                .ip(tcpServerConfig.getOutsideIp()).port(tcpServerConfig.getTcpPort())
                 .build();
-        redisTemplate.opsForValue().set(CacheConstant.LOGIN_USER, userChatServerVO, 8, TimeUnit.DAYS);
+        redisTemplate.opsForValue().set(CacheConstant.LOGIN_USER_CHAT_SERVER + key, userChatServerVO, 8, TimeUnit.DAYS);
         ctx.pipeline().remove(this);
-        log.info("[{}-{}]建立连接登录成功,初始化session,httpTimestamp=[{}]", msg.getLoginKey(), msg.getDeviceType());
+        log.info("[{}-{}]建立连接登录成功,初始化session,httpTimestamp=[{}]", key, msg.getDeviceType());
     }
 
     private LoginUser getLoginUser(UpMessage msg) {
         try {
             String token = JSONObject.parseObject(msg.getContent()).getString("token");
             final String loginKey = JwtUtil.validateJwtWithGetSubject(token);
-            if (!Objects.equals(msg.getLoginKey(), loginKey)) {
-                return null;
-            }
             LoginUser loginUser = (LoginUser) redisTemplate.opsForValue().get(CacheConstant.LOGIN_USER + loginKey);
             return loginUser;
         } catch (Exception e) {

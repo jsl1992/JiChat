@@ -28,8 +28,5 @@ public class AuthLoginVO {
     @ApiModelProperty(value = "accessToken过期时间", required = true)
     private Date expiresTime;
 
-    @ApiModelProperty(value = "连接tcp服务信息", required = true)
-    private RouteServerVO routeServerVO;
-
 
 }

@@ -1,13 +1,10 @@
 package com.ji.jichat.user.controller;
 
 
-import cn.hutool.core.util.IdUtil;
-
 import com.ji.jichat.common.pojo.CommonResult;
 import com.ji.jichat.security.admin.core.context.UserContext;
-import com.ji.jichat.security.admin.utils.JwtUtil;
-import com.ji.jichat.user.api.vo.RouteServerVO;
-import com.ji.jichat.user.kit.ConsistentHashing;
+import com.ji.jichat.user.api.vo.UserChatServerVO;
+import com.ji.jichat.user.api.vo.LoginUser;
 import com.ji.jichat.user.service.IUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -33,10 +30,10 @@ public class DiscoveryServerController {
 
     @PostMapping("/routeServer")
     @ApiOperation("路由服务")
-    public CommonResult<RouteServerVO> routeServer() {
+    public CommonResult<UserChatServerVO> routeServer() {
 //        异步方法，防止定时器调用超时
-        final String loginKey = UserContext.getLoginKey();
-        return CommonResult.success(userService.routeServer(loginKey));
+        final LoginUser loginUser = UserContext.get();
+        return CommonResult.success(userService.routeServer(loginUser));
     }
 
 
