@@ -23,6 +23,6 @@ public class MybatisCodeGeneratorTest {
     private static final String package_name = "com.ji.jichat.user";
 
     public static void main(String[] args) {
-        MybatisCodeGenerator.generator(url,userName,password,author,module_path,package_name,tableNames);
+        MybatisCodeGenerator.generator(url,userName,password,author,module_path,package_name,tableNames,true);
     }
 }

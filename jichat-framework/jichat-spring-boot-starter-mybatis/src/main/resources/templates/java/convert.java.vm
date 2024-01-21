@@ -1,0 +1,34 @@
+package ${packageName}.convert;
+
+import java.util.*;
+
+
+import org.mapstruct.Mapper;
+import org.mapstruct.factory.Mappers;
+import ${packageName}.domain.${ClassName};
+import ${packageName}.api.dto.${ClassName}DTO;
+import ${packageName}.api.vo.${ClassName}VO;
+
+/**
+ * ${functionName} Convert
+ *
+ * @author ${author}
+ * @date ${datetime}
+ */
+@Mapper
+public interface ${ClassName}Convert {
+
+    ${ClassName}Convert INSTANCE = Mappers.getMapper(${ClassName}Convert.class);
+
+    ${ClassName} convert(${ClassName}VO bean);
+
+    ${ClassName} convert(${ClassName}DTO bean);
+
+    ${ClassName}VO convert(${ClassName} bean);
+
+    List<${ClassName}VO> convertList(List<${ClassName}> list);
+
+##    PageResult<${ClassName}VO> convertPage(PageResult<${ClassName}> page);
+
+
+}
