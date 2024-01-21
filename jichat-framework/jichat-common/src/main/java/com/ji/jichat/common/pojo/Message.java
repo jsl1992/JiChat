@@ -36,9 +36,9 @@ public abstract class Message {
 
 
     /**
-     * 消息id
+     * 随机字符串
      */
-    private String msgId = "-1";
+    private String nonce = "-1";
 
 
 }

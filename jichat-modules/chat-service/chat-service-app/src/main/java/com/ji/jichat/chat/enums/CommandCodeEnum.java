@@ -11,7 +11,7 @@ public enum CommandCodeEnum {
     NO_COMMAND(-1, "没有处理Processor"),
     HEARTBEAT(1001, "心跳"),
     LOGIN(1002, "登录"),
-    RESPOND_COMMAND(3001, "客户端应答下发指令上报"),
+    MESSAGE(2001, "个人消息"),
 
     /*  ================下发指令=================*/
     SYNC_TIME(2001, "同步时间"),

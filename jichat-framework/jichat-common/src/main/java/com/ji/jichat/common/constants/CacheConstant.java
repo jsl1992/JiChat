@@ -8,8 +8,11 @@ public class CacheConstant {
     public static final String CHARSET = "UTF-8";
 
 
-    /**
-     * id存储自增
-     */
+
     public static final String LOGIN_USER = "user:loginUser:";
+
+    /**
+     * messageId存储自增
+     */
+    public static final String MESSAGE_ID = "chat:messageId:";
 }
