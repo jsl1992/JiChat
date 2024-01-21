@@ -30,8 +30,8 @@
         <druid.version>1.1.16</druid.version>
         <mybatis-spring-boot-starter.version>2.0.0</mybatis-spring-boot-starter.version>
         <mybatis.version>3.5.4</mybatis.version>
-        <mybatis-plus.version>3.4.1</mybatis-plus.version>
-        <mybatis-plus-generator.version>3.3.2</mybatis-plus-generator.version>
+        <mybatis-plus.version>3.5.2</mybatis-plus.version>
+        <mybatis-plus-generator.version>3.5.2</mybatis-plus-generator.version>
         <velocity-engine-core.version>2.2</velocity-engine-core.version>
         <spring-boot-starter-data-jest.version>3.2.5.RELEASE</spring-boot-starter-data-jest.version>
         <redisson.version>3.13.6</redisson.version>
