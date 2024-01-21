@@ -16,4 +16,6 @@ public class CacheConstant {
      * messageId存储自增
      */
     public static final String MESSAGE_ID = "chat:messageId:";
+
+    public static final String CHAT_SERVER_CLIENT_COUNT = "chat:server:clientCount";
 }

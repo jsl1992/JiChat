@@ -17,7 +17,7 @@ import com.ji.jichat.user.api.vo.LoginUser;
 import com.ji.jichat.user.api.vo.UserChatServerVO;
 import com.ji.jichat.user.entity.Device;
 import com.ji.jichat.user.entity.User;
-import com.ji.jichat.user.kit.ConsistentHashing;
+import com.ji.jichat.user.kit.ServerLoadBalancer;
 import com.ji.jichat.user.mapper.UserMapper;
 import com.ji.jichat.user.service.IDeviceService;
 import com.ji.jichat.user.service.IUserService;
@@ -46,6 +46,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
     @Resource
     private RedisTemplate<String, LoginUser> redisTemplate;
+
+    @Resource
+    private ServerLoadBalancer serverLoadBalancer;
 
     @Override
     public AuthLoginVO login(AuthLoginDTO loginDTO) {
@@ -139,7 +142,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
     @Override
     public UserChatServerVO routeServer(LoginUser loginUser) {
-        final String node = ConsistentHashing.getNode(loginUser.getLoginKey());
+        final String node = serverLoadBalancer.getServer();
         final String[] ipAndPort = node.split(":");
 //       todo 需要将nacos的内网和http端口找到对应的服务，找到返回外网ip和tcp端口
         final UserChatServerVO userChatServerVO = UserChatServerVO.builder()
