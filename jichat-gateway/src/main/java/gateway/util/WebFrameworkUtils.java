@@ -3,7 +3,6 @@ package gateway.util;
 import cn.hutool.core.net.NetUtil;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.extra.servlet.ServletUtil;
-import cn.iocoder.yudao.framework.common.util.json.JsonUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.route.Route;
 import org.springframework.cloud.gateway.support.ServerWebExchangeUtils;
@@ -62,7 +61,8 @@ public class WebFrameworkUtils {
         return response.writeWith(Mono.fromSupplier(() -> {
             DataBufferFactory bufferFactory = response.bufferFactory();
             try {
-                return bufferFactory.wrap(JsonUtils.toJsonByte(object));
+//                return bufferFactory.wrap(json.toJsonByte(object));
+                return null;
             } catch (Exception ex) {
                 ServerHttpRequest request = exchange.getRequest();
                 log.error("[writeJSON][uri({}/{}) 发生异常]", request.getURI(), request.getMethod(), ex);
@@ -89,9 +89,9 @@ public class WebFrameworkUtils {
         String ip;
         for (String header : headers) {
             ip = exchange.getRequest().getHeaders().getFirst(header);
-            if (!NetUtil.isUnknown(ip)) {
-                return NetUtil.getMultistageReverseProxyIp(ip);
-            }
+//            if (!NetUtil.isUnknown(ip)) {
+//                return NetUtil.getMultistageReverseProxyIp(ip);
+//            }
         }
 
         // 方式二，通过 remoteAddress 获取

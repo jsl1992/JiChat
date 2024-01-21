@@ -2,6 +2,8 @@ package com.ji.jichat.mybatis;
 
 import com.baomidou.mybatisplus.generator.FastAutoGenerator;
 import com.baomidou.mybatisplus.generator.config.OutputFile;
+import com.baomidou.mybatisplus.generator.config.rules.DateType;
+import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -21,7 +23,7 @@ public class MybatisCodeGenerator {
     private static final String userName = "root";
     private static final String password = "root";
     //需要生成的表(多张表用","分隔,例如:"t_user,t_role")
-    private static final String tableNames = "t_user,t_device,roles";
+    private static final String tableNames = "t_user,t_device";
     //模块地址
     private static final String module_path = "/jichat-modules/user-service/user-service-app";
     //包名
@@ -48,21 +50,30 @@ public class MybatisCodeGenerator {
                     builder.author(author) // 设置作者
                             .enableSwagger() // 开启 swagger 模式
 //                            .fileOverride() // 覆盖已生成文件
-                            .outputDir(appPath + "\\src\\main\\java"); // 指定输出目录
+                            .outputDir(appPath + "\\src\\main\\java") // 指定输出目录
+                            .dateType(DateType.ONLY_DATE)
+                            .disableOpenDir();
+
                 })
                 .packageConfig(builder -> {
                     builder
                             .parent(package_name) // 设置父包名
 //                            .moduleName("system") // 设置父包模块名
-                            .other("dto")
+//                            .other("dto") // 设置dto包名
+//                            .pathInfo(Collections.singletonMap(OutputFile.other, apiPath +  "\\src\\main\\java"))
                             .pathInfo(Collections.singletonMap(OutputFile.xml, appPath + "\\src\\main\\resources\\mapper")) // 设置mapperXml生成路径
-                            .other(apiPath + "\\src\\main\\java");
+                    ;
 
                 })
+                .templateConfig(builder -> {
+                            builder.entity("/templates/java/entity.java.vm");
+                        }
+                )
                 .strategyConfig(builder -> {
 //t_cnfeenode,t_etcflag,t_ff_node,t_ff_noderelation,t_flagfee,t_station,
                     builder.addInclude(tableNames) // 设置需要生成的表名
                             .addTablePrefix("t_", "c_")
+                            .entityBuilder().enableLombok().fileOverride();
                     ; // 设置过滤表前缀
                 })
                 .injectionConfig(consumer -> {
@@ -70,15 +81,16 @@ public class MybatisCodeGenerator {
                         Map<String, String> customFile = new HashMap<>();
                         // DTO
                         customFile.put("DTO.java", "/templates/java/dto.java.vm");
+//                        customFile.put("VO.java", "/templates/java/vo.java.vm");
                         consumer.customFile(customFile);
                     }
                 })
-//                .templateEngine(new FreemarkerTemplateEngine()) // 使用Freemarker引擎模板，默认的是Velocity引擎模板
+//                .templateEngine(new EnhanceFreemarkerTemplateEngine()) // 使用Freemarker引擎模板，默认的是Velocity引擎模板
                 .execute();
     }
 
     public static void main(String[] args) {
-        MybatisCodeGenerator.generator(url, userName, password, author, module_path, package_name, tableNames, true);
+        MybatisCodeGenerator.generator(url, userName, password, author, module_path, package_name, tableNames, false);
     }
 
 

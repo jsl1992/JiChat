@@ -1,9 +1,10 @@
 package com.ji.jichat.user.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
-import java.util.Date;
 import java.io.Serializable;
-
+import java.util.Date;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
 /**
@@ -12,86 +13,58 @@ import lombok.*;
  * </p>
  *
  * @author jisl
- * @since 2024-01-17
+ * @since 2024-01-21
  */
-@Data
-@EqualsAndHashCode(callSuper = false)
-@TableName("t_user")
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
+@Data
+@TableName("t_user")
+@ApiModel(value = "User对象", description = "用户表")
 public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    /**
-     * id主键
-     */
+    @ApiModelProperty("id主键")
     private Long id;
 
-    /**
-     * 用户名
-     */
+    @ApiModelProperty("用户名")
     private String username;
 
-    /**
-     * 密码
-     */
+    @ApiModelProperty("密码")
     private String password;
 
-    /**
-     * 用户昵称
-     */
+    @ApiModelProperty("用户昵称")
     private String nickname;
 
-    /**
-     * 手机号
-     */
+    @ApiModelProperty("手机号")
     private String mobile;
 
-    /**
-     * 帐号状态（0停用 1正常）
-     */
+    @ApiModelProperty("帐号状态（0停用 1正常）")
     private Integer status;
 
-    /**
-     * 在线状态（0离线 1在线）
-     */
+    @ApiModelProperty("在线状态（0离线 1在线）")
     private Integer onlineStatus;
 
-    /**
-     * 最后登录IP
-     */
+    @ApiModelProperty("最后登录IP")
     private String loginIp;
 
-    /**
-     * 最后登录时间
-     */
+    @ApiModelProperty("最后登录时间")
     private Date loginDate;
 
-    /**
-     * 是否删除(0存在 null删除,解决唯一索引冲突)
-     */
+    @ApiModelProperty("是否删除(0存在 null删除,解决唯一索引冲突)")
     private Integer delFlag;
 
-    /**
-     * 创建时间
-     */
+    @ApiModelProperty("创建时间")
     private Date createTime;
 
-    /**
-     * 创建人
-     */
+    @ApiModelProperty("创建人")
     private String createUser;
 
-    /**
-     * 更新时间
-     */
+    @ApiModelProperty("更新时间")
     private Date updateTime;
 
-    /**
-     * 更新人
-     */
+    @ApiModelProperty("更新人")
     private String updateUser;
 
 
