@@ -44,17 +44,12 @@ public class TcpServerConfig {
     private String env;
 
     public String getTcpAddress() {
-        return this.outsideIp.trim() + ":" + this.tcpPort;
+        return this.outsideIp + ":" + this.tcpPort;
     }
 
     public String getHttpAddress() {
-        return this.innerIp.trim() + ":" + this.httpPort;
+        return this.innerIp + ":" + this.httpPort;
     }
 
-    public void setWorkerCount(int workerCount) {
-        // 默认以cpu核心数*2为工作线程池大小
-        final int core = Runtime.getRuntime().availableProcessors();
-        this.workerCount = Math.max(workerCount, core * 2);
-    }
 
 }

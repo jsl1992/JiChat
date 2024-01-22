@@ -1,4 +1,4 @@
-package com.ji.jichat.user.kit;
+package com.ji.jichat.chat.kit;
 
 import com.alibaba.nacos.api.exception.NacosException;
 import com.alibaba.nacos.api.naming.NamingFactory;

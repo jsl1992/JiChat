@@ -4,7 +4,6 @@ import com.ji.jichat.user.api.dto.AuthLoginDTO;
 import com.ji.jichat.user.api.dto.UserRegisterDTO;
 import com.ji.jichat.user.api.vo.AuthLoginVO;
 import com.ji.jichat.user.api.vo.LoginUser;
-import com.ji.jichat.user.api.vo.UserChatServerVO;
 import com.ji.jichat.user.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -26,5 +25,4 @@ public interface IUserService extends IService<User> {
 
     LoginUser getLoginUserByLoginKey(String loginKey);
 
-    UserChatServerVO routeServer(LoginUser loginUser);
 }

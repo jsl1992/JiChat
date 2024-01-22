@@ -1,4 +1,4 @@
-package com.ji.jichat.user.kit;
+package com.ji.jichat.chat.kit;
 
 import com.ji.jichat.common.constants.CacheConstant;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -41,12 +41,18 @@ public class ServerLoadBalancer {
         redisTemplate.opsForZSet().incrementScore(CacheConstant.CHAT_SERVER_CLIENT_COUNT, selectedServer, 1);
     }
 
+    public void subServerClientCount(String selectedServer) {
+        redisTemplate.opsForZSet().incrementScore(CacheConstant.CHAT_SERVER_CLIENT_COUNT, selectedServer, -1);
+    }
+
     public void syncServer(List<String> curServers) {
         Set<String> cacheServers = new HashSet<>(redisTemplate.opsForZSet().range(CacheConstant.CHAT_SERVER_CLIENT_COUNT, 0, -1));
         // 删除在缓存中但不在当前服务器中的元素
-        cacheServers.removeAll(curServers);
-        redisTemplate.opsForZSet().remove(CacheConstant.CHAT_SERVER_CLIENT_COUNT, cacheServers.toArray());
-
+        for (String cs : cacheServers) {
+            if (!curServers.contains(cs)) {
+                redisTemplate.opsForZSet().remove(CacheConstant.CHAT_SERVER_CLIENT_COUNT, cs);
+            }
+        }
         // 添加在当前服务器中但不在缓存中的元素
         for (String s : curServers) {
 //            需要添加

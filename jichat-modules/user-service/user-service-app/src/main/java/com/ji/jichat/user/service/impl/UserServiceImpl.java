@@ -14,10 +14,8 @@ import com.ji.jichat.user.api.dto.AuthLoginDTO;
 import com.ji.jichat.user.api.dto.UserRegisterDTO;
 import com.ji.jichat.user.api.vo.AuthLoginVO;
 import com.ji.jichat.user.api.vo.LoginUser;
-import com.ji.jichat.user.api.vo.UserChatServerVO;
 import com.ji.jichat.user.entity.Device;
 import com.ji.jichat.user.entity.User;
-import com.ji.jichat.user.kit.ServerLoadBalancer;
 import com.ji.jichat.user.mapper.UserMapper;
 import com.ji.jichat.user.service.IDeviceService;
 import com.ji.jichat.user.service.IUserService;
@@ -47,8 +45,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     @Resource
     private RedisTemplate<String, LoginUser> redisTemplate;
 
-    @Resource
-    private ServerLoadBalancer serverLoadBalancer;
 
     @Override
     public AuthLoginVO login(AuthLoginDTO loginDTO) {
@@ -140,18 +136,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         return loginUser;
     }
 
-    @Override
-    public UserChatServerVO routeServer(LoginUser loginUser) {
-        final String node = serverLoadBalancer.getServer();
-        final String[] ipAndPort = node.split(":");
-//       todo 需要将nacos的内网和http端口找到对应的服务，找到返回外网ip和tcp端口
-        final UserChatServerVO userChatServerVO = UserChatServerVO.builder()
-                .userId(loginUser.getUserId())
-                .deviceType(loginUser.getDeviceType())
-                .ip(ipAndPort[0]).port(Integer.valueOf(ipAndPort[0]))
-                .build();
-        return userChatServerVO;
-    }
 
     private void loginDevice(AuthLoginDTO loginDTO, User user) {
         final String clientIP = ServletUtil.getClientIP(HttpContextUtil.getHttpServletRequest());

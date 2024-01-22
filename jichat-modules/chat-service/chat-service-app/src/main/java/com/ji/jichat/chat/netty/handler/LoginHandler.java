@@ -1,13 +1,14 @@
 package com.ji.jichat.chat.netty.handler;
 
 import com.alibaba.fastjson.JSONObject;
+import com.ji.jichat.chat.api.vo.UserChatServerVO;
 import com.ji.jichat.chat.core.config.TcpServerConfig;
 import com.ji.jichat.chat.enums.CommandCodeEnum;
+import com.ji.jichat.chat.kit.ServerLoadBalancer;
 import com.ji.jichat.chat.netty.ChannelRepository;
 import com.ji.jichat.common.constants.CacheConstant;
 import com.ji.jichat.common.pojo.UpMessage;
 import com.ji.jichat.security.admin.utils.JwtUtil;
-import com.ji.jichat.user.api.vo.UserChatServerVO;
 import com.ji.jichat.user.api.vo.LoginUser;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandler;
@@ -37,8 +38,8 @@ public class LoginHandler extends SimpleChannelInboundHandler<UpMessage> {
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
 
-//    @Resource
-
+    @Resource
+    private ServerLoadBalancer serverLoadBalancer;
     @Resource
     private TcpServerConfig tcpServerConfig;
 
@@ -72,9 +73,12 @@ public class LoginHandler extends SimpleChannelInboundHandler<UpMessage> {
         ChannelRepository.put(key, ctx.channel());
         final UserChatServerVO userChatServerVO = UserChatServerVO.builder()
                 .userId(loginUser.getUserId()).deviceType(loginUser.getDeviceType())
-                .ip(tcpServerConfig.getOutsideIp()).port(tcpServerConfig.getTcpPort())
+                .outsideIp(tcpServerConfig.getOutsideIp()).tcpPort(tcpServerConfig.getTcpPort())
+                .innerIp(tcpServerConfig.getInnerIp()).httpPort(tcpServerConfig.getHttpPort())
                 .build();
         redisTemplate.opsForValue().set(CacheConstant.LOGIN_USER_CHAT_SERVER + key, userChatServerVO, 8, TimeUnit.DAYS);
+        //增加当前的连接数
+        serverLoadBalancer.incrementServerClientCount(tcpServerConfig.getHttpAddress());
         ctx.pipeline().remove(this);
         log.info("[{}-{}]建立连接登录成功,初始化session,httpTimestamp=[{}]", key, msg.getDeviceType());
     }

@@ -27,5 +27,5 @@ spring:
     password: 123456
 
 
-outside-ip: 192.168.77.130
-inner-ip: 192.168.77.130
+outside-ip: 192.168.203.1
+inner-ip: 192.168.203.1

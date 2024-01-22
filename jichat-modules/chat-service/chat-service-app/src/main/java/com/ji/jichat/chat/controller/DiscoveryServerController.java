@@ -1,11 +1,11 @@
-package com.ji.jichat.user.controller;
+package com.ji.jichat.chat.controller;
 
 
+import com.ji.jichat.chat.api.vo.UserChatServerVO;
+import com.ji.jichat.chat.kit.ServerLoadBalancer;
 import com.ji.jichat.common.pojo.CommonResult;
 import com.ji.jichat.security.admin.core.context.UserContext;
-import com.ji.jichat.user.api.vo.UserChatServerVO;
 import com.ji.jichat.user.api.vo.LoginUser;
-import com.ji.jichat.user.service.IUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -25,15 +25,23 @@ import javax.annotation.Resource;
 public class DiscoveryServerController {
 
     @Resource
-    private IUserService userService;
+    private ServerLoadBalancer serverLoadBalancer;
 
 
     @PostMapping("/routeServer")
     @ApiOperation("路由服务")
     public CommonResult<UserChatServerVO> routeServer() {
 //        异步方法，防止定时器调用超时
+        final String node = serverLoadBalancer.getServer();
         final LoginUser loginUser = UserContext.get();
-        return CommonResult.success(userService.routeServer(loginUser));
+        final String[] ipAndPort = node.split(":");
+//       todo 需要将nacos的内网和http端口找到对应的服务，找到返回外网ip和tcp端口
+        final UserChatServerVO userChatServerVO = UserChatServerVO.builder()
+                .userId(loginUser.getUserId())
+                .deviceType(loginUser.getDeviceType())
+                .outsideIp(ipAndPort[0]).tcpPort(Integer.valueOf(ipAndPort[0]))
+                .build();
+        return CommonResult.success(userChatServerVO);
     }
 
 

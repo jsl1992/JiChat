@@ -61,6 +61,7 @@ public class UserController implements UserRpc {
 
     @PostMapping("/refresh-token")
     @ApiOperation("刷新令牌")
+    @RequiresNone
     @ApiImplicitParam(name = "refreshToken", value = "刷新令牌", required = true, dataTypeClass = String.class)
     public CommonResult<AuthLoginVO> refreshToken(@RequestParam("refreshToken") String refreshToken) {
         return CommonResult.success(userService.refreshToken(refreshToken));
