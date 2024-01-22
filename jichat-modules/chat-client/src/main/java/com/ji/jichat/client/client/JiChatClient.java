@@ -72,7 +72,7 @@ public class JiChatClient {
     private int errorCount;
 
     @PostConstruct
-    public void start() throws Exception {
+    public void start() {
         //登录 + 获取可以使用的服务器 ip+port
         userLogin();
         //启动客户端
@@ -218,9 +218,8 @@ public class JiChatClient {
      * 3. shutdown reconnect job.
      * 4. reset reconnect state.
      *
-     * @throws Exception
      */
-    public void reconnect() throws Exception {
+    public void reconnect() {
         if (channel != null && channel.isActive()) {
             return;
         }
@@ -235,9 +234,8 @@ public class JiChatClient {
     /**
      * 关闭
      *
-     * @throws InterruptedException
      */
-    public void close() throws InterruptedException {
+    public void close() {
         if (channel != null) {
             channel.close();
         }

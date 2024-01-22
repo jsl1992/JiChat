@@ -79,6 +79,7 @@ public class LoginHandler extends SimpleChannelInboundHandler<UpMessage> {
         redisTemplate.opsForValue().set(CacheConstant.LOGIN_USER_CHAT_SERVER + key, userChatServerVO, 8, TimeUnit.DAYS);
         //增加当前的连接数
         serverLoadBalancer.incrementServerClientCount(tcpServerConfig.getHttpAddress());
+//        理器在处理完特定的任务后，不再需要继续处理后续的事件。通过调用 remove(this) 可以将该处理器从链中移除，防止后续的事件传递给它。这在某些场景下有助于提高性能或确保在适当的时候清理资源
         ctx.pipeline().remove(this);
         log.info("[{}-{}]建立连接登录成功,初始化session,httpTimestamp=[{}]", key, msg.getDeviceType());
     }

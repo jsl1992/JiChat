@@ -3,7 +3,6 @@ package com.ji.jichat.client.controller;
 
 import com.ji.jichat.client.client.JiChatClient;
 import com.ji.jichat.common.pojo.CommonResult;
-import com.ji.jichat.user.api.UserRpc;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,6 +24,13 @@ public class MessageController {
     @ApiOperation("loginTcpServer")
     public CommonResult<Void> loginTcpServer() {
         jiChatClient.loginTcpServer();
+        return CommonResult.success();
+    }
+
+    @GetMapping("/reconnect")
+    @ApiOperation("reconnect")
+    public CommonResult<Void> reconnect() {
+        jiChatClient.reconnect();
         return CommonResult.success();
     }
 
