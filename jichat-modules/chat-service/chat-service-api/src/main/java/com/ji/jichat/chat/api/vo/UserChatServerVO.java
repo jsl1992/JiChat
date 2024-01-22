@@ -8,12 +8,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 
+import java.io.Serializable;
+
 @ApiModel("用户TCP服务")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserChatServerVO {
+public class UserChatServerVO implements Serializable {
 
     @ApiModelProperty(value = "用户id", required = true, example = "192.168.77.130")
     private Long userId;

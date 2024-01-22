@@ -1,10 +1,11 @@
-package com.ji.jichat.chat.netty.protocol;
+package com.ji.jichat.client.netty.protocol;
 
 import cn.hutool.core.io.checksum.CRC16;
 import com.alibaba.fastjson.JSON;
-import com.ji.jichat.chat.utils.ByteUtil;
+import com.ji.jichat.client.utils.ByteUtil;
 import com.ji.jichat.common.exception.ServiceException;
 import com.ji.jichat.common.pojo.DownMessage;
+import com.ji.jichat.common.pojo.Message;
 import com.ji.jichat.common.pojo.UpMessage;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -21,7 +22,7 @@ import java.util.Objects;
  * @author jishenglong on 2023/8/15 14:08
  **/
 @Slf4j
-public class ProtocolCodec {
+public class ClentProtocolCodec {
 
 
     public static final int PACKAGE_HEAD = 0xAAAABBBB;
@@ -32,11 +33,11 @@ public class ProtocolCodec {
     public static final int PROTOCOL_VERSION = 1001;
 
 
-    public static void encode(ByteBuf byteBuf, DownMessage downMessage) {
+    public static void encode(ByteBuf byteBuf, Message downMessage) {
         byte[] packageHead = ByteUtil.intToBytes(PACKAGE_HEAD);
         byte[] protocolVersion = ByteUtil.intToBytes(PROTOCOL_VERSION);
         byte[] packageTail = ByteUtil.intToBytes(PACKAGE_TAIL);
-        final byte[] content = downMessage.getContent().getBytes(StandardCharsets.UTF_8);
+        final byte[] content = JSON.toJSONString(downMessage).getBytes(StandardCharsets.UTF_8);
         final byte[] pkLenBytes = ByteUtil.intToBytes(protocolVersion.length + content.length);
 //        // 写入固定标识
         byteBuf.writeBytes(packageHead);
@@ -55,7 +56,6 @@ public class ProtocolCodec {
             int contentLen = byteBuf.getInt(4);
             byte[] content = new byte[contentLen - 4];
             byteBuf.getBytes(12, content); //从位置4开始读取contentLen个字节的数据
-            final String s = new String(content, StandardCharsets.UTF_8);
             final UpMessage message = JSON.parseObject(new String(content, StandardCharsets.UTF_8), UpMessage.class);
             return message;
         } else {

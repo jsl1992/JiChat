@@ -1,4 +1,4 @@
-package com.ji.jichat.chat.enums;
+package com.ji.jichat.common.enums;
 
 /**
   *命令编码

@@ -14,5 +14,6 @@
     <modules>
         <module>chat-service</module>
         <module>user-service</module>
+        <module>chat-client</module>
     </modules>
 </project>

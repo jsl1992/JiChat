@@ -39,7 +39,7 @@ public class DiscoveryServerController {
         final UserChatServerVO userChatServerVO = UserChatServerVO.builder()
                 .userId(loginUser.getUserId())
                 .deviceType(loginUser.getDeviceType())
-                .outsideIp(ipAndPort[0]).tcpPort(Integer.valueOf(ipAndPort[0]))
+                .outsideIp("192.168.77.130").tcpPort(7066)
                 .build();
         return CommonResult.success(userChatServerVO);
     }

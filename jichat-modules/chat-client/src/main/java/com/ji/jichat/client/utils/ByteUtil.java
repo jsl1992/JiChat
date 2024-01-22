@@ -1,4 +1,4 @@
-package com.ji.jichat.chat.utils;
+package com.ji.jichat.client.utils;
 
 
 import java.nio.charset.StandardCharsets;

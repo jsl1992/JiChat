@@ -3,10 +3,10 @@ package com.ji.jichat.chat.netty.handler;
 import com.alibaba.fastjson.JSONObject;
 import com.ji.jichat.chat.api.vo.UserChatServerVO;
 import com.ji.jichat.chat.core.config.TcpServerConfig;
-import com.ji.jichat.chat.enums.CommandCodeEnum;
 import com.ji.jichat.chat.kit.ServerLoadBalancer;
 import com.ji.jichat.chat.netty.ChannelRepository;
 import com.ji.jichat.common.constants.CacheConstant;
+import com.ji.jichat.common.enums.CommandCodeEnum;
 import com.ji.jichat.common.pojo.UpMessage;
 import com.ji.jichat.security.admin.utils.JwtUtil;
 import com.ji.jichat.user.api.vo.LoginUser;
@@ -62,7 +62,7 @@ public class LoginHandler extends SimpleChannelInboundHandler<UpMessage> {
             super.channelRead(ctx, msg);
             return;
         }
-        log.debug("收到连接[{}] 登录请求msg=[{}]", ctx.channel().remoteAddress(), msg);
+        log.info("收到连接[{}] 登录请求msg=[{}]", ctx.channel().remoteAddress(), msg);
         final LoginUser loginUser = getLoginUser(msg);
         if (Objects.isNull(loginUser)) {
             log.warn("连接[{}]登录请求token为空,关闭连接", ctx.channel().remoteAddress());

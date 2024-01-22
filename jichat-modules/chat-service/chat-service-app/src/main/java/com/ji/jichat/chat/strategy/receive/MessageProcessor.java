@@ -1,16 +1,11 @@
 package com.ji.jichat.chat.strategy.receive;
 
 
-import com.ji.jichat.chat.enums.CommandCodeEnum;
 import com.ji.jichat.chat.strategy.CommandStrategy;
-import com.ji.jichat.chat.utils.ByteUtil;
+import com.ji.jichat.common.enums.CommandCodeEnum;
 import com.ji.jichat.common.pojo.UpMessage;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
-
-import javax.annotation.Resource;
-import java.time.LocalDateTime;
 
 /**
  * 指令回复Processor
