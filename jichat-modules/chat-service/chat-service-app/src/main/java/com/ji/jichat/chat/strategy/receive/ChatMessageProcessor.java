@@ -1,7 +1,6 @@
 package com.ji.jichat.chat.strategy.receive;
 
 
-import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.IdUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -11,7 +10,7 @@ import com.ji.jichat.chat.api.enums.DeviceTypeEnum;
 import com.ji.jichat.chat.api.enums.MessageTypeEnum;
 import com.ji.jichat.chat.api.vo.UserChatServerVO;
 import com.ji.jichat.chat.manager.MessageIdGenerate;
-import com.ji.jichat.chat.mq.producer.MessageProducer;
+import com.ji.jichat.chat.mq.producer.ChatMessageProducer;
 import com.ji.jichat.chat.strategy.CommandStrategy;
 import com.ji.jichat.common.constants.CacheConstant;
 import com.ji.jichat.common.enums.CommonStatusEnum;
@@ -22,7 +21,6 @@ import com.ji.jichat.common.pojo.UpMessage;
 import com.ji.jichat.user.api.DeviceRpc;
 import com.ji.jichat.user.api.vo.DeviceVO;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
@@ -38,7 +36,7 @@ import java.util.Objects;
  **/
 @Component
 @Slf4j
-public class MessageProcessor implements CommandStrategy {
+public class ChatMessageProcessor implements CommandStrategy {
 
     @Resource
     private MessageIdGenerate messageIdGenerate;
@@ -47,7 +45,7 @@ public class MessageProcessor implements CommandStrategy {
     private DeviceRpc deviceRpc;
 
     @Resource
-    private MessageProducer messageProducer;
+    private ChatMessageProducer chatMessageProducer;
 
     @Resource
     private RedisTemplate<String, UserChatServerVO> redisTemplate;
@@ -77,7 +75,7 @@ public class MessageProcessor implements CommandStrategy {
                                 .setNonce(IdUtil.objectId());
                 final UserChatServerVO userChatServerVO = redisTemplate.opsForValue().get(CacheConstant.LOGIN_USER_CHAT_SERVER + deviceVO.getUserId() + "_" + deviceVO.getDeviceType());
                 //在线发送消息
-                messageProducer.sendMessage(JSON.toJSONString(downMessage), userChatServerVO.getHttpAddress());
+                chatMessageProducer.sendMessage(JSON.toJSONString(downMessage), userChatServerVO.getHttpAddress());
             } else if (Objects.equals(deviceVO.getDeviceType(), DeviceTypeEnum.MOBILE.getCode())) {
                 //手机登录那么发送 消息推送到客户端
                 log.info("使用苹果或者安卓推送，推送到手机");

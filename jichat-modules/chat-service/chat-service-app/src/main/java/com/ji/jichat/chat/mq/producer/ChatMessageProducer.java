@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Slf4j
-public class MessageProducer {
+public class ChatMessageProducer {
 
     @Autowired
     private AmqpTemplate amqpTemplate;

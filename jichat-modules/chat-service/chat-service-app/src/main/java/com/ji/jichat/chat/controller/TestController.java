@@ -1,7 +1,7 @@
 package com.ji.jichat.chat.controller;
 
 
-import com.ji.jichat.chat.mq.producer.MessageProducer;
+import com.ji.jichat.chat.mq.producer.ChatMessageProducer;
 import com.ji.jichat.common.pojo.CommonResult;
 import com.ji.jichat.user.api.UserRpc;
 import com.ji.jichat.user.api.vo.LoginUser;
@@ -19,7 +19,7 @@ import javax.annotation.Resource;
 public class TestController {
 
     @Resource
-    private MessageProducer messageProducer;
+    private ChatMessageProducer chatMessageProducer;
 
     @Resource
     private UserRpc userRpc;
@@ -34,7 +34,7 @@ public class TestController {
     @GetMapping("/sendMessage")
     @ApiOperation("sendMessage")
     public CommonResult<String> sendMessage(String message) {
-        messageProducer.sendMessage(message,"122222");
+        chatMessageProducer.sendMessage(message,"122222");
         return CommonResult.success("成功");
     }
 
