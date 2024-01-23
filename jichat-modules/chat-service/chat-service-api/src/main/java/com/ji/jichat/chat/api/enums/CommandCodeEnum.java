@@ -12,7 +12,8 @@ public enum CommandCodeEnum {
     HEARTBEAT(1001, "心跳"),
     LOGIN(1002, "登录"),
     MESSAGE(2001, "个人消息"),
-    GROUP_MESSAGE(2002, "群消息"),
+    MESSAGE_RECEIVE(2002, "个人消息接收"),
+    GROUP_MESSAGE(2102, "群消息"),
 
 
     /*  ================下发指令=================*/

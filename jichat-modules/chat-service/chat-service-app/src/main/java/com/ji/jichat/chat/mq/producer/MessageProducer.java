@@ -13,7 +13,7 @@ public class MessageProducer {
     @Autowired
     private AmqpTemplate amqpTemplate;
 
-    public void sendMessage(String target, String message) {
+    public void sendMessage( String message,String target) {
         final String queue = RabbitMQConstants.QUEUE_CHAT_MSG_NETTY + target;
         amqpTemplate.convertAndSend(queue, message);
         log.info("MQ sent:{},message:{} ", queue, message);

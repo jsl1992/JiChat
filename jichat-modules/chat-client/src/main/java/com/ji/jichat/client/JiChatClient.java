@@ -118,7 +118,7 @@ public class JiChatClient implements CommandLineRunner {
         appUpMessage.setContent(jsonObject.toString());
         ChannelFuture future = channel.writeAndFlush(appUpMessage);
         future.addListener((ChannelFutureListener) channelFuture ->
-                log.info("Registry cim server success!")
+                log.info("Registry JiChat server success!")
         );
     }
 
@@ -182,7 +182,7 @@ public class JiChatClient implements CommandLineRunner {
         }
         //首先清除路由信息，下线
 //        routeRequest.offLine();
-        log.info("cim server shutdown, reconnecting....");
+        log.info("JiChat server shutdown, reconnecting....");
         start();
         log.info("Great! reConnect success!!!");
 //        reConnectManager.reConnectSuccess();

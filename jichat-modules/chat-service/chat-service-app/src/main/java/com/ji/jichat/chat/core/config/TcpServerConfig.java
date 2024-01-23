@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 /**
  * 服务器配置信息
  *
- * @author lintengyue
+ * @author jisl
  */
 @Component
 @Data

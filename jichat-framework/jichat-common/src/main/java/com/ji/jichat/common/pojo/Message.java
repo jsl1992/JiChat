@@ -1,13 +1,11 @@
 package com.ji.jichat.common.pojo;
 
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 @Data
+@Accessors(chain = true)
 public abstract class Message {
-    /**
-     * 客户端ip
-     */
-    private String clientIp;
 
     /**
      * 用户id
@@ -36,6 +34,11 @@ public abstract class Message {
      * 随机字符串
      */
     private String nonce;
+
+
+    public String getUserKey() {
+        return this.getUserId() + "_" + this.getDeviceType();
+    }
 
 
 }

@@ -22,7 +22,7 @@ import org.springframework.stereotype.Component;
 /**
  * Socket服务器
  *
- * @author lintengyue
+ * @author jisl
  */
 @Slf4j
 @Component

@@ -10,7 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * ChannelRepository
  *
- * @author lintengyue
+ * @author jisl
  */
 @Slf4j
 public class ChannelRepository {
@@ -20,27 +20,27 @@ public class ChannelRepository {
     private ChannelRepository() {
     }
 
-    public static Channel put(String clientIP, Channel channel) {
-        log.debug("[{}]更新channel:[{}]", clientIP, channel.remoteAddress().toString());
-        return channelCache.put(clientIP, channel);
+    public static Channel put(String userKey, Channel channel) {
+        log.debug("[{}]更新channel:[{}]", userKey, channel.remoteAddress().toString());
+        return channelCache.put(userKey, channel);
     }
 
-    public static Channel get(String clientIP) {
-        return channelCache.get(clientIP);
+    public static Channel get(String userKey) {
+        return channelCache.get(userKey);
     }
 
-    public static Channel putIfAbsent(String clientIP, Channel newChannel) {
-        Channel channel = channelCache.get(clientIP);
+    public static Channel putIfAbsent(String userKey, Channel newChannel) {
+        Channel channel = channelCache.get(userKey);
         if (Objects.isNull(channel)) {
-            log.info("putIfAbsent clientIP=[{}]", clientIP);
-            channel = put(clientIP, newChannel);
+            log.info("putIfAbsent userKey=[{}]", userKey);
+            channel = put(userKey, newChannel);
         }
         return channel;
     }
 
-    public static void remove(String clientIP, Channel value) {
-        if (channelCache.remove(clientIP, value)) {
-            log.debug("[{}][{}]channel remove success", clientIP, value == null ? null : value.remoteAddress());
+    public static void remove(String userKey, Channel value) {
+        if (channelCache.remove(userKey, value)) {
+            log.debug("[{}][{}]channel remove success", userKey, value == null ? null : value.remoteAddress());
         }
     }
 

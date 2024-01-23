@@ -2,6 +2,7 @@ package com.ji.jichat.common.pojo;
 
 import lombok.Data;
 import lombok.ToString;
+import lombok.experimental.Accessors;
 
 /**
  * 云端下发数据（车场）
@@ -13,10 +14,11 @@ import lombok.ToString;
  * <p>
  * 不是心跳包的时候   回复  content = 他发过来的msgId  msgId = msgId
  *
- * @author lintengyue
+ * @author jisl
  */
 @Data
 @ToString(callSuper = true)
+@Accessors(chain = true)
 public class DownMessage extends Message {
 
 }

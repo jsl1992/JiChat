@@ -21,8 +21,6 @@ public class ClentPacketCodecHandler extends MessageToMessageCodec<ByteBuf, Obje
     public static final String NAME = "PacketCodecHandler";
 
 
-
-
     @Override
     protected void encode(ChannelHandlerContext ctx, Object msg, List<Object> out) {
         if (msg instanceof UpMessage) {
@@ -40,7 +38,6 @@ public class ClentPacketCodecHandler extends MessageToMessageCodec<ByteBuf, Obje
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf byteBuf, List<Object> out) {
         final DownMessage downMessage = ClentProtocolCodec.decode(byteBuf);
-        downMessage.setClientIp(ClentProtocolCodec.getClientIp(ctx));
         out.add(downMessage);
     }
 
