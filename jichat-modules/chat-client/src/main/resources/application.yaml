@@ -1,6 +1,7 @@
 # 服务器的配置项
 server:
   port: 9192
+#  port: 9192
 
 spring:
   # Application 的配置项
@@ -16,14 +17,23 @@ spring:
 #tcp服务配置
 jichat:
   user:
-    userId: 1747905091907751936
-    userName: jisl
+#    userId: 1747905091907751936
+#    userName: jisl
+#    password: 12345678
+#    version: 1.0
+#    deviceIdentifier: jpOKnf5vGaW9IcitjEPrUGINjDSSEvXd
+#    deviceName: iPhoneX
+#    deviceType: 1
+#    osType: 102
+
+    userId: 1749622404973465600
+    userName: libai
     password: 12345678
-    version: true
-    deviceIdentifier: jpOKnf5vGaW9IcitjEPrUGINjDSSEvXd
-    deviceName: iPhoneX
+    version: 1.0
+    deviceIdentifier: ogt8ihozzppmrtg0dt
+    deviceName: 诺基亚5300
     deviceType: 1
-    osType: 102
+    osType: 101
 
 
   # Swagger 配置项
