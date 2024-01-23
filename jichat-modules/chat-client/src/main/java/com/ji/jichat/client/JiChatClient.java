@@ -11,7 +11,9 @@ import com.ji.jichat.client.client.ClientInfo;
 import com.ji.jichat.client.dto.AppUpMessage;
 import com.ji.jichat.client.manager.JiChatServerManager;
 import com.ji.jichat.client.netty.ClientChannelInitializer;
+import com.ji.jichat.common.pojo.DownMessage;
 import com.ji.jichat.common.pojo.UpMessage;
+import com.ji.jichat.common.util.GuardedObject;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
@@ -24,7 +26,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.util.ArrayDeque;
 import java.util.Objects;
@@ -49,6 +50,9 @@ public class JiChatClient implements CommandLineRunner {
 
     @Resource
     private JiChatServerManager jiChatServerManager;
+
+    @Resource
+    private ClientChannelInitializer clientChannelInitializer;
 
 
     @Resource
@@ -77,11 +81,11 @@ public class JiChatClient implements CommandLineRunner {
      *
      * @throws Exception
      */
-    private void startClient() {
+    public void startClient() {
         Bootstrap bootstrap = new Bootstrap();
         bootstrap.group(group)
                 .channel(NioSocketChannel.class)
-                .handler(new ClientChannelInitializer())
+                .handler(clientChannelInitializer)
         ;
         ChannelFuture future = null;
         try {
@@ -131,10 +135,18 @@ public class JiChatClient implements CommandLineRunner {
         appUpMessage.setCode(CommandCodeEnum.MESSAGE.getCode());
         appUpMessage.setContent(JSON.toJSONString(chatMessageDTO));
         messagesQueue.add(appUpMessage);
-//        这边可以异步返回，也就是每次发完消息，等待服务端返回messageId。才能接着发消息。
+//        这边可以异步返回，也就是每次发完消息，等待服务端返回messageId。才能接着发消息。(用户操作界面可以不用管，就后台发给服务端的消息。)
         ChannelFuture future = channel.writeAndFlush(appUpMessage);
         future.addListener((ChannelFutureListener) channelFuture ->
                 log.info("客户端手动发消息成功={}", msg));
+        try {
+            final GuardedObject<DownMessage> go = GuardedObject.create(appUpMessage.getNonce());
+            final DownMessage downMessage = go.getAndThrow(t -> Objects.equals(t.getNonce(), appUpMessage.getNonce()), 3);
+            log.info("发送的消息收到messageId:{},{}", downMessage.getContent(), msg);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println();
     }
 
 //    /**

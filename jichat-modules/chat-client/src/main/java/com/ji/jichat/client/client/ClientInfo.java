@@ -5,11 +5,9 @@ import com.ji.jichat.chat.api.vo.UserChatServerVO;
 import com.ji.jichat.user.api.vo.AuthLoginVO;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
-import javax.validation.constraints.NotEmpty;
 import java.util.Date;
 
 /**
@@ -24,22 +22,17 @@ import java.util.Date;
 @ConfigurationProperties("jichat.user")
 public class ClientInfo {
 
-//    @Value("${cim.user.id}")
     private long userId;
 
-//    @Value("${cim.user.userName}")
     private String userName;
 
 
-//    @Value("${cim.user.password}")
     private String password;
 
-//    @Value("${cim.user.version}")
     private String version;
 
 
     @ApiModelProperty(value = "设备标识", required = true, example = "jpOKnf5vGaW9IcitjEPrUGINjDSSEvXd")
-//    @Value("${cim.user.version}")
     private String deviceIdentifier;
 
     @ApiModelProperty(value = "设备名称", required = true, example = "iPhoneX")

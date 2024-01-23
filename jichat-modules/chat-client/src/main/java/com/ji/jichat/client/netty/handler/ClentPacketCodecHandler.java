@@ -39,9 +39,9 @@ public class ClentPacketCodecHandler extends MessageToMessageCodec<ByteBuf, Obje
 
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf byteBuf, List<Object> out) {
-        final DownMessage upMessage = ClentProtocolCodec.decode(byteBuf);
-        upMessage.setClientIp(ClentProtocolCodec.getClientIp(ctx));
-        out.add(upMessage);
+        final DownMessage downMessage = ClentProtocolCodec.decode(byteBuf);
+        downMessage.setClientIp(ClentProtocolCodec.getClientIp(ctx));
+        out.add(downMessage);
     }
 
 
