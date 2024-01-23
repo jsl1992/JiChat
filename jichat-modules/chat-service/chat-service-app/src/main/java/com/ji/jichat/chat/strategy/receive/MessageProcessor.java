@@ -67,6 +67,7 @@ public class MessageProcessor implements CommandStrategy {
                 messageProducer.sendMessage(userChatServerVO.getHttpAddress(), JSON.toJSONString(chatMessageDTO));
             } else if (Objects.equals(deviceVO.getDeviceType(), DeviceTypeEnum.MOBILE.getCode())) {
                 //手机登录那么发送 消息推送到客户端
+                log.info("使用苹果或者安卓推送，推送到手机");
             }
         }
         // 和同一个用户的其他登录设备
