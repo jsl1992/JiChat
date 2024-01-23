@@ -32,11 +32,10 @@ public abstract class Message {
      */
     private String content;
 
-
     /**
      * 随机字符串
      */
-    private String nonce = "-1";
+    private String nonce;
 
 
 }

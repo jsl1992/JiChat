@@ -2,6 +2,7 @@ package com.ji.jichat.common.pojo;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.util.Objects;
 
@@ -10,9 +11,8 @@ import java.util.Objects;
   * @author jisl on 2024/1/22 15:29
   **/
 @Data
-@NoArgsConstructor
+@ToString(callSuper = true)
 public class UpMessage extends Message {
-
 
     /**
      * 版本号

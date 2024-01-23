@@ -2,6 +2,7 @@ package com.ji.jichat.chat.netty.handler;
 
 
 import cn.hutool.core.bean.BeanUtil;
+import com.ji.jichat.chat.api.enums.MessageTypeEnum;
 import com.ji.jichat.chat.strategy.CommandStrategy;
 import com.ji.jichat.chat.strategy.StrategyContext;
 import com.ji.jichat.common.pojo.DownMessage;
@@ -42,6 +43,7 @@ public class BizServerHandler extends SimpleChannelInboundHandler<UpMessage> {
             final CommandStrategy processor = strategyContext.getProcessor(message.getCode());
             final String returnContent = processor.execute(message);
             final DownMessage downMessage = BeanUtil.toBean(message, DownMessage.class);
+            downMessage.setType(MessageTypeEnum.DOWN.getCode());
             downMessage.setContent(returnContent);
             log.info("返回客户端消息:{}", downMessage);
             ctx.channel().writeAndFlush(downMessage).addListener((ChannelFutureListener) future -> {

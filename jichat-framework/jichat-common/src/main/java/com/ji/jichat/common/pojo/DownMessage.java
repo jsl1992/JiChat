@@ -19,9 +19,4 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public class DownMessage extends Message {
 
-
-
-
-
-
 }
