@@ -1,6 +1,7 @@
 package com.ji.jichat.client.netty;
 
 
+import com.ji.jichat.client.netty.handler.BizClientHandler;
 import com.ji.jichat.client.netty.handler.ClentConnectionTimeHandler;
 import com.ji.jichat.client.netty.handler.ClentLengthFieldDecoderHandler;
 import com.ji.jichat.client.netty.handler.ClentPacketCodecHandler;
@@ -9,6 +10,8 @@ import io.netty.channel.socket.SocketChannel;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
+
 @Component
 @Qualifier("clientChannelInitializer")
 public class ClientChannelInitializer extends ChannelInitializer<SocketChannel> {
@@ -16,9 +19,9 @@ public class ClientChannelInitializer extends ChannelInitializer<SocketChannel> 
 //    @Resource
 //    private TcpServerConfig tcpServerConfig;
 
-//
+
 //    @Resource
-//    private PacketCodecHandler packetCodecHandler;
+//    private BizClientHandler bizClientHandler;
 
 
     @Override
@@ -36,7 +39,7 @@ public class ClientChannelInitializer extends ChannelInitializer<SocketChannel> 
                 // 心跳处理器
 //            .addLast(HeartBeatServerHandler.NAME, new HeartBeatServerHandler())
                 // 业务处理器
-//                .addLast(BizServerHandler.NAME, bizServerHandler)
+                .addLast(BizClientHandler.NAME, new BizClientHandler())
         ;
 
         // 连接异常处理

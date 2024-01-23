@@ -6,6 +6,7 @@ import com.ji.jichat.web.core.constant.TraceSpanContext;
 import com.ji.jichat.web.util.HttpContextUtil;
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Objects;
@@ -15,6 +16,7 @@ import java.util.Objects;
  *
  * @author 芋道源码
  */
+@EnableFeignClients(basePackages = "com.ji.jichat")
 public class FeignRequestInterceptor implements RequestInterceptor {
 
     @Override

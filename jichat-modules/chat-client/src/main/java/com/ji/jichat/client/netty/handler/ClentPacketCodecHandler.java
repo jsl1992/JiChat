@@ -1,6 +1,7 @@
 package com.ji.jichat.client.netty.handler;
 
 import com.ji.jichat.client.netty.protocol.ClentProtocolCodec;
+import com.ji.jichat.common.pojo.DownMessage;
 import com.ji.jichat.common.pojo.UpMessage;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandler;
@@ -38,7 +39,7 @@ public class ClentPacketCodecHandler extends MessageToMessageCodec<ByteBuf, Obje
 
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf byteBuf, List<Object> out) {
-        final UpMessage upMessage = ClentProtocolCodec.decode(byteBuf);
+        final DownMessage upMessage = ClentProtocolCodec.decode(byteBuf);
         upMessage.setClientIp(ClentProtocolCodec.getClientIp(ctx));
         out.add(upMessage);
     }

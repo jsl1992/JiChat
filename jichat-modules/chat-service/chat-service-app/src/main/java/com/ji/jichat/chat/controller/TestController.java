@@ -34,7 +34,7 @@ public class TestController {
     @GetMapping("/sendMessage")
     @ApiOperation("sendMessage")
     public CommonResult<String> sendMessage(String message) {
-        messageProducer.sendMessage(message);
+        messageProducer.sendMessage(message,"122222");
         return CommonResult.success("成功");
     }
 

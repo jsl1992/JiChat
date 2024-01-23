@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
@@ -134,6 +135,27 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     public LoginUser getLoginUserByLoginKey(String loginKey) {
         final LoginUser loginUser = redisTemplate.opsForValue().get(CacheConstant.LOGIN_USER + loginKey);
         return loginUser;
+    }
+
+    @Override
+    public void logout(LoginUser loginUser) {
+        redisTemplate.delete(CacheConstant.LOGIN_USER + loginUser.getLoginKey());
+        final User user = getById(loginUser.getUserId());
+        final List<Device> devices = deviceService.getOnlineDevices(loginUser.getUserId());
+        for (Device device : devices) {
+            if (Objects.equals(device.getDeviceType(), loginUser.getDeviceType())) {
+//                和当前用户设备类型一致那么退出
+                device.setOnlineStatus(OnlineStatus.OFFLINE.getCode());
+                device.setUpdateTime(new Date());
+                deviceService.updateById(device);
+            }
+        }
+        if (devices.size() == 1) {
+            //就一个设备登录，那么将用户状态改为下线
+            user.setOnlineStatus(OnlineStatus.OFFLINE.getCode());
+            user.setUpdateTime(new Date());
+            updateById(user);
+        }
     }
 
 

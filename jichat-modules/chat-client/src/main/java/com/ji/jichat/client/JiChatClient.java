@@ -1,15 +1,17 @@
-package com.ji.jichat.client.client;
+package com.ji.jichat.client;
 
 
 import cn.hutool.json.JSONObject;
 import com.alibaba.fastjson.JSON;
+import com.ji.jichat.chat.api.dto.ChatMessageDTO;
+import com.ji.jichat.chat.api.enums.ChatMessageTypeEnum;
+import com.ji.jichat.chat.api.enums.CommandCodeEnum;
 import com.ji.jichat.chat.api.vo.UserChatServerVO;
+import com.ji.jichat.client.client.ClientInfo;
 import com.ji.jichat.client.dto.AppUpMessage;
+import com.ji.jichat.client.manager.JiChatServerManager;
 import com.ji.jichat.client.netty.ClientChannelInitializer;
-import com.ji.jichat.common.enums.CommandCodeEnum;
-import com.ji.jichat.common.pojo.CommonResult;
-import com.ji.jichat.user.api.dto.AuthLoginDTO;
-import com.ji.jichat.user.api.vo.AuthLoginVO;
+import com.ji.jichat.common.pojo.UpMessage;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
@@ -19,17 +21,12 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.util.concurrent.DefaultThreadFactory;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.*;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.PostConstruct;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.util.Arrays;
+import javax.annotation.Resource;
+import java.util.ArrayDeque;
 import java.util.Objects;
 
 /**
@@ -41,40 +38,34 @@ import java.util.Objects;
  */
 @Component
 @Slf4j
-public class JiChatClient {
+public class JiChatClient implements CommandLineRunner {
 
 
     private EventLoopGroup group = new NioEventLoopGroup(0, new DefaultThreadFactory("jichat-work"));
 
 
-    @Value("${user.url}")
-    private String userUrl;
-
-    @Value("${chat.url}")
-    private String chatUrl;
-
     private SocketChannel channel;
 
 
-    @Autowired
-    private AppConfiguration configuration;
+    @Resource
+    private JiChatServerManager jiChatServerManager;
 
 
-    @Autowired
+    @Resource
     private ClientInfo clientInfo;
 
-//    @Autowired
-//    private ReConnectManager reConnectManager;
+
+    private static ArrayDeque<UpMessage> messagesQueue = new ArrayDeque<>();
+
 
     /**
      * 重试次数
      */
     private int errorCount;
 
-    @PostConstruct
     public void start() {
         //登录 + 获取可以使用的服务器 ip+port
-        userLogin();
+        jiChatServerManager.userLogin();
         //启动客户端
         startClient();
         //向服务端注册
@@ -111,57 +102,6 @@ public class JiChatClient {
         }
     }
 
-    /**
-     * 登录+路由服务器
-     *
-     * @return 路由服务器信息
-     * @throws Exception
-     */
-    private void userLogin() {
-        final AuthLoginDTO loginDTO = AuthLoginDTO.builder()
-                .username(clientInfo.getUserName()).password(clientInfo.getPassword()).deviceIdentifier(clientInfo.getDeviceIdentifier())
-                .deviceName(clientInfo.getDeviceName()).deviceType(clientInfo.getDeviceType()).osType(clientInfo.getOsType())
-                .build();
-        final String url = userUrl + "/user/login";
-        final AuthLoginVO authLoginVO = exchangeResponseResult(url, HttpMethod.POST, loginDTO, new ParameterizedTypeReference<CommonResult<AuthLoginVO>>() {
-        });
-        clientInfo.setAuthLoginVO(authLoginVO);
-        try {
-            clientInfo.setIp(InetAddress.getLocalHost().getHostAddress());
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
-        getUserChatServer();
-
-    }
-
-
-    public <T> T exchangeResponseResult(String url, HttpMethod httpMethod, Object request, ParameterizedTypeReference<CommonResult<T>> typeReference, Object... uriVariables) {
-        log.info("{},url=[{}],uriVariables={},requestBody=[ {} ]", httpMethod.name(), url, Arrays.toString(uriVariables), JSON.toJSONString(request));
-        RestTemplate restTemplate = new RestTemplate();
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        if (Objects.nonNull(clientInfo.getAuthLoginVO())) {
-            headers.set("Authorization", clientInfo.getAuthLoginVO().getAccessToken());
-        }
-        HttpEntity httpEntity = new HttpEntity<>(request, headers);
-        ResponseEntity<CommonResult<T>> res = restTemplate.exchange(url,
-                httpMethod,
-                httpEntity,
-                typeReference,
-                uriVariables);
-        final CommonResult<T> body = res.getBody();
-        body.checkError();
-        return body.getData();
-
-    }
-
-
-    private void getUserChatServer() {
-        final UserChatServerVO authLoginVO = exchangeResponseResult(chatUrl + "/discoveryServer/routeServer", HttpMethod.POST, null, new ParameterizedTypeReference<CommonResult<UserChatServerVO>>() {
-        });
-        clientInfo.setUserChatServerVO(authLoginVO);
-    }
 
     /**
      * 向服务器注册
@@ -183,12 +123,18 @@ public class JiChatClient {
      *
      * @param msg
      */
-    public void sendStringMsg(String msg) {
+    public void p2pMessage(String msg, long userId) {
         final AppUpMessage appUpMessage = new AppUpMessage(clientInfo);
+        final ChatMessageDTO chatMessageDTO = ChatMessageDTO.builder()
+                .messageFrom(clientInfo.getUserId()).messageTo(userId).messageType(ChatMessageTypeEnum.TEXT.getCode()).msg(msg)
+                .build();
+        appUpMessage.setCode(CommandCodeEnum.MESSAGE.getCode());
+        appUpMessage.setContent(JSON.toJSONString(chatMessageDTO));
+        messagesQueue.add(appUpMessage);
+//        这边可以异步返回，也就是每次发完消息，等待服务端返回messageId。才能接着发消息。
         ChannelFuture future = channel.writeAndFlush(appUpMessage);
         future.addListener((ChannelFutureListener) channelFuture ->
                 log.info("客户端手动发消息成功={}", msg));
-
     }
 
 //    /**
@@ -217,7 +163,6 @@ public class JiChatClient {
      * 2. reconnect.
      * 3. shutdown reconnect job.
      * 4. reset reconnect state.
-     *
      */
     public void reconnect() {
         if (channel != null && channel.isActive()) {
@@ -233,11 +178,16 @@ public class JiChatClient {
 
     /**
      * 关闭
-     *
      */
     public void close() {
         if (channel != null) {
             channel.close();
         }
+    }
+
+
+    @Override
+    public void run(String... args) {
+        start();
     }
 }

@@ -1,7 +1,7 @@
 package com.ji.jichat.chat.strategy;
 
 
-import com.ji.jichat.common.enums.CommandCodeEnum;
+import com.ji.jichat.chat.api.enums.CommandCodeEnum;
 import com.ji.jichat.common.pojo.UpMessage;
 
 /**

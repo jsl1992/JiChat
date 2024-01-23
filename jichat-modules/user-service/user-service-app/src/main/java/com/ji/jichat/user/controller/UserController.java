@@ -3,6 +3,7 @@ package com.ji.jichat.user.controller;
 
 import com.ji.jichat.common.annotions.RequiresNone;
 import com.ji.jichat.common.pojo.CommonResult;
+import com.ji.jichat.security.admin.core.context.UserContext;
 import com.ji.jichat.user.api.UserRpc;
 import com.ji.jichat.user.api.dto.AuthLoginDTO;
 import com.ji.jichat.user.api.dto.UserRegisterDTO;
@@ -51,11 +52,8 @@ public class UserController implements UserRpc {
 
     @PostMapping("/logout")
     @ApiOperation("登出系统")
-    public CommonResult<Boolean> logout(HttpServletRequest request) {
-//        String token = obtainAuthorization(request, securityProperties.getTokenHeader());
-//        if (StrUtil.isNotBlank(token)) {
-//            userService.logout(token, LoginLogTypeEnum.LOGOUT_SELF.getType());
-//        }
+    public CommonResult<Boolean> logout() {
+        userService.logout(UserContext.get());
         return CommonResult.success(true);
     }
 

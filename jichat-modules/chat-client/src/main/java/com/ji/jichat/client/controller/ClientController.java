@@ -1,7 +1,7 @@
 package com.ji.jichat.client.controller;
 
 
-import com.ji.jichat.client.client.JiChatClient;
+import com.ji.jichat.client.JiChatClient;
 import com.ji.jichat.common.pojo.CommonResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -13,8 +13,8 @@ import javax.annotation.Resource;
 
 @RestController
 @Api(tags = {"消息Controller "})
-@RequestMapping("/message")
-public class MessageController {
+@RequestMapping("/client")
+public class ClientController {
 
     @Resource
     private JiChatClient jiChatClient;
@@ -31,6 +31,13 @@ public class MessageController {
     @ApiOperation("reconnect")
     public CommonResult<Void> reconnect() {
         jiChatClient.reconnect();
+        return CommonResult.success();
+    }
+
+    @GetMapping("/p2pMessage")
+    @ApiOperation("私聊消息")
+    public CommonResult<Void> p2pMessage(String msg,long userId) {
+        jiChatClient.p2pMessage(msg,userId);
         return CommonResult.success();
     }
 

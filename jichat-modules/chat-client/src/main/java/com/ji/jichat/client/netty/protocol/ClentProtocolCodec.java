@@ -6,7 +6,6 @@ import com.ji.jichat.client.utils.ByteUtil;
 import com.ji.jichat.common.exception.ServiceException;
 import com.ji.jichat.common.pojo.DownMessage;
 import com.ji.jichat.common.pojo.Message;
-import com.ji.jichat.common.pojo.UpMessage;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import lombok.extern.slf4j.Slf4j;
@@ -49,14 +48,15 @@ public class ClentProtocolCodec {
     }
 
 
-    public static UpMessage decode(ByteBuf byteBuf) {
+    public static DownMessage decode(ByteBuf byteBuf) {
         // 获取版本号
         int protocolVersion = byteBuf.getInt(8);
         if (Objects.equals(protocolVersion, PROTOCOL_VERSION)) {
             int contentLen = byteBuf.getInt(4);
-            byte[] content = new byte[contentLen - 4];
-            byteBuf.getBytes(12, content); //从位置4开始读取contentLen个字节的数据
-            final UpMessage message = JSON.parseObject(new String(content, StandardCharsets.UTF_8), UpMessage.class);
+            byte[] contentBytes = new byte[contentLen - 4];
+            byteBuf.getBytes(12, contentBytes); //从位置12开始读取contentLen-4个字节的数据
+            final String content = new String(contentBytes, StandardCharsets.UTF_8);
+            final DownMessage message = JSON.parseObject(content, DownMessage.class);
             return message;
         } else {
             throw new ServiceException("当前版本号暂不支持");

@@ -25,4 +25,5 @@ public interface IUserService extends IService<User> {
 
     LoginUser getLoginUserByLoginKey(String loginKey);
 
+    void logout(LoginUser loginUser);
 }

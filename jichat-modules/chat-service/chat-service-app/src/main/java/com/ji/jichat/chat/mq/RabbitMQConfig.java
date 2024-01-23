@@ -18,7 +18,7 @@ public class RabbitMQConfig {
 
     @Bean
     Queue queueChatMsgNetty() {
-        String queueName = RabbitMQConstants.QUEUE_CHAT_MSG_NETTY + innerIp + "_" + serverPort;
+        String queueName = RabbitMQConstants.QUEUE_CHAT_MSG_NETTY + innerIp + ":" + serverPort;
         Queue queue = new Queue(queueName, true);
         return queue;
     }

@@ -1,4 +1,4 @@
-package com.ji.jichat.common.enums;
+package com.ji.jichat.chat.api.enums;
 
 import java.util.Objects;
 
@@ -12,9 +12,11 @@ public enum CommandCodeEnum {
     HEARTBEAT(1001, "心跳"),
     LOGIN(1002, "登录"),
     MESSAGE(2001, "个人消息"),
+    GROUP_MESSAGE(2002, "群消息"),
+
 
     /*  ================下发指令=================*/
-    SYNC_TIME(2001, "同步时间"),
+    SYNC_TIME(5001, "同步时间"),
     ;
 
 

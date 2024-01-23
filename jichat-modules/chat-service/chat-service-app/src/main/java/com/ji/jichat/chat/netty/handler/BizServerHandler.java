@@ -36,13 +36,14 @@ public class BizServerHandler extends SimpleChannelInboundHandler<UpMessage> {
 
     @Override
     public void channelRead0(ChannelHandlerContext ctx, UpMessage message) {
+        log.info("收到客户端消息:{}", message);
         final long start = System.currentTimeMillis();
         try {
             final CommandStrategy processor = strategyContext.getProcessor(message.getCode());
             final String returnContent = processor.execute(message);
             final DownMessage downMessage = BeanUtil.toBean(message, DownMessage.class);
             downMessage.setContent(returnContent);
-            message.setContent(returnContent);
+            log.info("返回客户端消息:{}", downMessage);
             ctx.channel().writeAndFlush(downMessage).addListener((ChannelFutureListener) future -> {
                 final long time = System.currentTimeMillis() - start;
                 if (!future.isSuccess()) {

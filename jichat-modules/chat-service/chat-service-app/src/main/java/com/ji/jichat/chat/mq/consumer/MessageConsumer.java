@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class MessageConsumer {
 
-    @RabbitListener(queues = RabbitMQConstants.QUEUE_CHAT_MSG_NETTY+"#{environment.getProperty('inner-ip')}_#{environment.getProperty('server.port')}")
+    @RabbitListener(queues = RabbitMQConstants.QUEUE_CHAT_MSG_NETTY + "#{environment.getProperty('inner-ip')}:#{environment.getProperty('server.port')}")
     public void receiveMessage(String message) {
         System.out.println("Message received: " + message);
     }

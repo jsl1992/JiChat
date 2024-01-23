@@ -3,6 +3,8 @@ package com.ji.jichat.user.service;
 import com.ji.jichat.user.entity.Device;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.List;
+
 /**
  * <p>
  * 设备表 服务类
@@ -13,4 +15,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IDeviceService extends IService<Device> {
 
+    List<Device> getOnlineDevices(Long userId);
 }

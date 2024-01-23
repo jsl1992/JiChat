@@ -36,7 +36,7 @@ public class ProtocolCodec {
         byte[] packageHead = ByteUtil.intToBytes(PACKAGE_HEAD);
         byte[] protocolVersion = ByteUtil.intToBytes(PROTOCOL_VERSION);
         byte[] packageTail = ByteUtil.intToBytes(PACKAGE_TAIL);
-        final byte[] content = downMessage.getContent().getBytes(StandardCharsets.UTF_8);
+        final byte[] content = JSON.toJSONString(downMessage).getBytes(StandardCharsets.UTF_8);
         final byte[] pkLenBytes = ByteUtil.intToBytes(protocolVersion.length + content.length);
 //        // 写入固定标识
         byteBuf.writeBytes(packageHead);
