@@ -64,6 +64,13 @@ public class ChatMessageProcessor implements CommandStrategy {
         final JSONObject jsonObject = new JSONObject();
         jsonObject.put("messageId", messageId);
         //通过mq转发消息，给消息接收者
+        forwardMessage(chatMessageDTO);
+        // 和同一个用户的其他登录设备
+//      将mq消息入库
+        return jsonObject.toJSONString();
+    }
+
+    private void forwardMessage(ChatMessageDTO chatMessageDTO) {
         final CommonResult<List<DeviceVO>> onlineDevicesResult = deviceRpc.getOnlineDevices(chatMessageDTO.getMessageTo());
         onlineDevicesResult.checkError();
         final List<DeviceVO> toOnlineDevices = onlineDevicesResult.getData();
@@ -81,8 +88,5 @@ public class ChatMessageProcessor implements CommandStrategy {
                 log.info("使用苹果或者安卓推送，推送到手机");
             }
         }
-        // 和同一个用户的其他登录设备
-//      将mq消息入库
-        return jsonObject.toJSONString();
     }
 }
