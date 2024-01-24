@@ -11,7 +11,6 @@ import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
-import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
@@ -49,7 +48,7 @@ public class AccessLogAspect {
     public void afterReturn() {
         final long timer = System.currentTimeMillis() - CommonWebUtil.getAccessStartTime(HttpContextUtil.getHttpServletRequest());
         if (timer > LONG_TIME) {
-            log.info("异常耗时: {} ms", timer);
+            log.warn("异常耗时: {} ms", timer);
         }
     }
 

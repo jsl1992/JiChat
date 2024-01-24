@@ -2,7 +2,6 @@ package com.ji.jichat.mybatis.config;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.ji.jichat.mybatis.core.handler.DefaultDBFieldHandler;
-import org.apache.ibatis.annotations.Mapper;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
  * @author 芋道源码
  */
 @Configuration
-@MapperScan(value = "com.ji.jichat.*.mapper", annotationClass = Mapper.class) // Mapper 懒加载，目前仅用于单元测试
+@MapperScan(value = "com.ji.jichat.*.mapper") // Mapper 懒加载，目前仅用于单元测试
 public class MybatisAutoConfiguration {
 
 //    @Bean

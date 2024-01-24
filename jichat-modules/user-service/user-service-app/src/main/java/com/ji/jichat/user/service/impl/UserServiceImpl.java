@@ -60,9 +60,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         if (Objects.equals(user.getStatus(), CommonStatusEnum.DISABLE.getStatus())) {
             throw new ServiceException("登录失败，账号被禁用");
         }
-        final String clientIP = ServletUtil.getClientIP(HttpContextUtil.getHttpServletRequest());
+        final String clientIp = ServletUtil.getClientIP(HttpContextUtil.getHttpServletRequest());
         final Date now = new Date();
-        user.toBuilder().onlineStatus(OnlineStatus.ONLINE.getCode()).loginIp(clientIP).loginDate(now);
+        user.toBuilder().onlineStatus(OnlineStatus.ONLINE.getCode()).loginIp(clientIp).loginDate(now);
         updateById(user);
         loginDevice(loginDTO, user);
         return buildAuthLoginVO(user, loginDTO.getDeviceType());
@@ -121,7 +121,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         }
         final User user = UserConvert.INSTANCE.convert(dto).toBuilder()
                 .id(IdUtil.getSnowflake(1, 1).nextId()).status(CommonStatusEnum.ENABLE.getStatus())
-                .password(BCrypt.hashpw(dto.getPassword()))
+                .password(BCrypt.hashpw(dto.getPassword())).onlineStatus(OnlineStatus.OFFLINE.getCode())
                 .build();
         save(user);
     }
@@ -140,21 +140,19 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
             if (Objects.equals(device.getDeviceType(), loginUser.getDeviceType())) {
 //                和当前用户设备类型一致那么退出
                 device.setOnlineStatus(OnlineStatus.OFFLINE.getCode());
-                device.setUpdateTime(new Date());
                 deviceService.updateById(device);
             }
         }
         if (devices.size() == 1) {
             //就一个设备登录，那么将用户状态改为下线
             user.setOnlineStatus(OnlineStatus.OFFLINE.getCode());
-            user.setUpdateTime(new Date());
             updateById(user);
         }
     }
 
 
     private void loginDevice(AuthLoginDTO loginDTO, User user) {
-        final String clientIP = ServletUtil.getClientIP(HttpContextUtil.getHttpServletRequest());
+        final String clientIp = ServletUtil.getClientIP(HttpContextUtil.getHttpServletRequest());
         final Date now = new Date();
         final Device onlineDevice = deviceService.getOne(new LambdaQueryWrapper<Device>().eq(Device::getUserId, user.getId())
                 .eq(Device::getDeviceType, loginDTO.getDeviceType()).eq(Device::getOnlineStatus, OnlineStatus.ONLINE.getCode()));
@@ -167,7 +165,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         final Device device = Device.builder()
                 .deviceIdentifier(loginDTO.getDeviceIdentifier()).deviceName(loginDTO.getDeviceName())
                 .deviceType(loginDTO.getDeviceType()).onlineStatus(loginDTO.getDeviceType())
-                .onlineStatus(OnlineStatus.ONLINE.getCode()).osType(loginDTO.getOsType()).loginIp(clientIP)
+                .onlineStatus(OnlineStatus.ONLINE.getCode()).osType(loginDTO.getOsType()).loginIp(clientIp)
                 .loginDate(now).userId(user.getId())
                 .build();
         final Device dbDevice = deviceService.getOne(new LambdaQueryWrapper<Device>().eq(Device::getUserId, user.getId()).eq(Device::getDeviceIdentifier, loginDTO.getDeviceIdentifier()));
