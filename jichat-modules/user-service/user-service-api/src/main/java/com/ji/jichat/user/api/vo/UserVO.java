@@ -1,6 +1,5 @@
-package com.ji.jichat.user.entity;
+package com.ji.jichat.user.api.vo;
 
-import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.util.Date;
 import io.swagger.annotations.ApiModel;
@@ -9,7 +8,7 @@ import lombok.*;
 
 /**
  * <p>
- * 用户表
+ * 用户表VO
  * </p>
  *
  * @author jisl
@@ -19,9 +18,8 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@TableName("t_user")
-@ApiModel(value = "User对象", description = "用户表")
-public class User implements Serializable {
+@ApiModel(value = "UserVO", description = "用户表VO")
+public class UserVO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

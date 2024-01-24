@@ -23,7 +23,7 @@ public class MybatisCodeGenerator {
     private static final String userName = "root";
     private static final String password = "root";
     //需要生成的表(多张表用","分隔,例如:"t_user,t_role")
-    private static final String tableNames = "t_user,t_device";
+    private static final String tableNames = "t_user";
     //模块地址
     private static final String module_path = "/jichat-modules/user-service/user-service-app";
     //包名
@@ -56,21 +56,22 @@ public class MybatisCodeGenerator {
 
                 })
                 .packageConfig(builder -> {
+                    final Map<OutputFile, String> pathInfo = new HashMap<>();
+                    pathInfo.put(OutputFile.xml, appPath + "\\src\\main\\resources\\mapper");  // 设置mapperXml生成路径
+                    pathInfo.put(OutputFile.other, apiPath + "\\src\\main\\java");  //自定义路径
                     builder
                             .parent(package_name) // 设置父包名
 //                            .moduleName("system") // 设置父包模块名
-//                            .other("dto") // 设置dto包名
-//                            .pathInfo(Collections.singletonMap(OutputFile.other, apiPath +  "\\src\\main\\java"))
-                            .pathInfo(Collections.singletonMap(OutputFile.xml, appPath + "\\src\\main\\resources\\mapper")) // 设置mapperXml生成路径
+                            .pathInfo(pathInfo)
                     ;
 
                 })
                 .templateConfig(builder -> {
-                            builder.entity("/templates/java/entity.java.vm");
+                            builder.entity("/templates/java/entity.java");
                         }
                 )
                 .strategyConfig(builder -> {
-//t_cnfeenode,t_etcflag,t_ff_node,t_ff_noderelation,t_flagfee,t_station,
+                    //t_cnfeenode,t_etcflag,t_ff_node,t_ff_noderelation,t_flagfee,t_station,
                     builder.addInclude(tableNames) // 设置需要生成的表名
                             .addTablePrefix("t_", "c_")
                             .entityBuilder().enableLombok().fileOverride();
@@ -80,17 +81,19 @@ public class MybatisCodeGenerator {
                     if (isCustom) {
                         Map<String, String> customFile = new HashMap<>();
                         // DTO
-                        customFile.put("DTO.java", "/templates/java/dto.java.vm");
-//                        customFile.put("VO.java", "/templates/java/vo.java.vm");
+                        customFile.put(MyBatisConstants.DTO, "/templates/java/dto.java.ftl");
+                        customFile.put(MyBatisConstants.VO, "/templates/java/vo.java.ftl");
+//                        customFile.put(MyBatisConstants.RPC, "/templates/java/vo.java.ftl");
+                        customFile.put(MyBatisConstants.Convert, "/templates/java/convert.java.ftl");
                         consumer.customFile(customFile);
                     }
                 })
-//                .templateEngine(new EnhanceFreemarkerTemplateEngine()) // 使用Freemarker引擎模板，默认的是Velocity引擎模板
+                .templateEngine(new EnhanceFreemarkerTemplateEngine()) // 使用Freemarker引擎模板(ftl)，默认的是Velocity引擎模板(vm)
                 .execute();
     }
 
     public static void main(String[] args) {
-        MybatisCodeGenerator.generator(url, userName, password, author, module_path, package_name, tableNames, false);
+        MybatisCodeGenerator.generator(url, userName, password, author, module_path, package_name, tableNames, true);
     }
 
 
