@@ -61,7 +61,7 @@
         <commons-lang3.version>3.10</commons-lang3.version>
         <guava.version>27.0.1-jre</guava.version>
         <org.mapstruct.version>1.4.1.Final</org.mapstruct.version>
-        <org.projectlombok.version>1.16.14</org.projectlombok.version>
+        <org.projectlombok.version>1.18.20</org.projectlombok.version>
         <shardingsphere.version>4.1.1</shardingsphere.version>
         <netty.version>4.1.68.Final</netty.version>
     </properties>
