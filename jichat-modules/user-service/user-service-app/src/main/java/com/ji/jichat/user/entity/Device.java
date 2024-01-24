@@ -5,7 +5,10 @@ import java.io.Serializable;
 import java.util.Date;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * <p>
@@ -13,7 +16,7 @@ import lombok.*;
  * </p>
  *
  * @author jisl
- * @since 2024-01-21
+ * @since 2024-01-24
  */
 @Builder
 @AllArgsConstructor

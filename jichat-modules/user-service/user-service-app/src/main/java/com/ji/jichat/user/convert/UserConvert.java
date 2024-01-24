@@ -13,7 +13,7 @@ import com.ji.jichat.user.api.vo.UserVO;
  * 用户表 Convert
  *
  * @author jisl
- * @since 2024-01-23
+ * @since 2024-01-24
  */
 @Mapper
 public interface UserConvert {

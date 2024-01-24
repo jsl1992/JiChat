@@ -1,4 +1,4 @@
-package com.ji.jichat.user.api.vo;
+package com.ji.jichat.user.api.dto;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 
 /**
  * <p>
- * 设备表VO
+ * 设备表DTO
  * </p>
  *
  * @author jisl
@@ -21,8 +21,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@ApiModel(value = "DeviceVO", description = "设备表VO")
-public class DeviceVO implements Serializable {
+@ApiModel(value = "DeviceDTO", description = "设备表DTO")
+public class DeviceDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

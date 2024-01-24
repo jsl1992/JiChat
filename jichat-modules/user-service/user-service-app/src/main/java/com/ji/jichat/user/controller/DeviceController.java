@@ -1,11 +1,10 @@
 package com.ji.jichat.user.controller;
 
 
-import cn.hutool.core.bean.BeanUtil;
 import com.ji.jichat.common.pojo.CommonResult;
 import com.ji.jichat.user.api.DeviceRpc;
 import com.ji.jichat.user.api.vo.DeviceVO;
-import com.ji.jichat.user.entity.Device;
+import com.ji.jichat.user.convert.DeviceConvert;
 import com.ji.jichat.user.service.IDeviceService;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -33,9 +31,8 @@ public class DeviceController implements DeviceRpc {
 
     @Override
     public CommonResult<List<DeviceVO>> getOnlineDevices(@RequestParam long userId) {
-        final List<Device> onlineDevices = deviceService.getOnlineDevices(userId);
-        final List<DeviceVO> deviceVOList = onlineDevices.stream().map(t -> BeanUtil.toBean(t, DeviceVO.class)).collect(Collectors.toList());
-        return CommonResult.success(deviceVOList);
+        final List<DeviceVO> onlineDevices = DeviceConvert.INSTANCE.convertList(deviceService.getOnlineDevices(userId));
+        return CommonResult.success(onlineDevices);
     }
 
 }
