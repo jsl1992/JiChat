@@ -5,11 +5,12 @@
     <parent>
         <artifactId>jichat-framework</artifactId>
         <groupId>com.ji.jichat</groupId>
-        <version>1.0</version>
+        <version>${revision}</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>jichat-spring-boot-starter-swagger</artifactId>
+    <version>${revision}</version>
 
     <dependencies>
         <!-- Spring 核心 -->

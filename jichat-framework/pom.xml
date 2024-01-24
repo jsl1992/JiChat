@@ -6,10 +6,9 @@
     <parent>
         <artifactId>jichat-parent</artifactId>
         <groupId>com.ji.jichat</groupId>
-        <version>1.0</version>
+        <version>${revision}</version>
     </parent>
     <artifactId>jichat-framework</artifactId>
-    <version>1.0</version>
     <packaging>pom</packaging>
 
 

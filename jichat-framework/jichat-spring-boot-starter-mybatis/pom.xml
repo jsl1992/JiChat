@@ -5,12 +5,12 @@
     <parent>
         <artifactId>jichat-framework</artifactId>
         <groupId>com.ji.jichat</groupId>
-        <version>1.0</version>
+        <version>${revision}</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <version>1.0</version>
 
     <artifactId>jichat-spring-boot-starter-mybatis</artifactId>
+    <version>${revision}</version>
 
     <dependencies>
 
@@ -35,7 +35,6 @@
         <dependency>
             <groupId>com.ji.jichat</groupId>
             <artifactId>jichat-spring-boot-starter-security</artifactId>
-            <version>1.0</version>
             <scope>provided</scope> <!-- 设置为 provided，只有 OncePerRequestFilter 使用到 -->
         </dependency>
     </dependencies>

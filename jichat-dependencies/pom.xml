@@ -6,7 +6,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.ji.jichat</groupId>
     <artifactId>jichat-dependencies</artifactId>
-    <version>1.0</version>
+    <version>${revision}</version>
     <packaging>pom</packaging>
 
     <name>JiChat Dependencies</name>
@@ -15,6 +15,7 @@
 
     <!-- 统一依赖管理 -->
     <properties>
+        <revision>1.0-SNAPSHOT</revision>
         <spring.boot.version>2.2.4.RELEASE</spring.boot.version>
         <spring.cloud.version>Hoxton.SR1</spring.cloud.version>
         <spring.cloud.alibaba.version>2.2.1.RELEASE</spring.cloud.alibaba.version>
@@ -92,20 +93,40 @@
                 <scope>import</scope>
             </dependency>
 
-            <!-- 通用相关 -->
+            <!-- JiChat 业务组件相关 -->
             <dependency>
-                <groupId>com.ji.mall</groupId>
-                <artifactId>common-framework</artifactId>
-                <version>1.0-SNAPSHOT</version>
+                <groupId>com.ji.jichat</groupId>
+                <artifactId>jichat-common</artifactId>
+                <version>${revision}</version>
             </dependency>
+            <dependency>
+                <groupId>com.ji.jichat</groupId>
+                <artifactId>jichat-mybatis-gen</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.ji.jichat</groupId>
+                <artifactId>jichat-spring-boot-starter-mybatis</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.ji.jichat</groupId>
+                <artifactId>jichat-spring-boot-starter-security</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.ji.jichat</groupId>
+                <artifactId>jichat-spring-boot-starter-swagger</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.ji.jichat</groupId>
+                <artifactId>jichat-spring-boot-starter-web</artifactId>
+                <version>${revision}</version>
+            </dependency>
+
 
             <!-- DB 相关 -->
-            <dependency>
-                <groupId>com.ji.mall</groupId>
-                <artifactId>jimall-spring-boot-starter-mybatis</artifactId>
-                <version>1.0-SNAPSHOT</version>
-            </dependency>
-
             <dependency>
                 <groupId>com.baomidou</groupId>
                 <artifactId>mybatis-plus-boot-starter</artifactId>
@@ -133,27 +154,6 @@
             </dependency>
 
             <!-- Web 相关 -->
-            <dependency>
-                <groupId>com.ji.mall</groupId>
-                <artifactId>mall-spring-boot-starter-swagger</artifactId>
-                <version>1.0-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>com.ji.mall</groupId>
-                <artifactId>mall-spring-boot-starter-web</artifactId>
-                <version>1.0-SNAPSHOT</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.ji.mall</groupId>
-                <artifactId>mall-spring-boot-starter-security-admin</artifactId>
-                <version>1.0-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>com.ji.mall</groupId>
-                <artifactId>mall-spring-boot-starter-xxljob</artifactId>
-                <version>1.0-SNAPSHOT</version>
-            </dependency>
 
             <dependency>
                 <groupId>com.github.xiaoymin</groupId>
@@ -170,12 +170,6 @@
                 <groupId>io.springfox</groupId>
                 <artifactId>springfox-swagger2</artifactId>
                 <version>${springfox-swagger.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.mapstruct</groupId>
-                        <artifactId>mapstruct</artifactId>
-                    </exclusion>
-                </exclusions>
             </dependency>
 
             <dependency>
@@ -198,18 +192,6 @@
                 <groupId>io.jsonwebtoken</groupId>
                 <artifactId>jjwt</artifactId>
                 <version>${jwt.version}</version>
-            </dependency>
-
-            <!-- RPC相关 -->
-            <dependency>
-                <groupId>com.ji.mall</groupId>
-                <artifactId>mall-spring-boot-starter-dubbo</artifactId>
-                <version>1.0-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.dubbo</groupId>
-                <artifactId>dubbo</artifactId>
-                <version>${dubbo.version}</version>
             </dependency>
 
             <!-- Job 相关 -->
@@ -252,12 +234,12 @@
             <!-- 工具类相关 -->
             <dependency>
                 <groupId>org.mapstruct</groupId>
-                <artifactId>mapstruct</artifactId> <!-- use mapstruct-jdk8 for Java 8 or higher -->
+                <artifactId>mapstruct</artifactId>
                 <version>${org.mapstruct.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.mapstruct</groupId>
-                <artifactId>mapstruct-jdk8</artifactId>
+                <artifactId>mapstruct-jdk8</artifactId>  <!-- use mapstruct-jdk8 for Java 8 or higher -->
                 <version>${org.mapstruct.version}</version>
             </dependency>
             <dependency>
