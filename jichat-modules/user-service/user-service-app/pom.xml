@@ -39,7 +39,12 @@
             <artifactId>jichat-spring-boot-starter-swagger</artifactId>
             <version>1.0</version>
         </dependency>
-
+        <dependency>
+            <groupId>com.ji.jichat</groupId>
+            <artifactId>jichat-mybatis-gen</artifactId>
+            <version>1.0</version>
+            <scope>test</scope>
+        </dependency>
 
         <!-- Spring AMQP -->
         <dependency>

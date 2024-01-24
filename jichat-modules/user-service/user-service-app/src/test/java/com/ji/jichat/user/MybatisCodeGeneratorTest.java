@@ -1,6 +1,7 @@
 package com.ji.jichat.user;
 
-import com.ji.jichat.mybatis.MybatisCodeGenerator;
+
+import com.ji.jichat.mybatis.gen.MybatisCodeGenerator;
 
 /**
  * @author jisl on 2024/1/21 14:15

@@ -1,4 +1,4 @@
-package com.ji.jichat.mybatis;
+package com.ji.jichat.mybatis.gen.core;
 
 /**
  * @author jisl on 2024/1/23 19:13

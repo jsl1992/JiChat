@@ -8,35 +8,33 @@
         <version>1.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <version>1.0</version>
 
-    <artifactId>jichat-spring-boot-starter-mybatis</artifactId>
+    <artifactId>jichat-mybatis-gen</artifactId>
 
     <dependencies>
-
-
-        <!-- lombok 简化代码-->
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <optional>true</optional>
-        </dependency>
-
         <!--    mybatis-plus启动器    -->
         <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-boot-starter</artifactId>
+            <groupId>com.ji.jichat</groupId>
+            <artifactId>jichat-spring-boot-starter-mybatis</artifactId>
+            <version>1.0</version>
+            <optional>true</optional>
         </dependency>
-
+        <!--   生成器  -->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-generator</artifactId>
+        </dependency>
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.ji.jichat</groupId>
-            <artifactId>jichat-spring-boot-starter-security</artifactId>
-            <version>1.0</version>
-            <scope>provided</scope> <!-- 设置为 provided，只有 OncePerRequestFilter 使用到 -->
+            <groupId>org.freemarker</groupId>
+            <artifactId>freemarker</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.velocity</groupId>
+            <artifactId>velocity-engine-core</artifactId>
         </dependency>
     </dependencies>
 

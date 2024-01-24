@@ -9,6 +9,7 @@ import com.ji.jichat.user.api.dto.AuthLoginDTO;
 import com.ji.jichat.user.api.dto.UserRegisterDTO;
 import com.ji.jichat.user.api.vo.AuthLoginVO;
 import com.ji.jichat.user.api.vo.LoginUser;
+import com.ji.jichat.user.convert.UserConvert;
 import com.ji.jichat.user.service.IUserService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;

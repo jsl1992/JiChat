@@ -1,11 +1,12 @@
-package com.ji.jichat.mybatis;
+package com.ji.jichat.mybatis.gen;
 
 import com.baomidou.mybatisplus.generator.FastAutoGenerator;
 import com.baomidou.mybatisplus.generator.config.OutputFile;
 import com.baomidou.mybatisplus.generator.config.rules.DateType;
-import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
+import com.ji.jichat.mybatis.core.dataobject.BaseDO;
+import com.ji.jichat.mybatis.gen.core.EnhanceFreemarkerTemplateEngine;
+import com.ji.jichat.mybatis.gen.core.MyBatisConstants;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -74,7 +75,8 @@ public class MybatisCodeGenerator {
                     //t_cnfeenode,t_etcflag,t_ff_node,t_ff_noderelation,t_flagfee,t_station,
                     builder.addInclude(tableNames) // 设置需要生成的表名
                             .addTablePrefix("t_", "c_")
-                            .entityBuilder().enableLombok().fileOverride();
+                            .entityBuilder().superClass(BaseDO.class).enableLombok().fileOverride()
+                            .addSuperEntityColumns("create_time","create_user","update_time","update_user");
                     ; // 设置过滤表前缀
                 })
                 .injectionConfig(consumer -> {

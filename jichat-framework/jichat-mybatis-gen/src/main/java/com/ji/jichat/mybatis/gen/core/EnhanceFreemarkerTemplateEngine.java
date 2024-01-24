@@ -1,4 +1,4 @@
-package com.ji.jichat.mybatis;
+package com.ji.jichat.mybatis.gen.core;
 
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
@@ -6,7 +6,9 @@ import com.baomidou.mybatisplus.generator.config.ConstVal;
 import com.baomidou.mybatisplus.generator.config.OutputFile;
 import com.baomidou.mybatisplus.generator.config.po.TableInfo;
 import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
+import com.ji.jichat.mybatis.gen.core.MyBatisConstants;
 import org.jetbrains.annotations.NotNull;
+
 import java.io.File;
 import java.util.Map;
 import java.util.Objects;
@@ -25,7 +27,7 @@ public final class EnhanceFreemarkerTemplateEngine extends FreemarkerTemplateEng
         for (Map.Entry<String, String> entry : customFile.entrySet()) {
             String otherPath = getPath(parentPackage, entry.getKey());
             String fileName = String.format(otherPath + File.separator + entityName + "%s", entry.getKey());
-            this.outputFile(new File(fileName), objectMap, entry.getValue(), true);
+            this.outputFile(new File(fileName), objectMap, entry.getValue(), false);
         }
 
     }

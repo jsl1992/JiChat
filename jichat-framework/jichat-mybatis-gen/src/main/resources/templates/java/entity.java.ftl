@@ -1,17 +1,16 @@
 package ${package.Entity};
 
 <#list table.importPackages as pkg>
+    <#if pkg != "java.io.Serializable" >
 import ${pkg};
+    </#if>
 </#list>
 <#if swagger>
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 </#if>
 <#if entityLombokModel>
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
     <#if chainModel>
 import lombok.experimental.Accessors;
     </#if>
@@ -26,10 +25,12 @@ import lombok.experimental.Accessors;
  * @since ${date}
  */
 <#if entityLombokModel>
-@Builder
+@Builder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
     <#if chainModel>
 @Accessors(chain = true)
     </#if>

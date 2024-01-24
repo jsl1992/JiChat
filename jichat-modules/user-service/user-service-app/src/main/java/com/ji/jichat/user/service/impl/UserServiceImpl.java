@@ -14,6 +14,7 @@ import com.ji.jichat.user.api.dto.AuthLoginDTO;
 import com.ji.jichat.user.api.dto.UserRegisterDTO;
 import com.ji.jichat.user.api.vo.AuthLoginVO;
 import com.ji.jichat.user.api.vo.LoginUser;
+import com.ji.jichat.user.convert.UserConvert;
 import com.ji.jichat.user.entity.Device;
 import com.ji.jichat.user.entity.User;
 import com.ji.jichat.user.mapper.UserMapper;
@@ -61,11 +62,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         }
         final String clientIP = ServletUtil.getClientIP(HttpContextUtil.getHttpServletRequest());
         final Date now = new Date();
-        user.setOnlineStatus(OnlineStatus.ONLINE.getCode());
-        user.setLoginIp(clientIP);
-        user.setLoginDate(now);
-        user.setUpdateUser(user.getUpdateUser());
-        user.setUpdateTime(now);
+        user.toBuilder().onlineStatus(OnlineStatus.ONLINE.getCode()).loginIp(clientIP).loginDate(now);
         updateById(user);
         loginDevice(loginDTO, user);
         return buildAuthLoginVO(user, loginDTO.getDeviceType());
@@ -122,19 +119,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         if (Objects.nonNull(dbUser)) {
             throw new ServiceException("用户名已存在");
         }
-        final User user = User.builder()
-                // todo id工具
-                .id(IdUtil.getSnowflake(1, 1).nextId()).username(dto.getUsername()).mobile(dto.getMobile())
-                .password(BCrypt.hashpw(dto.getPassword())).nickname(dto.getNickname()).status(CommonStatusEnum.ENABLE.getStatus())
-                .createTime(new Date()).createUser(dto.getUsername()).updateUser(dto.getUsername()).updateTime(new Date())
+        final User user = UserConvert.INSTANCE.convert(dto).toBuilder()
+                .id(IdUtil.getSnowflake(1, 1).nextId()).status(CommonStatusEnum.ENABLE.getStatus())
+                .password(BCrypt.hashpw(dto.getPassword()))
                 .build();
         save(user);
     }
 
     @Override
     public LoginUser getLoginUserByLoginKey(String loginKey) {
-        final LoginUser loginUser = redisTemplate.opsForValue().get(CacheConstant.LOGIN_USER + loginKey);
-        return loginUser;
+        return redisTemplate.opsForValue().get(CacheConstant.LOGIN_USER + loginKey);
     }
 
     @Override
@@ -166,9 +160,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
                 .eq(Device::getDeviceType, loginDTO.getDeviceType()).eq(Device::getOnlineStatus, OnlineStatus.ONLINE.getCode()));
         if (Objects.nonNull(onlineDevice)) {
             //同一个设备类型在线，那么要把前面登录的设备下线。
-            onlineDevice.setOnlineStatus(OnlineStatus.OFFLINE.getCode());
-            onlineDevice.setUpdateTime(now);
-            onlineDevice.setUpdateUser(user.getUsername());
+            onlineDevice.toBuilder().onlineStatus(OnlineStatus.OFFLINE.getCode());
             deviceService.updateById(onlineDevice);
             // todo netty连接也要断开
         }
@@ -176,12 +168,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
                 .deviceIdentifier(loginDTO.getDeviceIdentifier()).deviceName(loginDTO.getDeviceName())
                 .deviceType(loginDTO.getDeviceType()).onlineStatus(loginDTO.getDeviceType())
                 .onlineStatus(OnlineStatus.ONLINE.getCode()).osType(loginDTO.getOsType()).loginIp(clientIP)
-                .loginDate(now).userId(user.getId()).updateUser(user.getUsername()).updateTime(now)
+                .loginDate(now).userId(user.getId())
                 .build();
         final Device dbDevice = deviceService.getOne(new LambdaQueryWrapper<Device>().eq(Device::getUserId, user.getId()).eq(Device::getDeviceIdentifier, loginDTO.getDeviceIdentifier()));
         if (Objects.isNull(dbDevice)) {
-            device.setCreateUser(user.getUsername());
-            device.setCreateTime(now);
             deviceService.save(device);
         } else {
             device.setId(dbDevice.getId());

@@ -5,7 +5,6 @@
 
 package com.ji.jichat.web.util;
 
-import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -18,16 +17,12 @@ public class HttpContextUtil {
     }
 
     public static HttpServletRequest getHttpServletRequest() {
-        RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
-        return requestAttributes == null ? null : ((ServletRequestAttributes) Objects.requireNonNull(requestAttributes)).getRequest();
+        return ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
     }
+
 
     public static HttpServletResponse getHttpServletResponse() {
-        RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
-        return requestAttributes == null ? null : ((ServletRequestAttributes) Objects.requireNonNull(requestAttributes)).getResponse();
+        return ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getResponse();
     }
 
-    public static void asyncShareRequestAttributes() {
-        RequestContextHolder.setRequestAttributes(RequestContextHolder.getRequestAttributes(), true);
-    }
 }

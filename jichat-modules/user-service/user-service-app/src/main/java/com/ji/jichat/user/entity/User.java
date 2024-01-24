@@ -1,14 +1,11 @@
 package com.ji.jichat.user.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
-import java.io.Serializable;
+import com.ji.jichat.mybatis.core.dataobject.BaseDO;
 import java.util.Date;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 /**
  * <p>
@@ -18,13 +15,15 @@ import lombok.NoArgsConstructor;
  * @author jisl
  * @since 2024-01-24
  */
-@Builder
+@Builder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 @TableName("t_user")
 @ApiModel(value = "User对象", description = "用户表")
-public class User implements Serializable {
+public class User extends BaseDO {
 
     private static final long serialVersionUID = 1L;
 
@@ -57,18 +56,6 @@ public class User implements Serializable {
 
     @ApiModelProperty("是否删除(0存在 null删除,解决唯一索引冲突)")
     private Integer delFlag;
-
-    @ApiModelProperty("创建时间")
-    private Date createTime;
-
-    @ApiModelProperty("创建人")
-    private String createUser;
-
-    @ApiModelProperty("更新时间")
-    private Date updateTime;
-
-    @ApiModelProperty("更新人")
-    private String updateUser;
 
 
 }

@@ -1,7 +1,7 @@
-package ${package.Parent}.api.dto;
+package ${package.Parent}.api.vo;
 
 <#list table.importPackages as pkg>
-    <#if pkg != "com.baomidou.mybatisplus.annotation.TableName">
+    <#if pkg != "com.baomidou.mybatisplus.annotation.TableName" && pkg != "com.ji.jichat.mybatis.core.dataobject.BaseDO">
 import ${pkg};
     </#if>
 </#list>
@@ -21,14 +21,14 @@ import lombok.experimental.Accessors;
 
 /**
  * <p>
- * ${table.comment!}DTO
+ * ${table.comment!}VO
  * </p>
  *
  * @author ${author}
  * @since ${date}
  */
 <#if entityLombokModel>
-@Builder
+@Builder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
@@ -40,14 +40,14 @@ import lombok.experimental.Accessors;
 <#--@TableName("${schemaName}${table.name}")-->
 </#if>
 <#if swagger>
-@ApiModel(value = "${entity}DTO", description = "${table.comment!}DTO")
+@ApiModel(value = "${entity}VO", description = "${table.comment!}VO")
 </#if>
-<#if superEntityClass??>
-public class ${entity} extends ${superEntityClass}<#if activeRecord><${entity}></#if> {
-<#elseif activeRecord>
+<#--<#if superEntityClass??>-->
+<#--public class ${entity} extends ${superEntityClass}<#if activeRecord><${entity}></#if> {-->
+<#if activeRecord>
 public class ${entity} extends Model<${entity}> {
 <#elseif entitySerialVersionUID>
-public class ${entity}DTO implements Serializable {
+public class ${entity}VO implements Serializable {
 <#else>
 public class ${entity} {
 </#if>

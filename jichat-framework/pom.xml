@@ -19,6 +19,7 @@
         <module>jichat-spring-boot-starter-swagger</module>
         <module>jichat-spring-boot-starter-mybatis</module>
         <module>jichat-spring-boot-starter-security</module>
+        <module>jichat-mybatis-gen</module>
     </modules>
 
 

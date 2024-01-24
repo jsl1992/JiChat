@@ -3,6 +3,7 @@ package com.ji.jichat.user.convert;
 import java.util.*;
 
 
+import com.ji.jichat.user.api.dto.UserRegisterDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 import com.ji.jichat.user.entity.User;
@@ -28,7 +29,7 @@ public interface UserConvert {
 
     List<UserVO> convertList(List<User> list);
 
-
+    User convert(UserRegisterDTO bean);
 
 
 }
