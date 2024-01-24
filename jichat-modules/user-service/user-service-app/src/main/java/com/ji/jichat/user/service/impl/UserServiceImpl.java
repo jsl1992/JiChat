@@ -158,7 +158,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
                 .eq(Device::getDeviceType, loginDTO.getDeviceType()).eq(Device::getOnlineStatus, OnlineStatus.ONLINE.getCode()));
         if (Objects.nonNull(onlineDevice)) {
             //同一个设备类型在线，那么要把前面登录的设备下线。
-            onlineDevice.toBuilder().onlineStatus(OnlineStatus.OFFLINE.getCode());
+            onlineDevice.setOnlineStatus(OnlineStatus.OFFLINE.getCode());
             deviceService.updateById(onlineDevice);
             // todo netty连接也要断开
         }

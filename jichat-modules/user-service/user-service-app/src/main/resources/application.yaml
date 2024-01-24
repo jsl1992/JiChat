@@ -22,9 +22,10 @@ mybatis-plus:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   global-config:
     db-config:
-      logic-delete-value: null # 逻辑已删除值(默认为 1)
+      logic-delete-field: delFlag  # 全局逻辑删除的实体字段名
+      logic-delete-value: 1 # 逻辑已删除值(默认为 1)
       logic-not-delete-value: 0 # 逻辑未删除值(默认为 0)
-      logic-delete-field: del_flag
+
   mapper-locations: classpath:mapper/*.xml
   # 实体类扫描路径
   type-aliases-package: com.ji.jichat.user.entity

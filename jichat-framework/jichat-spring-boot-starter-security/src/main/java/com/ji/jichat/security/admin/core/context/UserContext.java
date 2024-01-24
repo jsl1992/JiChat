@@ -27,11 +27,11 @@ public class UserContext {
     }
 
     public static String getLoginKey() {
-        return  get().getLoginKey();
+        return get().getLoginKey();
     }
 
     public static Long getUserId() {
-        return get() == null ? -100L : get().getUserId();
+        return get() == null ? -1L : get().getUserId();
     }
 
 

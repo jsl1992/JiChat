@@ -43,11 +43,20 @@ public class UserController implements UserRpc {
         return CommonResult.success();
     }
 
+
+
     @PostMapping("/login")
     @ApiOperation("使用账号密码登录")
     @RequiresNone
     public CommonResult<AuthLoginVO> login(@RequestBody @Valid AuthLoginDTO reqVO) {
         return CommonResult.success(userService.login(reqVO));
+    }
+
+    @DeleteMapping("/del")
+    @ApiOperation("del")
+    public CommonResult<Void> del(@RequestParam long userId) {
+        userService.removeById(userId);
+        return CommonResult.success();
     }
 
 

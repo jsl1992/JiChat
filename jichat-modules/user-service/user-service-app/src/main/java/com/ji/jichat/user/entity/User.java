@@ -54,7 +54,7 @@ public class User extends BaseDO {
     @ApiModelProperty("最后登录时间")
     private Date loginDate;
 
-    @ApiModelProperty("是否删除(0存在 null删除,解决唯一索引冲突)")
+    @ApiModelProperty("是否删除(0存在 1已删除)")
     private Integer delFlag;
 
 
