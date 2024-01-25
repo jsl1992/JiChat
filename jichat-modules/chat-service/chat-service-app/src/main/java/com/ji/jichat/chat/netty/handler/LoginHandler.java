@@ -2,8 +2,6 @@ package com.ji.jichat.chat.netty.handler;
 
 import com.alibaba.fastjson.JSONObject;
 import com.ji.jichat.chat.api.enums.CommandCodeEnum;
-import com.ji.jichat.chat.core.config.TcpServerConfig;
-import com.ji.jichat.chat.kit.ServerLoadBalancer;
 import com.ji.jichat.chat.kit.UserChatServerCache;
 import com.ji.jichat.chat.netty.ChannelRepository;
 import com.ji.jichat.common.constants.CacheConstant;
@@ -37,10 +35,6 @@ public class LoginHandler extends SimpleChannelInboundHandler<UpMessage> {
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
 
-    @Resource
-    private ServerLoadBalancer serverLoadBalancer;
-    @Resource
-    private TcpServerConfig tcpServerConfig;
 
     @Resource
     private UserChatServerCache userChatServerCache;
@@ -73,8 +67,6 @@ public class LoginHandler extends SimpleChannelInboundHandler<UpMessage> {
         }
         //缓存用户连接的服务信息
         userChatServerCache.put(loginUser, ctx.channel());
-        //增加当前的连接数
-        serverLoadBalancer.incrementServerClientCount(tcpServerConfig.getHttpAddress());
 //        理器在处理完特定的任务后，不再需要继续处理后续的事件。通过调用 remove(this) 可以将该处理器从链中移除，防止后续的事件传递给它。这在某些场景下有助于提高性能或确保在适当的时候清理资源
         ctx.pipeline().remove(this);
         log.info("[{}]建立连接登录成功,初始化session", key);

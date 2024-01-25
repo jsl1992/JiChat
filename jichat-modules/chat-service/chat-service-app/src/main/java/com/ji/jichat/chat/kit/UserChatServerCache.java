@@ -22,6 +22,10 @@ public class UserChatServerCache {
     @Resource
     private RedisTemplate<String, UserChatServerVO> redisTemplate;
 
+
+    @Resource
+    private ServerLoadBalancer serverLoadBalancer;
+
     @Resource
     private TcpServerConfig tcpServerConfig;
 
@@ -34,6 +38,8 @@ public class UserChatServerCache {
         final String key = getKey(loginUser.getUserId(), loginUser.getDeviceType());
         redisTemplate.opsForValue().set(CacheConstant.USER_CHAT_SERVER + key, userChatServerVO, 8, TimeUnit.DAYS);
         ChannelRepository.put(key, channel);
+        //增加当前的连接数
+        serverLoadBalancer.incrementServerClientCount(tcpServerConfig.getHttpAddress());
     }
 
     public String getKey(long userId, Integer deviceType) {
@@ -45,7 +51,9 @@ public class UserChatServerCache {
     }
 
     public boolean remove(long userId, Integer deviceType) {
+        //   todo      这边逻辑要改下，需要转发到对应的服务节点上。（这样服务的ChannelRepository和服务客户端数量才会正确）
         final String key = getKey(userId, deviceType);
+        serverLoadBalancer.subServerClientCount(tcpServerConfig.getHttpAddress());
         ChannelRepository.remove(key);
         return redisTemplate.delete(CacheConstant.USER_CHAT_SERVER + key);
     }

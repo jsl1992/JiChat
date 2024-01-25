@@ -1,6 +1,7 @@
 package com.ji.jichat.chat.kit;
 
 import com.ji.jichat.common.constants.CacheConstant;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Component;
@@ -11,6 +12,7 @@ import java.util.List;
 import java.util.Set;
 
 @Component
+@Slf4j
 public class ServerLoadBalancer {
     @Resource
     private RedisTemplate<String, String> redisTemplate;
@@ -46,7 +48,9 @@ public class ServerLoadBalancer {
     }
 
     public void syncServer(List<String> curServers) {
+        log.info("当前服务列表{}",curServers);
         Set<String> cacheServers = new HashSet<>(redisTemplate.opsForZSet().range(CacheConstant.CHAT_SERVER_CLIENT_COUNT, 0, -1));
+        log.info("缓存服务列表{}",cacheServers);
         // 删除在缓存中但不在当前服务器中的元素
         for (String cs : cacheServers) {
             if (!curServers.contains(cs)) {

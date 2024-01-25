@@ -42,4 +42,13 @@ public class ClientController {
     }
 
 
+    @GetMapping("/close")
+    @ApiOperation("close")
+    public CommonResult<Void> close() {
+        jiChatClient.close();
+        return CommonResult.success();
+    }
+
+
+
 }
