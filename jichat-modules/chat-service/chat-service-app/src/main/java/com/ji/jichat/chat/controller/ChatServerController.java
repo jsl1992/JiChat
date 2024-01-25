@@ -49,7 +49,7 @@ public class ChatServerController {
     }
 
     @PostMapping("/offLine")
-    @ApiOperation("路由服务")
+    @ApiOperation("客户端下线")
     public CommonResult<Void> offLine() {
         final LoginUser loginUser = UserContext.get();
         userChatServerCache.remove(loginUser.getUserId(), loginUser.getDeviceType());

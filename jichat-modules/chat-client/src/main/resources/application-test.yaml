@@ -1,0 +1,21 @@
+# 服务器的配置项
+server:
+  port: 9193
+
+
+#tcp服务配置
+jichat:
+  user:
+    userId: 1749622404973465600
+    userName: libai
+    password: 12345678
+    version: 1.0
+    deviceIdentifier: ogt8ihozzppmrtg0dt
+    deviceName: 诺基亚5300
+    deviceType: 1
+    osType: 101
+
+user:
+  url: http://localhost:18081/user-api
+chat:
+  url: http://localhost:18080/chat-api

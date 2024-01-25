@@ -206,6 +206,7 @@ public class JiChatClient implements CommandLineRunner {
      * 关闭
      */
     public void close() {
+        jiChatServerManager.offLine();
         if (channel != null) {
             channel.close();
         }

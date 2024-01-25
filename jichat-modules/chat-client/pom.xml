@@ -10,6 +10,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>jichat-client</artifactId>
+    <name>JiCHat Client</name>
+    <description>JiCHat 客户端（一般不会用Java写客户端）</description>
 
     <dependencies>
         <dependency>

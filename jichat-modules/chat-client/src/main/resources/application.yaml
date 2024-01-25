@@ -1,39 +1,11 @@
-# 服务器的配置项
-server:
-  port: 9192
-#  port: 9193
 
 spring:
   # Application 的配置项
   application:
     name: chat-client
+  profiles:
+    active: dev
 
-
-
-
-
-
-
-#tcp服务配置
-jichat:
-  user:
-    userId: 1747905091907751936
-    userName: jisl
-    password: 12345678
-    version: 1.0
-    deviceIdentifier: jpOKnf5vGaW9IcitjEPrUGINjDSSEvXd
-    deviceName: iPhoneX
-    deviceType: 1
-    osType: 102
-
-#    userId: 1749622404973465600
-#    userName: libai
-#    password: 12345678
-#    version: 1.0
-#    deviceIdentifier: ogt8ihozzppmrtg0dt
-#    deviceName: 诺基亚5300
-#    deviceType: 1
-#    osType: 101
 
 
   # Swagger 配置项
@@ -44,7 +16,3 @@ swagger:
   version: 1.0.0
   base-package: com.ji.jichat.client.controller
 
-user:
-  url: http://localhost:18081/user-api
-chat:
-  url: http://localhost:18080/chat-api
