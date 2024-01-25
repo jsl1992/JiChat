@@ -49,7 +49,7 @@ public class ChatMessageProcessor implements CommandStrategy {
 
     @Override
     public CommandCodeEnum getCommandCode() {
-        return CommandCodeEnum.MESSAGE;
+        return CommandCodeEnum.PRIVATE_MESSAGE;
     }
 
     @Override
@@ -86,7 +86,7 @@ public class ChatMessageProcessor implements CommandStrategy {
 
     private void sendChatMsgToClient(ChatMessageDTO chatMessageDTO, DeviceVO deviceVO) {
         final DownMessage downMessage = DownMessage.builder()
-                .userId(deviceVO.getUserId()).deviceType(deviceVO.getDeviceType()).code(CommandCodeEnum.MESSAGE_RECEIVE.getCode())
+                .userId(deviceVO.getUserId()).deviceType(deviceVO.getDeviceType()).code(CommandCodeEnum.PRIVATE_MESSAGE_RECEIVE.getCode())
                 .content(JSON.toJSONString(chatMessageDTO)).nonce(IdUtil.objectId()).type(MessageTypeEnum.DOWN.getCode())
                 .build();
         final UserChatServerVO userChatServerVO = userChatServerCache.get(deviceVO.getUserId(), deviceVO.getDeviceType());

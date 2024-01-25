@@ -34,10 +34,10 @@ public class ClientController {
         return CommonResult.success();
     }
 
-    @GetMapping("/p2pMessage")
-    @ApiOperation("私聊消息")
-    public CommonResult<Void> p2pMessage(String msg,long userId) {
-        jiChatClient.p2pMessage(msg,userId);
+    @GetMapping("/privateMessage")
+    @ApiOperation("One-on-One Chat / Private Chat: 单聊")
+    public CommonResult<Void> privateMessage(String msg, long userId) {
+        jiChatClient.privateMessage(msg,userId);
         return CommonResult.success();
     }
 

@@ -11,8 +11,8 @@ public enum CommandCodeEnum {
     NO_COMMAND(-1, "没有处理Processor"),
     HEARTBEAT(1001, "心跳"),
     LOGIN(1002, "登录"),
-    MESSAGE(2001, "个人消息"),
-    MESSAGE_RECEIVE(2002, "个人消息接收"),
+    PRIVATE_MESSAGE(2001, "私聊消息"),
+    PRIVATE_MESSAGE_RECEIVE(2002, "私聊消息接收"),
     GROUP_MESSAGE(2102, "群消息"),
 
 

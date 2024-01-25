@@ -32,7 +32,7 @@ public class BizClientHandler extends SimpleChannelInboundHandler<DownMessage> {
     public void channelRead0(ChannelHandlerContext ctx, DownMessage message) {
         log.info("收到服务端消息:{}", message);
         GuardedObject.fireEvent(message.getNonce(), message);
-        if (message.getCode().equals(CommandCodeEnum.MESSAGE.getCode())) {
+        if (message.getCode().equals(CommandCodeEnum.PRIVATE_MESSAGE.getCode())) {
             clientInfo.getUserId();
         }
     }

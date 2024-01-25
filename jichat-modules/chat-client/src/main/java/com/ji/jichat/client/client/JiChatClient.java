@@ -7,7 +7,6 @@ import com.ji.jichat.chat.api.dto.ChatMessageDTO;
 import com.ji.jichat.chat.api.enums.ChatMessageTypeEnum;
 import com.ji.jichat.chat.api.enums.CommandCodeEnum;
 import com.ji.jichat.chat.api.vo.UserChatServerVO;
-import com.ji.jichat.client.client.ClientInfo;
 import com.ji.jichat.client.dto.AppUpMessage;
 import com.ji.jichat.client.manager.JiChatServerManager;
 import com.ji.jichat.client.netty.ClientChannelInitializer;
@@ -128,12 +127,12 @@ public class JiChatClient implements CommandLineRunner {
      *
      * @param msg
      */
-    public void p2pMessage(String msg, long userId) {
+    public void privateMessage(String msg, long userId) {
         final AppUpMessage appUpMessage = new AppUpMessage(clientInfo);
         final ChatMessageDTO chatMessageDTO = ChatMessageDTO.builder()
                 .messageFrom(clientInfo.getUserId()).messageTo(userId).messageType(ChatMessageTypeEnum.TEXT.getCode()).msg(msg)
                 .build();
-        appUpMessage.setCode(CommandCodeEnum.MESSAGE.getCode());
+        appUpMessage.setCode(CommandCodeEnum.PRIVATE_MESSAGE.getCode());
         appUpMessage.setContent(JSON.toJSONString(chatMessageDTO));
         messagesQueue.add(appUpMessage);
         CompletableFuture.runAsync(() -> syncSendMsg());
