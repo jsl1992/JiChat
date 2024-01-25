@@ -26,7 +26,7 @@ public class ChatMessageConsumer {
     public void receiveMessage(String message) {
         System.out.println("Message received: " + message);
         final DownMessage downMessage = JSON.parseObject(message, DownMessage.class);
-        final Channel channel = ChannelRepository.get(userChatServerCache.getKey(downMessage.getUserId(), downMessage.getDeviceType()));
+        final Channel channel = ChannelRepository.get(downMessage.getUserKey());
         if (Objects.isNull(channel)) {
             log.info("连接客户端连接关闭了，下发消息到客户端失败:{}", message);
             return;

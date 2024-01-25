@@ -3,11 +3,15 @@ package com.ji.jichat.client.netty.handler;
 
 import com.ji.jichat.chat.api.enums.CommandCodeEnum;
 import com.ji.jichat.client.client.ClientInfo;
+import com.ji.jichat.client.dto.AppUpMessage;
 import com.ji.jichat.common.pojo.DownMessage;
 import com.ji.jichat.common.util.GuardedObject;
+import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.handler.timeout.IdleState;
+import io.netty.handler.timeout.IdleStateEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -35,6 +39,31 @@ public class BizClientHandler extends SimpleChannelInboundHandler<DownMessage> {
         if (message.getCode().equals(CommandCodeEnum.PRIVATE_MESSAGE.getCode())) {
             clientInfo.getUserId();
         }
+    }
+
+
+    @Override
+    public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
+//        长时间，没有发消息给服务端，开始发送心跳
+        if (evt instanceof IdleStateEvent) {
+            IdleStateEvent idleStateEvent = (IdleStateEvent) evt;
+            if (idleStateEvent.state() == IdleState.WRITER_IDLE) {
+                sendPing(ctx);
+            }
+        }
+        super.userEventTriggered(ctx, evt);
+    }
+
+    private void sendPing(ChannelHandlerContext ctx) {
+        final AppUpMessage appUpMessage = new AppUpMessage(clientInfo);
+        appUpMessage.setCode(CommandCodeEnum.HEARTBEAT.getCode());
+        appUpMessage.setContent("ping");
+        ctx.writeAndFlush(appUpMessage).addListeners((ChannelFutureListener) future -> {
+            if (!future.isSuccess()) {
+                log.error("IO error,close Channel");
+                future.channel().close();
+            }
+        });
     }
 
 }

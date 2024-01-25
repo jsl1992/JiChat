@@ -12,15 +12,10 @@ import lombok.experimental.SuperBuilder;
 public abstract class Message {
 
     /**
-     * 用户id
+     * 用户id+deviceType (格式：1749693821463060481_1)
      */
-    private Long userId;
+    private String userKey;
 
-
-    /**
-     * 设备类型 1手机 2电脑 3平板
-     */
-    private Integer deviceType;
 
     /**
      * 功能码

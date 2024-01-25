@@ -20,8 +20,7 @@ public class AppUpMessage extends UpMessage {
 
     public AppUpMessage(ClientInfo clientInfo) {
         this.setClientIp(clientInfo.getIp());
-        this.setUserId(clientInfo.getUserId());
-        this.setDeviceType(clientInfo.getDeviceType());
+        this.setUserKey(clientInfo.getUserKey());
         this.setType(1);
         this.setNonce(IdUtil.objectId());
         this.setVersion(clientInfo.getVersion());

@@ -46,6 +46,15 @@ public class ChannelRepository {
         return channelCache.size();
     }
 
+    public static String getUserKey(Channel channel) {
+        for (Map.Entry<String, Channel> entry : channelCache.entrySet()) {
+            if (entry.getValue().equals(channel)) {
+                return entry.getKey();
+            }
+        }
+        return null;
+    }
+
     public static Map<String, Channel> getChannelCache() {
         return channelCache;
     }

@@ -13,7 +13,6 @@ import com.ji.jichat.chat.kit.UserChatServerCache;
 import com.ji.jichat.chat.manager.MessageIdGenerate;
 import com.ji.jichat.chat.mq.producer.ChatMessageProducer;
 import com.ji.jichat.chat.strategy.CommandStrategy;
-import com.ji.jichat.common.enums.CommonStatusEnum;
 import com.ji.jichat.common.pojo.DownMessage;
 import com.ji.jichat.common.pojo.UpMessage;
 import com.ji.jichat.user.api.DeviceRpc;
@@ -74,36 +73,36 @@ public class ChatMessageProcessor implements CommandStrategy {
     private void syncOtherDevicesMessage(ChatMessageDTO chatMessageDTO, UpMessage message) {
         final List<DeviceVO> fromOnlineDevices = deviceRpc.getOnlineDevices(chatMessageDTO.getMessageFrom()).getCheckedData();
         for (DeviceVO deviceVO : fromOnlineDevices) {
-            if (Objects.equals(deviceVO.getDeviceType(), message.getDeviceType())) {
+            final String userKey = userChatServerCache.getUserKey(deviceVO.getUserId(), deviceVO.getDeviceType());
+            if (Objects.equals(userKey, message.getUserKey())) {
                 //同一个设备，那么不用发给自己。直接跳过
                 continue;
             }
-            if (Objects.equals(deviceVO.getDeviceStatus(), CommonStatusEnum.ENABLE.getStatus())) {
+            if (userChatServerCache.hasKey(userKey)) {
                 sendChatMsgToClient(chatMessageDTO, deviceVO);
             }
         }
     }
 
     private void sendChatMsgToClient(ChatMessageDTO chatMessageDTO, DeviceVO deviceVO) {
+        final String userKey = userChatServerCache.getUserKey(deviceVO.getUserId(), deviceVO.getDeviceType());
         final DownMessage downMessage = DownMessage.builder()
-                .userId(deviceVO.getUserId()).deviceType(deviceVO.getDeviceType()).code(CommandCodeEnum.PRIVATE_MESSAGE_RECEIVE.getCode())
+                .userKey(userKey).code(CommandCodeEnum.PRIVATE_MESSAGE_RECEIVE.getCode())
                 .content(JSON.toJSONString(chatMessageDTO)).nonce(IdUtil.objectId()).type(MessageTypeEnum.DOWN.getCode())
                 .build();
-        final UserChatServerVO userChatServerVO = userChatServerCache.get(deviceVO.getUserId(), deviceVO.getDeviceType());
+        final UserChatServerVO userChatServerVO = userChatServerCache.get(userKey);
         //在线发送消息
-        assert userChatServerVO != null;
         chatMessageProducer.sendMessage(JSON.toJSONString(downMessage), userChatServerVO.getHttpAddress());
     }
 
     private void forwardMessage(ChatMessageDTO chatMessageDTO) {
         final List<DeviceVO> toOnlineDevices = deviceRpc.getOnlineDevices(chatMessageDTO.getMessageTo()).getCheckedData();
         for (DeviceVO deviceVO : toOnlineDevices) {
-            if (Objects.equals(deviceVO.getDeviceStatus(), CommonStatusEnum.ENABLE.getStatus())) {
+            if (userChatServerCache.hasKey(deviceVO.getUserId(), deviceVO.getDeviceType())) {
                 sendChatMsgToClient(chatMessageDTO, deviceVO);
             } else if (Objects.equals(deviceVO.getDeviceType(), DeviceTypeEnum.MOBILE.getCode())) {
                 log.info("手机登录当前设备没在线，使用苹果或者安卓推送，推送到手机");
             }
         }
-
     }
 }

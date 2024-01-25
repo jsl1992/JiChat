@@ -42,7 +42,7 @@ public class LoginHandler extends SimpleChannelInboundHandler<UpMessage> {
 
     @Override
     public void channelRead0(ChannelHandlerContext ctx, UpMessage msg) throws Exception {
-        final String key = userChatServerCache.getKey(msg.getUserId(), msg.getDeviceType());
+        final String key = msg.getUserKey();
         final Channel channel = ChannelRepository.get(key);
         if (channel == null && !msg.isMatch(CommandCodeEnum.LOGIN.getCode())) {
             //之前没有登录，且当前编码不是登录那么需要返回异常

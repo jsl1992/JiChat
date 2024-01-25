@@ -53,5 +53,9 @@ public class ClientInfo {
 
     private UserChatServerVO userChatServerVO;
 
+    public String getUserKey() {
+        return userId + "_" + deviceType;
+    }
+
 
 }
