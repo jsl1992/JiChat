@@ -38,7 +38,7 @@ public class ChatChannelTask {
         final Map<String, Channel> channelCache = ChannelRepository.getChannelCache();
         log.info("开始执行关闭无效连接客户端定时器:{}连接客户端总数", channelCache.size());
         for (Map.Entry<String, Channel> channelEntry : channelCache.entrySet()) {
-            final UserChatServerVO userChatServerVO = (UserChatServerVO) redisTemplate.opsForValue().get(CacheConstant.LOGIN_USER_CHAT_SERVER + channelEntry.getKey());
+            final UserChatServerVO userChatServerVO = (UserChatServerVO) redisTemplate.opsForValue().get(CacheConstant.USER_CHAT_SERVER + channelEntry.getKey());
             if (Objects.isNull(userChatServerVO) || !Objects.equals(userChatServerVO.getHttpAddress(), tcpServerConfig.getHttpAddress())) {
 //                不存在，或者连接到其他服务。那么需要将它关闭
                 log.info("用户[{}]连接失效，关闭当前客户端连接", channelEntry.getKey());

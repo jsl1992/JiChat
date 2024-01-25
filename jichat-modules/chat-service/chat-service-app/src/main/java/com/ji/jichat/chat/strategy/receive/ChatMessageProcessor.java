@@ -9,17 +9,16 @@ import com.ji.jichat.chat.api.enums.CommandCodeEnum;
 import com.ji.jichat.chat.api.enums.DeviceTypeEnum;
 import com.ji.jichat.chat.api.enums.MessageTypeEnum;
 import com.ji.jichat.chat.api.vo.UserChatServerVO;
+import com.ji.jichat.chat.kit.UserChatServerCache;
 import com.ji.jichat.chat.manager.MessageIdGenerate;
 import com.ji.jichat.chat.mq.producer.ChatMessageProducer;
 import com.ji.jichat.chat.strategy.CommandStrategy;
-import com.ji.jichat.common.constants.CacheConstant;
 import com.ji.jichat.common.enums.CommonStatusEnum;
 import com.ji.jichat.common.pojo.DownMessage;
 import com.ji.jichat.common.pojo.UpMessage;
 import com.ji.jichat.user.api.DeviceRpc;
 import com.ji.jichat.user.api.vo.DeviceVO;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -46,7 +45,7 @@ public class ChatMessageProcessor implements CommandStrategy {
     private ChatMessageProducer chatMessageProducer;
 
     @Resource
-    private RedisTemplate<String, UserChatServerVO> redisTemplate;
+    private UserChatServerCache userChatServerCache;
 
     @Override
     public CommandCodeEnum getCommandCode() {
@@ -86,11 +85,11 @@ public class ChatMessageProcessor implements CommandStrategy {
     }
 
     private void sendChatMsgToClient(ChatMessageDTO chatMessageDTO, DeviceVO deviceVO) {
-        final DownMessage downMessage =DownMessage.builder()
+        final DownMessage downMessage = DownMessage.builder()
                 .userId(deviceVO.getUserId()).deviceType(deviceVO.getDeviceType()).code(CommandCodeEnum.MESSAGE_RECEIVE.getCode())
                 .content(JSON.toJSONString(chatMessageDTO)).nonce(IdUtil.objectId()).type(MessageTypeEnum.DOWN.getCode())
                 .build();
-        final UserChatServerVO userChatServerVO = redisTemplate.opsForValue().get(CacheConstant.LOGIN_USER_CHAT_SERVER + deviceVO.getUserId() + "_" + deviceVO.getDeviceType());
+        final UserChatServerVO userChatServerVO = userChatServerCache.get(deviceVO.getUserId(), deviceVO.getDeviceType());
         //在线发送消息
         assert userChatServerVO != null;
         chatMessageProducer.sendMessage(JSON.toJSONString(downMessage), userChatServerVO.getHttpAddress());

@@ -84,8 +84,13 @@ public class JiChatServerManager {
 
 
     public void getUserChatServer() {
-        final UserChatServerVO authLoginVO = exchangeResponseResult(chatUrl + "/discoveryServer/routeServer", HttpMethod.POST, null, new ParameterizedTypeReference<CommonResult<UserChatServerVO>>() {
+        final UserChatServerVO authLoginVO = exchangeResponseResult(chatUrl + "/chatServer/routeServer", HttpMethod.POST, null, new ParameterizedTypeReference<CommonResult<UserChatServerVO>>() {
         });
         clientInfo.setUserChatServerVO(authLoginVO);
+    }
+
+    public void offLine() {
+        exchangeResponseResult(chatUrl + "/chatServer/offLine", HttpMethod.POST, null, new ParameterizedTypeReference<CommonResult<Void>>() {
+        });
     }
 }

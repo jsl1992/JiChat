@@ -1,6 +1,8 @@
 package com.ji.jichat.common.pojo;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 @Data
@@ -40,11 +42,6 @@ public abstract class Message {
      * 随机字符串
      */
     private String nonce;
-
-
-    public String getUserKey() {
-        return this.getUserId() + "_" + this.getDeviceType();
-    }
 
 
 }

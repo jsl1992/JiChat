@@ -3,6 +3,7 @@ package com.ji.jichat.chat.controller;
 
 import com.ji.jichat.chat.api.vo.UserChatServerVO;
 import com.ji.jichat.chat.kit.ServerLoadBalancer;
+import com.ji.jichat.chat.kit.UserChatServerCache;
 import com.ji.jichat.common.pojo.CommonResult;
 import com.ji.jichat.security.admin.core.context.UserContext;
 import com.ji.jichat.user.api.vo.LoginUser;
@@ -19,13 +20,16 @@ import javax.annotation.Resource;
  * @author jisl on 2023/10/10 11:05
  **/
 @RestController
-@Api(tags = {"发现服务Controller "})
-@RequestMapping("/discoveryServer/")
+@Api(tags = {"聊天服务信息Controller "})
+@RequestMapping("/chatServer/")
 @Slf4j
-public class DiscoveryServerController {
+public class ChatServerController {
 
     @Resource
     private ServerLoadBalancer serverLoadBalancer;
+
+    @Resource
+    private UserChatServerCache userChatServerCache;
 
 
     @PostMapping("/routeServer")
@@ -42,6 +46,14 @@ public class DiscoveryServerController {
                 .outsideIp("192.168.77.130").tcpPort(7066)
                 .build();
         return CommonResult.success(userChatServerVO);
+    }
+
+    @PostMapping("/offLine")
+    @ApiOperation("路由服务")
+    public CommonResult<Void> offLine() {
+        final LoginUser loginUser = UserContext.get();
+        userChatServerCache.remove(loginUser.getUserId(), loginUser.getDeviceType());
+        return CommonResult.success();
     }
 
 

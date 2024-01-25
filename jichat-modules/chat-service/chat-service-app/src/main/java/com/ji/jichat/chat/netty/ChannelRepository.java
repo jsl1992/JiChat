@@ -38,10 +38,8 @@ public class ChannelRepository {
         return channel;
     }
 
-    public static void remove(String userKey, Channel value) {
-        if (channelCache.remove(userKey, value)) {
-            log.debug("[{}][{}]channel remove success", userKey, value == null ? null : value.remoteAddress());
-        }
+    public static void remove(String userKey) {
+        channelCache.remove(userKey);
     }
 
     public static int size() {

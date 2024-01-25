@@ -107,7 +107,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         final User user = getById(loginUser.getUserId());
         final AuthLoginVO authLoginVO = buildAuthLoginVO(user, loginUser.getDeviceType());
 //        同时将tcp连接的redis时间也刷新
-        redisTemplate.expire(CacheConstant.LOGIN_USER_CHAT_SERVER + loginUser.getUserId() + "_" + loginUser.getDeviceType(), 8, TimeUnit.DAYS);
+        redisTemplate.expire(CacheConstant.USER_CHAT_SERVER + loginUser.getUserId() + "_" + loginUser.getDeviceType(), 8, TimeUnit.DAYS);
         //新的token创建完毕，将旧的loginKey作废
         redisTemplate.delete(CacheConstant.LOGIN_USER + loginKey);
         return authLoginVO;

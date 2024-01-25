@@ -6,11 +6,9 @@ package com.ji.jichat.common.constants;
 public class CacheConstant {
 
 
-
-
     public static final String LOGIN_USER = "user:loginUser:";
 
-    public static final String LOGIN_USER_CHAT_SERVER = "user:loginUser:chatServer";
+    public static final String USER_CHAT_SERVER = "user:chatServer";
 
     /**
      * messageId存储自增

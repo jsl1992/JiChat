@@ -193,11 +193,13 @@ public class JiChatClient implements CommandLineRunner {
             return;
         }
         //首先清除路由信息，下线
-//        routeRequest.offLine();
+        jiChatServerManager.offLine();
         log.info("JiChat server shutdown, reconnecting....");
-        start();
+        //启动客户端
+        startClient();
+        //向服务端注册
+        loginTcpServer();
         log.info("Great! reConnect success!!!");
-//        reConnectManager.reConnectSuccess();
     }
 
     /**

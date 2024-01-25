@@ -2,9 +2,9 @@ package com.ji.jichat.chat.netty.handler;
 
 import com.alibaba.fastjson.JSONObject;
 import com.ji.jichat.chat.api.enums.CommandCodeEnum;
-import com.ji.jichat.chat.api.vo.UserChatServerVO;
 import com.ji.jichat.chat.core.config.TcpServerConfig;
 import com.ji.jichat.chat.kit.ServerLoadBalancer;
+import com.ji.jichat.chat.kit.UserChatServerCache;
 import com.ji.jichat.chat.netty.ChannelRepository;
 import com.ji.jichat.common.constants.CacheConstant;
 import com.ji.jichat.common.pojo.UpMessage;
@@ -20,7 +20,6 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.util.Objects;
-import java.util.concurrent.TimeUnit;
 
 /**
  *
@@ -43,10 +42,13 @@ public class LoginHandler extends SimpleChannelInboundHandler<UpMessage> {
     @Resource
     private TcpServerConfig tcpServerConfig;
 
+    @Resource
+    private UserChatServerCache userChatServerCache;
+
 
     @Override
     public void channelRead0(ChannelHandlerContext ctx, UpMessage msg) throws Exception {
-        final String key = msg.getUserId() + "_" + msg.getDeviceType();
+        final String key = userChatServerCache.getKey(msg.getUserId(), msg.getDeviceType());
         final Channel channel = ChannelRepository.get(key);
         if (channel == null && !msg.isMatch(CommandCodeEnum.LOGIN.getCode())) {
             //之前没有登录，且当前编码不是登录那么需要返回异常
@@ -69,14 +71,8 @@ public class LoginHandler extends SimpleChannelInboundHandler<UpMessage> {
             ctx.channel().close();
             return;
         }
-//        存在redis里的用户服务缓存过期，那么也要将 ChannelRepository里的服务删除
-        ChannelRepository.put(key, ctx.channel());
-        final UserChatServerVO userChatServerVO = UserChatServerVO.builder()
-                .userId(loginUser.getUserId()).deviceType(loginUser.getDeviceType())
-                .outsideIp(tcpServerConfig.getOutsideIp()).tcpPort(tcpServerConfig.getTcpPort())
-                .innerIp(tcpServerConfig.getInnerIp()).httpPort(tcpServerConfig.getHttpPort())
-                .build();
-        redisTemplate.opsForValue().set(CacheConstant.LOGIN_USER_CHAT_SERVER + key, userChatServerVO, 8, TimeUnit.DAYS);
+        //缓存用户连接的服务信息
+        userChatServerCache.put(loginUser, ctx.channel());
         //增加当前的连接数
         serverLoadBalancer.incrementServerClientCount(tcpServerConfig.getHttpAddress());
 //        理器在处理完特定的任务后，不再需要继续处理后续的事件。通过调用 remove(this) 可以将该处理器从链中移除，防止后续的事件传递给它。这在某些场景下有助于提高性能或确保在适当的时候清理资源
