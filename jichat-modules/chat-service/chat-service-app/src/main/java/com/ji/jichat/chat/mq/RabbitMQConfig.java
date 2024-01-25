@@ -22,4 +22,11 @@ public class RabbitMQConfig {
         Queue queue = new Queue(queueName, true);
         return queue;
     }
+
+    @Bean
+    Queue queueChatMsgStore() {
+        String queueName = RabbitMQConstants.QUEUE_CHAT_MSG_STORE;
+        Queue queue = new Queue(queueName, true);
+        return queue;
+    }
 }

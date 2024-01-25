@@ -1,7 +1,7 @@
 package com.ji.jichat.client.controller;
 
 
-import com.ji.jichat.client.JiChatClient;
+import com.ji.jichat.client.client.JiChatClient;
 import com.ji.jichat.common.pojo.CommonResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

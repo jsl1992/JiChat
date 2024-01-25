@@ -88,8 +88,7 @@ public class LoginHandler extends SimpleChannelInboundHandler<UpMessage> {
         try {
             String token = JSONObject.parseObject(msg.getContent()).getString("token");
             final String loginKey = JwtUtil.validateJwtWithGetSubject(token);
-            LoginUser loginUser = (LoginUser) redisTemplate.opsForValue().get(CacheConstant.LOGIN_USER + loginKey);
-            return loginUser;
+            return (LoginUser) redisTemplate.opsForValue().get(CacheConstant.LOGIN_USER + loginKey);
         } catch (Exception e) {
             log.info("解析token获取用户异常:", e);
         }

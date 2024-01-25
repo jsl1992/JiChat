@@ -1,8 +1,8 @@
 package com.ji.jichat.common.pojo;
 
-import lombok.Data;
-import lombok.ToString;
-import lombok.experimental.Accessors;
+import com.alibaba.fastjson.JSON;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 /**
  * 云端下发数据（车场）
@@ -16,9 +16,18 @@ import lombok.experimental.Accessors;
  *
  * @author jisl
  */
+
 @Data
+@EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-@Accessors(chain = true)
+@NoArgsConstructor
+@SuperBuilder(toBuilder = true)
 public class DownMessage extends Message {
+
+    public static void main(String[] args) {
+        final DownMessage build = DownMessage.builder().type(1).build();
+        System.out.println(JSON.toJSONString(build));
+    }
+
 
 }

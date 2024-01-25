@@ -5,6 +5,7 @@ import cn.hutool.core.lang.Assert;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.ji.jichat.common.enums.ErrorCodeEnum;
 import com.ji.jichat.common.exception.ServiceException;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -86,11 +87,12 @@ public class CommonResult<T> implements Serializable {
         throw new ServiceException(code, msg);
     }
 
-//    @JSONField(serialize = false) // 避免序列化
-//    public T getCheckedData() {
-//        checkError();
-//        return data;
-//    }
+    @JSONField(serialize = false) // 避免序列化
+    @ApiModelProperty(hidden = true)
+    public T getCheckedData() {
+        checkError();
+        return data;
+    }
 
     public void setTraceId(String traceId) {
         this.traceId = traceId;

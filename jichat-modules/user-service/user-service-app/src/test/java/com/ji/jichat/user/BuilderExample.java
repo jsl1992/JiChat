@@ -1,5 +1,6 @@
 package com.ji.jichat.user;
 
+import com.alibaba.fastjson.JSON;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -34,5 +35,6 @@ public class BuilderExample {
 
         System.out.println(childObject.getParentProperty());  // Output: ParentValue
         System.out.println(childObject.getChildProperty());  // Output: ChildValue
+        System.out.println(JSON.toJSONString(childObject));
     }
 }

@@ -1,4 +1,4 @@
-package com.ji.jichat.client;
+package com.ji.jichat.client.client;
 
 
 import cn.hutool.json.JSONObject;
@@ -29,6 +29,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.Resource;
 import java.util.ArrayDeque;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * Function:
@@ -135,18 +136,29 @@ public class JiChatClient implements CommandLineRunner {
         appUpMessage.setCode(CommandCodeEnum.MESSAGE.getCode());
         appUpMessage.setContent(JSON.toJSONString(chatMessageDTO));
         messagesQueue.add(appUpMessage);
-//        这边可以异步返回，也就是每次发完消息，等待服务端返回messageId。才能接着发消息。(用户操作界面可以不用管，就后台发给服务端的消息。)
-        ChannelFuture future = channel.writeAndFlush(appUpMessage);
-        future.addListener((ChannelFutureListener) channelFuture ->
-                log.info("客户端手动发消息成功={}", msg));
-        try {
-            final GuardedObject<DownMessage> go = GuardedObject.create(appUpMessage.getNonce());
-            final DownMessage downMessage = go.getAndThrow(t -> Objects.equals(t.getNonce(), appUpMessage.getNonce()), 3);
-            log.info("发送的消息收到messageId:{},{}", downMessage.getContent(), msg);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        CompletableFuture.runAsync(() -> syncSendMsg());
+    }
+
+    /**
+     * 通过队列统一发送，等收到服务端messageId。再发送下一条消息。这样保证发送的消息顺序和服务端收到的顺序是一致
+     *
+     * @author jisl on 2024/1/24 16:30
+     **/
+    private void syncSendMsg() {
+        while (!messagesQueue.isEmpty()) {
+            final UpMessage upMessage = messagesQueue.pop();
+            ChannelFuture future = channel.writeAndFlush(upMessage);
+            future.addListener((ChannelFutureListener) channelFuture -> log.debug("客户端手动发消息成功={}", upMessage.getContent()));
+            try {
+                final GuardedObject<DownMessage> go = GuardedObject.create(upMessage.getNonce());
+                final DownMessage downMessage = go.getAndThrow(t -> Objects.equals(t.getNonce(), upMessage.getNonce()), 3);
+                log.info("发送的消息收到messageId:{},{}", downMessage.getContent(), upMessage.getContent());
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+//                这边发送失败，可以将消息添加到队首。再进行重试。重试3次失败后。提示网络啥
+            }
         }
-        System.out.println();
+
     }
 
 //    /**

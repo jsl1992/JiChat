@@ -26,6 +26,7 @@ public class ChatMessageDTO implements Serializable {
     @ApiModelProperty(value = "消息类型 1：文字 2：图片 3：语音 4：视频 5：文件", required = true, example = "1")
     private Integer messageType;
 
+
     @ApiModelProperty(value = "消息内容", required = true, example = "HelloWorld")
     private String msg;
 

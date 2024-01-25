@@ -3,8 +3,8 @@ package com.ji.jichat.client.dto;
 import cn.hutool.core.util.IdUtil;
 import com.ji.jichat.client.client.ClientInfo;
 import com.ji.jichat.common.pojo.UpMessage;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 
 /**
@@ -12,6 +12,10 @@ import lombok.EqualsAndHashCode;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
+@Getter
+@Setter
+@NoArgsConstructor
+@SuperBuilder
 public class AppUpMessage extends UpMessage {
 
     public AppUpMessage(ClientInfo clientInfo) {

@@ -14,9 +14,7 @@ import com.ji.jichat.chat.mq.producer.ChatMessageProducer;
 import com.ji.jichat.chat.strategy.CommandStrategy;
 import com.ji.jichat.common.constants.CacheConstant;
 import com.ji.jichat.common.enums.CommonStatusEnum;
-import com.ji.jichat.common.pojo.CommonResult;
 import com.ji.jichat.common.pojo.DownMessage;
-import com.ji.jichat.common.pojo.Message;
 import com.ji.jichat.common.pojo.UpMessage;
 import com.ji.jichat.user.api.DeviceRpc;
 import com.ji.jichat.user.api.vo.DeviceVO;
@@ -60,33 +58,53 @@ public class ChatMessageProcessor implements CommandStrategy {
         final ChatMessageDTO chatMessageDTO = JSON.parseObject(message.getContent(), ChatMessageDTO.class);
         final long messageId = messageIdGenerate.genMessageId(chatMessageDTO.getMessageFrom(), chatMessageDTO.getMessageTo());
         chatMessageDTO.setMessageId(messageId);
+//        消息时间以服务器时间为准，以防不同客户端时间相差太多
         chatMessageDTO.setCreateTime(new Date());
-        final JSONObject jsonObject = new JSONObject();
-        jsonObject.put("messageId", messageId);
+
         //通过mq转发消息，给消息接收者
         forwardMessage(chatMessageDTO);
         // 和同一个用户的其他登录设备
+        syncOtherDevicesMessage(chatMessageDTO, message);
 //      将mq消息入库
+        chatMessageProducer.storeChatMessage(chatMessageDTO);
+        final JSONObject jsonObject = new JSONObject();
+        jsonObject.put("messageId", messageId);
         return jsonObject.toJSONString();
     }
 
-    private void forwardMessage(ChatMessageDTO chatMessageDTO) {
-        final CommonResult<List<DeviceVO>> onlineDevicesResult = deviceRpc.getOnlineDevices(chatMessageDTO.getMessageTo());
-        onlineDevicesResult.checkError();
-        final List<DeviceVO> toOnlineDevices = onlineDevicesResult.getData();
-        for (DeviceVO deviceVO : toOnlineDevices) {
+    private void syncOtherDevicesMessage(ChatMessageDTO chatMessageDTO, UpMessage message) {
+        final List<DeviceVO> fromOnlineDevices = deviceRpc.getOnlineDevices(chatMessageDTO.getMessageFrom()).getCheckedData();
+        for (DeviceVO deviceVO : fromOnlineDevices) {
+            if (Objects.equals(deviceVO.getDeviceType(), message.getDeviceType())) {
+                //同一个设备，那么不用发给自己。直接跳过
+                continue;
+            }
             if (Objects.equals(deviceVO.getDeviceStatus(), CommonStatusEnum.ENABLE.getStatus())) {
-                final Message downMessage = new DownMessage()
-                        .setUserId(deviceVO.getUserId()).setDeviceType(deviceVO.getDeviceType()).setCode(CommandCodeEnum.MESSAGE_RECEIVE.getCode())
-                        .setContent(JSON.toJSONString(chatMessageDTO)).setType(MessageTypeEnum.DOWN.getCode())
-                                .setNonce(IdUtil.objectId());
-                final UserChatServerVO userChatServerVO = redisTemplate.opsForValue().get(CacheConstant.LOGIN_USER_CHAT_SERVER + deviceVO.getUserId() + "_" + deviceVO.getDeviceType());
-                //在线发送消息
-                chatMessageProducer.sendMessage(JSON.toJSONString(downMessage), userChatServerVO.getHttpAddress());
-            } else if (Objects.equals(deviceVO.getDeviceType(), DeviceTypeEnum.MOBILE.getCode())) {
-                //手机登录那么发送 消息推送到客户端
-                log.info("使用苹果或者安卓推送，推送到手机");
+                sendChatMsgToClient(chatMessageDTO, deviceVO);
             }
         }
+    }
+
+    private void sendChatMsgToClient(ChatMessageDTO chatMessageDTO, DeviceVO deviceVO) {
+        final DownMessage downMessage =DownMessage.builder()
+                .userId(deviceVO.getUserId()).deviceType(deviceVO.getDeviceType()).code(CommandCodeEnum.MESSAGE_RECEIVE.getCode())
+                .content(JSON.toJSONString(chatMessageDTO)).nonce(IdUtil.objectId()).type(MessageTypeEnum.DOWN.getCode())
+                .build();
+        final UserChatServerVO userChatServerVO = redisTemplate.opsForValue().get(CacheConstant.LOGIN_USER_CHAT_SERVER + deviceVO.getUserId() + "_" + deviceVO.getDeviceType());
+        //在线发送消息
+        assert userChatServerVO != null;
+        chatMessageProducer.sendMessage(JSON.toJSONString(downMessage), userChatServerVO.getHttpAddress());
+    }
+
+    private void forwardMessage(ChatMessageDTO chatMessageDTO) {
+        final List<DeviceVO> toOnlineDevices = deviceRpc.getOnlineDevices(chatMessageDTO.getMessageTo()).getCheckedData();
+        for (DeviceVO deviceVO : toOnlineDevices) {
+            if (Objects.equals(deviceVO.getDeviceStatus(), CommonStatusEnum.ENABLE.getStatus())) {
+                sendChatMsgToClient(chatMessageDTO, deviceVO);
+            } else if (Objects.equals(deviceVO.getDeviceType(), DeviceTypeEnum.MOBILE.getCode())) {
+                log.info("手机登录当前设备没在线，使用苹果或者安卓推送，推送到手机");
+            }
+        }
+
     }
 }
