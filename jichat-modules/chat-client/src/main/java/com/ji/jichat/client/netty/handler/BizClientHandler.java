@@ -58,7 +58,7 @@ public class BizClientHandler extends SimpleChannelInboundHandler<DownMessage> {
         final AppUpMessage appUpMessage = new AppUpMessage(clientInfo);
         appUpMessage.setCode(CommandCodeEnum.HEARTBEAT.getCode());
         appUpMessage.setContent("ping");
-        log.debug("发送给服务端心跳:{}",appUpMessage);
+        log.debug("发送给服务端心跳:{}",appUpMessage.getContent());
         ctx.writeAndFlush(appUpMessage).addListeners((ChannelFutureListener) future -> {
             if (!future.isSuccess()) {
                 log.error("IO error,close Channel");

@@ -78,6 +78,7 @@ public class JiChatServerManager {
                 uriVariables);
         final CommonResult<T> body = res.getBody();
         body.checkError();
+        log.info("请求返回值:{}",body.getData());
         return body.getData();
 
     }

@@ -1,5 +1,6 @@
 package com.ji.jichat.chat.kit;
 
+import com.alibaba.fastjson.JSON;
 import com.ji.jichat.common.constants.CacheConstant;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -24,9 +25,11 @@ public class ServerLoadBalancer {
      * @author jisl on 2024/1/21 22:50
      **/
     public String getServer() {
+        log.info("开始执行getServer");
         String selectedServer = null;
         // 获取所有服务器和连接数
         Set<ZSetOperations.TypedTuple<String>> servers = redisTemplate.opsForZSet().rangeWithScores(CacheConstant.CHAT_SERVER_CLIENT_COUNT, 0, -1);
+        log.info("开始执行getServer：{}", JSON.toJSONString(servers));
         // 选择连接数最少的服务器
         double minConnections = Double.MAX_VALUE;
         for (ZSetOperations.TypedTuple<String> server : servers) {

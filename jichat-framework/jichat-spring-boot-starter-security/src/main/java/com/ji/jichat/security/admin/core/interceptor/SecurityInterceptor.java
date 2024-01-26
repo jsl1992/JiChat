@@ -45,9 +45,7 @@ public class SecurityInterceptor extends HandlerInterceptorAdapter {
         if (StringUtils.isEmpty(loginKey)) {
             throw new ServiceException(ErrorCodeEnum.TOKEN_EXPIRES);
         }
-        final CommonResult<LoginUser> loginUserCommonResult = userRpc.getLoginUserByLoginKey(loginKey);
-        loginUserCommonResult.checkError();
-        final LoginUser loginUser = loginUserCommonResult.getData();
+        final LoginUser loginUser = userRpc.getLoginUserByLoginKey(loginKey).getCheckedData();
         if (Objects.isNull(loginUser)) {
             throw new ServiceException(ErrorCodeEnum.UNAUTHORIZED);
         }

@@ -9,7 +9,7 @@ spring:
     name: chat-service
   # Profile 的配置项
   profiles:
-    active: dev
+    active: test
     # Spring Boot 2.1 需要设定
     allow-bean-definition-overriding: true
 

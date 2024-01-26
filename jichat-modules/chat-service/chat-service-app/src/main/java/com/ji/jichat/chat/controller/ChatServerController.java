@@ -4,8 +4,11 @@ package com.ji.jichat.chat.controller;
 import com.ji.jichat.chat.api.vo.UserChatServerVO;
 import com.ji.jichat.chat.kit.ServerLoadBalancer;
 import com.ji.jichat.chat.kit.UserChatServerCache;
+import com.ji.jichat.common.exception.ServiceException;
 import com.ji.jichat.common.pojo.CommonResult;
 import com.ji.jichat.security.admin.core.context.UserContext;
+import com.ji.jichat.user.api.ChatServerInfoRpc;
+import com.ji.jichat.user.api.vo.ChatServerInfoVO;
 import com.ji.jichat.user.api.vo.LoginUser;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -15,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.Objects;
 
 /**
  * @author jisl on 2023/10/10 11:05
@@ -29,7 +33,7 @@ public class ChatServerController {
     private ServerLoadBalancer serverLoadBalancer;
 
     @Resource
-    private UserChatServerCache userChatServerCache;
+    private ChatServerInfoRpc chatServerInfoRpc;
 
 
     @PostMapping("/routeServer")
@@ -39,11 +43,14 @@ public class ChatServerController {
         final String node = serverLoadBalancer.getServer();
         final LoginUser loginUser = UserContext.get();
         final String[] ipAndPort = node.split(":");
-//       todo 需要将nacos的内网和http端口找到对应的服务，找到返回外网ip和tcp端口
+        final ChatServerInfoVO chatServerInfoVO = chatServerInfoRpc.getByIpAndPort(ipAndPort[0], Integer.parseInt(ipAndPort[1])).getCheckedData();
+        if (Objects.isNull(chatServerInfoVO)) {
+            throw new ServiceException("暂时没有合适的服务器分配");
+        }
         final UserChatServerVO userChatServerVO = UserChatServerVO.builder()
                 .userId(loginUser.getUserId())
                 .deviceType(loginUser.getDeviceType())
-                .outsideIp("192.168.77.130").tcpPort(7066)
+                .outsideIp(chatServerInfoVO.getOutsideIp()).tcpPort(chatServerInfoVO.getTcpPort())
                 .build();
         return CommonResult.success(userChatServerVO);
     }
