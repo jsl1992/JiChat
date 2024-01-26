@@ -51,7 +51,7 @@
 
 
     <!--开发环境:打印控制台-->
-    <springProfile name="!prd">
+    <springProfile name="dev">
         <root level="DEBUG">
             <appender-ref ref="CONSOLE" />
             <appender-ref ref="INFO_FILE" />
@@ -61,7 +61,7 @@
 
 
     <!--生产环境:输出到文件-->
-    <springProfile name="prd">
+    <springProfile name="!dev">
         <root level="INFO">
             <appender-ref ref="INFO_FILE" />
             <appender-ref ref="ERROR_FILE" />
