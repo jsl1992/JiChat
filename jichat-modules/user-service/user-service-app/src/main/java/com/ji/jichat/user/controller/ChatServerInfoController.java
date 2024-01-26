@@ -37,7 +37,7 @@ public class ChatServerInfoController implements ChatServerInfoRpc {
     }
 
 
-    @PostMapping("/getByIpAndPort")
+    @GetMapping("/getByIpAndPort")
     @RequiresNone
     @ApiOperation("获取服务信息")
     @Override
