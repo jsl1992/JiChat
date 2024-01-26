@@ -12,8 +12,7 @@ import lombok.experimental.SuperBuilder;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-@Getter
-@Setter
+@ToString(callSuper = true)
 @NoArgsConstructor
 @SuperBuilder
 public class AppUpMessage extends UpMessage {

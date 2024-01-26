@@ -49,6 +49,13 @@
         </filter>
     </appender>
 
+    <!-- Netty logger -->
+    <logger name="io.netty" level="info"/>
+    <!-- Spring Boot logger -->
+    <logger name="org.springframework" level="info"/>
+    <!-- Redis logger -->
+    <logger name="org.redisson" level="INFO"/>
+    <logger name="io.lettuce.core" level="INFO"/>
 
     <!--开发环境:打印控制台-->
     <springProfile name="dev">

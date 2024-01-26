@@ -14,7 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
-public class ClientHeartbeatHandler extends ChannelInboundHandlerAdapter {
+public class ConnectionTimeHandler extends ChannelInboundHandlerAdapter {
 
     private long connectionStartTime;
 
