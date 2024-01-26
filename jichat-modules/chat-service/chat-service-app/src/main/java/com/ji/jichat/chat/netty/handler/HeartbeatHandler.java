@@ -44,7 +44,7 @@ public class HeartbeatHandler extends SimpleChannelInboundHandler<UpMessage> {
             return;
         }
 //        收到客户端的心跳消息
-        log.debug("收到客户端心跳:{},{}", msg.getUserKey(), msg.getContent());
+        log.info("收到客户端心跳:{},{}", msg.getUserKey(), msg.getContent());
         if (!userChatServerCache.hasKey(ctx.channel())) {
             log.warn("心跳---客户端连接的信息不存在{},关闭当前客户端", msg.getUserKey());
         }

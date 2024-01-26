@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 @RestController
 @Api(tags = {"测试Controller "})
@@ -38,7 +41,7 @@ public class TestController {
     @GetMapping("/sendMessage")
     @ApiOperation("sendMessage")
     public CommonResult<String> sendMessage(String message) {
-        chatMessageProducer.sendMessage(message,"122222");
+        chatMessageProducer.sendMessage(message, "122222");
         return CommonResult.success("成功");
     }
 
@@ -56,6 +59,19 @@ public class TestController {
     public CommonResult<Object> getRedisCache(String key) {
         final Object o = redisTemplate.opsForValue().get(key);
         return CommonResult.success(o);
+    }
+
+
+    @GetMapping("/getKeysWithPrefix")
+    @ApiOperation("getKeysWithPrefix")
+    public List<String> getKeysWithPrefix(String prefix) {
+        final Set<String> keys = redisTemplate.keys(prefix + "*");
+        final ArrayList<String> list = new ArrayList<>();
+        for (String key : keys) {
+            final Object o = redisTemplate.opsForValue().get(key);
+            list.add(key + "============" + o.toString());
+        }
+        return list;
     }
 
 
