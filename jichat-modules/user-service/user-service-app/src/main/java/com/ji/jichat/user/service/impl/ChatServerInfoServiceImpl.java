@@ -32,7 +32,7 @@ public class ChatServerInfoServiceImpl extends ServiceImpl<ChatServerInfoMapper,
         final ChatServerInfo chatServerInfo = getOne(new LambdaQueryWrapper<ChatServerInfo>()
                 .eq(ChatServerInfo::getInnerIp, innerIp)
                 .eq(ChatServerInfo::getHttpPort, httpPort)
-                .eq(ChatServerInfo::getStatus, CommonStatusEnum.ENABLE));
+                .eq(ChatServerInfo::getStatus, CommonStatusEnum.ENABLE.getStatus()));
         return ChatServerInfoConvert.INSTANCE.convert(chatServerInfo);
     }
 }

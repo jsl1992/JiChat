@@ -37,7 +37,7 @@ public class UserChatServerVO implements Serializable {
 
 
     public String getHttpAddress() {
-        return this.outsideIp + ":" + this.httpPort;
+        return this.innerIp + ":" + this.httpPort;
     }
 
     public String getTcpAddress() {

@@ -43,13 +43,15 @@ public class TcpServerConfig {
     @Value("${spring.profiles.active}")
     private String env;
 
+    public String getHttpAddress() {
+        return this.innerIp + ":" + this.httpPort;
+    }
+
     public String getTcpAddress() {
         return this.outsideIp + ":" + this.tcpPort;
     }
 
-    public String getHttpAddress() {
-        return this.innerIp + ":" + this.httpPort;
-    }
+
 
 
 }

@@ -43,13 +43,13 @@ public class ChatServerController {
         final String node = serverLoadBalancer.getServer();
         final LoginUser loginUser = UserContext.get();
         final String[] ipAndPort = node.split(":");
-        final ChatServerInfoVO chatServerInfoVO = chatServerInfoRpc.getByIpAndPort(ipAndPort[0], Integer.parseInt(ipAndPort[1])).getCheckedData();
+        final ChatServerInfoVO chatServerInfoVO = chatServerInfoRpc.getByIpAndPort(ipAndPort[0],Integer.valueOf(ipAndPort[1])).getCheckedData();
         if (Objects.isNull(chatServerInfoVO)) {
             throw new ServiceException("暂时没有合适的服务器分配");
         }
         final UserChatServerVO userChatServerVO = UserChatServerVO.builder()
-                .userId(loginUser.getUserId())
-                .deviceType(loginUser.getDeviceType())
+                .userId(loginUser.getUserId()).deviceType(loginUser.getDeviceType())
+                .innerIp(chatServerInfoVO.getInnerIp()).httpPort(chatServerInfoVO.getHttpPort())
                 .outsideIp(chatServerInfoVO.getOutsideIp()).tcpPort(chatServerInfoVO.getTcpPort())
                 .build();
         return CommonResult.success(userChatServerVO);

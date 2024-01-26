@@ -7,7 +7,6 @@ import com.ji.jichat.user.api.dto.ChatServerInfoDTO;
 import com.ji.jichat.user.api.vo.ChatServerInfoVO;
 import com.ji.jichat.user.service.IChatServerInfoService;
 import io.swagger.annotations.ApiOperation;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -22,7 +21,6 @@ import javax.validation.Valid;
  * @since 2024-01-26
  */
 @RestController
-@Slf4j
 @RequestMapping("/chatServerInfo")
 public class ChatServerInfoController implements ChatServerInfoRpc {
 
@@ -44,5 +42,6 @@ public class ChatServerInfoController implements ChatServerInfoRpc {
     public CommonResult<ChatServerInfoVO> getByIpAndPort(@RequestParam String innerIp, @RequestParam int httpPort) {
         return CommonResult.success(chatServerInfoService.getByIpAndPort(innerIp, httpPort));
     }
+
 
 }
