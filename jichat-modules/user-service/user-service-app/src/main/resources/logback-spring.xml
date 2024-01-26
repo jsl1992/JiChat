@@ -49,13 +49,12 @@
         </filter>
     </appender>
 
-    <!-- Netty logger -->
-    <logger name="io.netty" level="info"/>
-    <!-- Spring Boot logger -->
-    <logger name="org.springframework" level="info"/>
-    <!-- Redis logger -->
-    <logger name="org.redisson" level="INFO"/>
-    <logger name="io.lettuce.core" level="INFO"/>
+    <!-- io开头的（io.netty，lettuce） logger -->
+    <logger name="io" level="info"/>
+    <!--org开头的（ Spring Boot，redisson，apache） logger -->
+    <logger name="org" level="info"/>
+    <!-- netflix-ribbon logger -->
+    <logger name="com.netflix" level="INFO"/>
 
     <!--开发环境:打印控制台-->
     <springProfile name="dev">
