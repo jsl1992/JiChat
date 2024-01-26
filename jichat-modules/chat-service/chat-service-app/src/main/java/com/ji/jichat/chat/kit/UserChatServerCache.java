@@ -62,10 +62,10 @@ public class UserChatServerCache {
     }
 
     public boolean remove(String userKey) {
-        //   todo      这边逻辑要改下，需要转发到对应的服务节点上。（这样服务的ChannelRepository和服务客户端数量才会正确）
+        log.info("开始执行移除{}客户端", userKey);
         serverLoadBalancer.subServerClientCount(tcpServerConfig.getHttpAddress());
         ChannelRepository.remove(userKey);
-        return redisTemplate.delete(CacheConstant.USER_CHAT_SERVER + userKey);
+        return Boolean.TRUE.equals(redisTemplate.delete(CacheConstant.USER_CHAT_SERVER + userKey));
     }
 
 

@@ -44,6 +44,7 @@ public class HeartbeatHandler extends SimpleChannelInboundHandler<UpMessage> {
             return;
         }
 //        收到客户端的心跳消息
+        log.debug("收到客户端心跳:{}",msg);
         NettyAttrUtil.updateReaderTime(ctx.channel(), System.currentTimeMillis());
         final DownMessage downMessage = MessageConvert.INSTANCE.convert(msg);
         downMessage.setType(MessageTypeEnum.DOWN.getCode());

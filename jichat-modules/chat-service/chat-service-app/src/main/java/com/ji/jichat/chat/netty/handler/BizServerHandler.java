@@ -58,6 +58,7 @@ public class BizServerHandler extends SimpleChannelInboundHandler<UpMessage> {
             log.error("业务处理异常:{},e:{}", message, e.getMessage(), e);
         } finally {
             log.debug("业务处理完成:code={},ip={}", message.getCode(), message.getClientIp());
+//            ReferenceCountUtil.release(message) 是 Netty 框架中的一个方法，用于释放 Netty 对象的引用计数。在 Netty 中，对象的引用计数是一种用于跟踪对象在内存中的引用数量的机制，以确保在不再需要使用对象时能够安全地释放资源
             ReferenceCountUtil.release(message);
         }
 

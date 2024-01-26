@@ -41,8 +41,6 @@ public class DeviceDTO implements Serializable {
     @ApiModelProperty("操作系统类型")
     private Integer osType;
 
-    @ApiModelProperty("设备状态(0:离线 1:在线)")
-    private Integer deviceStatus;
 
     @ApiModelProperty("在线状态（0离线 1在线）")
     private Integer onlineStatus;

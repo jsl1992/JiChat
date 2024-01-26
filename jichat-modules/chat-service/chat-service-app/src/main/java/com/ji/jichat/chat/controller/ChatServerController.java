@@ -48,14 +48,14 @@ public class ChatServerController {
         return CommonResult.success(userChatServerVO);
     }
 
-    @PostMapping("/offLine")
-    @ApiOperation("客户端下线")
-    public CommonResult<Void> offLine() {
-        final LoginUser loginUser = UserContext.get();
-        final String userKey = userChatServerCache.getUserKey(loginUser.getUserId(), loginUser.getDeviceType());
-        userChatServerCache.remove(userKey);
-        return CommonResult.success();
-    }
+//    @PostMapping("/offLine")
+//    @ApiOperation("客户端下线")
+//    public CommonResult<Void> offLine() {
+//        final LoginUser loginUser = UserContext.get();
+//        final String userKey = userChatServerCache.getUserKey(loginUser.getUserId(), loginUser.getDeviceType());
+//        userChatServerCache.remove(userKey);
+//        return CommonResult.success();
+//    }
 
 
 }
