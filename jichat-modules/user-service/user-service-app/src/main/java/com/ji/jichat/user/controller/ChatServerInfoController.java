@@ -7,11 +7,8 @@ import com.ji.jichat.user.api.dto.ChatServerInfoDTO;
 import com.ji.jichat.user.api.vo.ChatServerInfoVO;
 import com.ji.jichat.user.service.IChatServerInfoService;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
@@ -24,7 +21,8 @@ import javax.validation.Valid;
  * @author jisl
  * @since 2024-01-26
  */
-@Controller
+@RestController
+@Slf4j
 @RequestMapping("/chatServerInfo")
 public class ChatServerInfoController implements ChatServerInfoRpc {
 
@@ -32,8 +30,7 @@ public class ChatServerInfoController implements ChatServerInfoRpc {
     private IChatServerInfoService chatServerInfoService;
 
     @PostMapping("/save")
-    @RequiresNone
-    @ApiOperation("保存")
+    @ApiOperation("保存服务信息")
     public CommonResult<Void> save(@RequestBody @Valid ChatServerInfoDTO dto) {
         chatServerInfoService.save(dto);
         return CommonResult.success();
