@@ -7,6 +7,7 @@ import com.ji.jichat.user.api.UserRpc;
 import com.ji.jichat.user.api.vo.LoginUser;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,6 +24,9 @@ public class TestController {
 
     @Resource
     private UserRpc userRpc;
+
+    @Resource
+    private RedisTemplate redisTemplate;
 
     @GetMapping("/test")
     @ApiOperation("test")
@@ -44,6 +48,14 @@ public class TestController {
         final CommonResult<LoginUser> loginUserCommonResult = userRpc.getLoginUserByLoginKey(loginKey);
         loginUserCommonResult.checkError();
         return CommonResult.success(loginUserCommonResult.getData());
+    }
+
+
+    @GetMapping("/getRedisCache")
+    @ApiOperation("getRedisCache")
+    public CommonResult<Object> getRedisCache(String key) {
+        final Object o = redisTemplate.opsForValue().get(key);
+        return CommonResult.success(o);
     }
 
 

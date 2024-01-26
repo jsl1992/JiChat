@@ -7,6 +7,7 @@ import com.ji.jichat.common.constants.CacheConstant;
 import com.ji.jichat.user.api.vo.LoginUser;
 import io.netty.channel.Channel;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
@@ -55,6 +56,11 @@ public class UserChatServerCache {
 
     public boolean hasKey(long userId, int deviceType) {
         return hasKey(getUserKey(userId, deviceType));
+    }
+
+    public boolean hasKey(Channel channel) {
+        final String userKey = ChannelRepository.getUserKey(channel);
+        return StringUtils.isNotBlank(userKey) && redisTemplate.hasKey(CacheConstant.USER_CHAT_SERVER + userKey);
     }
 
     public boolean hasKey(String userKey) {

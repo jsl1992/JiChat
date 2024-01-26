@@ -45,6 +45,9 @@ public class HeartbeatHandler extends SimpleChannelInboundHandler<UpMessage> {
         }
 //        收到客户端的心跳消息
         log.debug("收到客户端心跳:{},{}", msg.getUserKey(), msg.getContent());
+        if (!userChatServerCache.hasKey(ctx.channel())) {
+            log.warn("心跳---客户端连接的信息不存在{},关闭当前客户端", msg.getUserKey());
+        }
         NettyAttrUtil.updateReaderTime(ctx.channel(), System.currentTimeMillis());
         final DownMessage downMessage = MessageConvert.INSTANCE.convert(msg);
         downMessage.setType(MessageTypeEnum.DOWN.getCode());
