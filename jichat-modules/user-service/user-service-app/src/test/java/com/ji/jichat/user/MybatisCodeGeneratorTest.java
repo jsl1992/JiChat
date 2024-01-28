@@ -17,7 +17,7 @@ public class MybatisCodeGeneratorTest {
     private static final String userName = "root";
     private static final String password = "root";
     //需要生成的表(多张表用","分隔,例如:"t_user,t_role")
-    private static final String tableNames = "t_chat_server_info";
+    private static final String tableNames = "t_user_relation,t_chat_message";
     //模块地址
     private static final String module_path = "/jichat-modules/user-service/user-service-app";
     //包名

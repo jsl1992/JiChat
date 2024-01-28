@@ -4,7 +4,7 @@ package com.ji.jichat.chat.strategy.receive;
 import cn.hutool.core.util.IdUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.ji.jichat.chat.api.dto.ChatMessageDTO;
+import com.ji.jichat.chat.api.dto.ChatMessageSendDTO;
 import com.ji.jichat.chat.api.enums.CommandCodeEnum;
 import com.ji.jichat.chat.api.enums.DeviceTypeEnum;
 import com.ji.jichat.chat.api.enums.MessageTypeEnum;
@@ -15,6 +15,7 @@ import com.ji.jichat.chat.mq.producer.ChatMessageProducer;
 import com.ji.jichat.chat.strategy.CommandStrategy;
 import com.ji.jichat.common.pojo.DownMessage;
 import com.ji.jichat.common.pojo.UpMessage;
+import com.ji.jichat.common.util.MessageIdUtil;
 import com.ji.jichat.user.api.DeviceRpc;
 import com.ji.jichat.user.api.vo.DeviceVO;
 import lombok.extern.slf4j.Slf4j;
@@ -53,9 +54,10 @@ public class ChatMessageProcessor implements CommandStrategy {
 
     @Override
     public String execute(UpMessage message) {
-        final ChatMessageDTO chatMessageDTO = JSON.parseObject(message.getContent(), ChatMessageDTO.class);
+        final ChatMessageSendDTO chatMessageDTO = JSON.parseObject(message.getContent(), ChatMessageSendDTO.class);
         final long messageId = messageIdGenerate.genMessageId(chatMessageDTO.getMessageFrom(), chatMessageDTO.getMessageTo());
         chatMessageDTO.setMessageId(messageId);
+        chatMessageDTO.setChannelKey(MessageIdUtil.getChannelKey(chatMessageDTO.getMessageFrom(), chatMessageDTO.getMessageTo()));
 //        消息时间以服务器时间为准，以防不同客户端时间相差太多
         chatMessageDTO.setCreateTime(new Date());
 
@@ -67,10 +69,11 @@ public class ChatMessageProcessor implements CommandStrategy {
         chatMessageProducer.storeChatMessage(chatMessageDTO);
         final JSONObject jsonObject = new JSONObject();
         jsonObject.put("messageId", messageId);
+        jsonObject.put("channelKey", chatMessageDTO.getChannelKey());
         return jsonObject.toJSONString();
     }
 
-    private void syncOtherDevicesMessage(ChatMessageDTO chatMessageDTO, UpMessage message) {
+    private void syncOtherDevicesMessage(ChatMessageSendDTO chatMessageDTO, UpMessage message) {
         final List<DeviceVO> fromOnlineDevices = deviceRpc.getOnlineDevices(chatMessageDTO.getMessageFrom()).getCheckedData();
         for (DeviceVO deviceVO : fromOnlineDevices) {
             final String userKey = userChatServerCache.getUserKey(deviceVO.getUserId(), deviceVO.getDeviceType());
@@ -84,7 +87,7 @@ public class ChatMessageProcessor implements CommandStrategy {
         }
     }
 
-    private void sendChatMsgToClient(ChatMessageDTO chatMessageDTO, DeviceVO deviceVO) {
+    private void sendChatMsgToClient(ChatMessageSendDTO chatMessageDTO, DeviceVO deviceVO) {
         final String userKey = userChatServerCache.getUserKey(deviceVO.getUserId(), deviceVO.getDeviceType());
         final DownMessage downMessage = DownMessage.builder()
                 .userKey(userKey).code(CommandCodeEnum.PRIVATE_MESSAGE_RECEIVE.getCode())
@@ -95,7 +98,7 @@ public class ChatMessageProcessor implements CommandStrategy {
         chatMessageProducer.sendMessage(JSON.toJSONString(downMessage), userChatServerVO.getHttpAddress());
     }
 
-    private void forwardMessage(ChatMessageDTO chatMessageDTO) {
+    private void forwardMessage(ChatMessageSendDTO chatMessageDTO) {
         final List<DeviceVO> toOnlineDevices = deviceRpc.getOnlineDevices(chatMessageDTO.getMessageTo()).getCheckedData();
         for (DeviceVO deviceVO : toOnlineDevices) {
             if (userChatServerCache.hasKey(deviceVO.getUserId(), deviceVO.getDeviceType())) {

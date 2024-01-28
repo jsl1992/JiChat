@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ji.jichat.user.mapper.ChatMessageMapper">
+    <select id="query"
+            parameterType="com.ji.jichat.user.api.dto.ChatMessageDTO"
+            resultType="com.ji.jichat.user.api.vo.ChatMessageVO">
+        SELECT
+        message_id,channel_id, message_from, message_to, message_type, message_content, create_time
+        FROM
+        t_chat_message
+        <where>
+            <if test=" channelKey != null ">
+                AND channel_key=#{channelKey}
+            </if>
+            <if test=" messageIdStart != null AND messageIdEnd != null ">
+                AND message_Id BETWEEN #{messageIdStart} AND #{messageIdEnd}
+            </if>
+            <if test=" messageType != null ">
+                AND message_type=#{messageType}
+            </if>
+        </where>
+        ORDER BY message_id
+    </select>
+</mapper>

@@ -23,6 +23,7 @@ import com.ji.jichat.user.service.IUserService;
 import com.ji.jichat.web.util.HttpContextUtil;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.Date;
@@ -49,6 +50,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
 
     @Override
+    @Transactional
     public AuthLoginVO login(AuthLoginDTO loginDTO) {
         final User user = getOne(new LambdaQueryWrapper<User>().eq(User::getUsername, loginDTO.getUsername()));
         if (Objects.isNull(user)) {
@@ -94,6 +96,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
 
     @Override
+    @Transactional
     public AuthLoginVO refreshToken(String refreshToken) {
         final String loginKey = JwtUtil.validateJwtWithGetSubject(refreshToken);
         if (Objects.isNull(loginKey)) {
@@ -114,6 +117,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     }
 
     @Override
+    @Transactional
     public void register(UserRegisterDTO dto) {
         final User dbUser = getOne(new LambdaQueryWrapper<User>().eq(User::getUsername, dto.getUsername()));
         if (Objects.nonNull(dbUser)) {
@@ -132,6 +136,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     }
 
     @Override
+    @Transactional
     public void logout(LoginUser loginUser) {
         redisTemplate.delete(CacheConstant.LOGIN_USER + loginUser.getLoginKey());
         final User user = getById(loginUser.getUserId());

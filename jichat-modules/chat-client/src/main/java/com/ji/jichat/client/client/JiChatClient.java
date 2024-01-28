@@ -3,7 +3,7 @@ package com.ji.jichat.client.client;
 
 import cn.hutool.json.JSONObject;
 import com.alibaba.fastjson.JSON;
-import com.ji.jichat.chat.api.dto.ChatMessageDTO;
+import com.ji.jichat.chat.api.dto.ChatMessageSendDTO;
 import com.ji.jichat.chat.api.enums.ChatMessageTypeEnum;
 import com.ji.jichat.chat.api.enums.CommandCodeEnum;
 import com.ji.jichat.chat.api.vo.UserChatServerVO;
@@ -13,6 +13,8 @@ import com.ji.jichat.client.netty.ClientChannelInitializer;
 import com.ji.jichat.common.pojo.DownMessage;
 import com.ji.jichat.common.pojo.UpMessage;
 import com.ji.jichat.common.util.GuardedObject;
+import com.ji.jichat.common.util.MessageIdUtil;
+import com.ji.jichat.user.api.vo.UserRelationVO;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
@@ -27,6 +29,8 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.util.ArrayDeque;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
@@ -61,6 +65,8 @@ public class JiChatClient implements CommandLineRunner {
 
     private static ArrayDeque<UpMessage> messagesQueue = new ArrayDeque<>();
 
+    private static HashMap<String, Long> chatMessageIdMap = new HashMap<>();
+
 
     /**
      * 重试次数
@@ -74,6 +80,22 @@ public class JiChatClient implements CommandLineRunner {
         startClient();
         //向服务端注册
         loginTcpServer();
+        //同步历史消息
+        syncHisMsg();
+    }
+
+    private void syncHisMsg() {
+        final List<UserRelationVO> userRelationVOS = jiChatServerManager.listUserRelation();
+        //遍历所有的好友列表
+        for (UserRelationVO vo : userRelationVOS) {
+            String channelKey = vo.getRelationType() == 1 ? MessageIdUtil.getChannelKey(vo.getUserId(), vo.getRelationId()) : MessageIdUtil.getChannelKey(vo.getRelationId());
+            if (!chatMessageIdMap.containsKey(channelKey) || chatMessageIdMap.get(channelKey) < vo.getMessageId()) {
+                //不存在当前会话，或者当前会话的curMaxMessageId<服务端里最小，那么拉取数据同步
+                final Long curMaxMessageId = chatMessageIdMap.getOrDefault(channelKey, 0L);
+
+                chatMessageIdMap.put(channelKey, vo.getMessageId());
+            }
+        }
     }
 
     /**
@@ -129,8 +151,8 @@ public class JiChatClient implements CommandLineRunner {
      */
     public void privateMessage(String msg, long userId) {
         final AppUpMessage appUpMessage = new AppUpMessage(clientInfo);
-        final ChatMessageDTO chatMessageDTO = ChatMessageDTO.builder()
-                .messageFrom(clientInfo.getUserId()).messageTo(userId).messageType(ChatMessageTypeEnum.TEXT.getCode()).msg(msg)
+        final ChatMessageSendDTO chatMessageDTO = ChatMessageSendDTO.builder()
+                .messageFrom(clientInfo.getUserId()).messageTo(userId).messageType(ChatMessageTypeEnum.TEXT.getCode()).messageContent(msg)
                 .build();
         appUpMessage.setCode(CommandCodeEnum.PRIVATE_MESSAGE.getCode());
         appUpMessage.setContent(JSON.toJSONString(chatMessageDTO));

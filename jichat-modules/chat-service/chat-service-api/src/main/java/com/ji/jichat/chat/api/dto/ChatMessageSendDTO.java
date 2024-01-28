@@ -15,7 +15,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ChatMessageDTO implements Serializable {
+public class ChatMessageSendDTO implements Serializable {
 
     @ApiModelProperty(value = "用户id", required = true, example = "1")
     private Long messageFrom;
@@ -28,7 +28,10 @@ public class ChatMessageDTO implements Serializable {
 
 
     @ApiModelProperty(value = "消息内容", required = true, example = "HelloWorld")
-    private String msg;
+    private String messageContent;
+
+    @ApiModelProperty("频道key")
+    private String channelKey;
 
     @ApiModelProperty(value = "消息id", required = true, example = "1")
     private Long messageId;

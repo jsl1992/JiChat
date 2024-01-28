@@ -17,8 +17,8 @@
 
         <!-- lombok 简化代码-->
         <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
+            <groupId>com.ji.jichat</groupId>
+            <artifactId>jichat-common</artifactId>
             <optional>true</optional>
         </dependency>
 
@@ -36,6 +36,22 @@
             <groupId>com.ji.jichat</groupId>
             <artifactId>jichat-spring-boot-starter-security</artifactId>
             <scope>provided</scope> <!-- 设置为 provided，只有 OncePerRequestFilter 使用到 -->
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper-spring-boot-starter</artifactId>
+            <version>1.2.3</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.mybatis</groupId>
+                    <artifactId>mybatis</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.mybatis</groupId>
+                    <artifactId>mybatis-spring</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 

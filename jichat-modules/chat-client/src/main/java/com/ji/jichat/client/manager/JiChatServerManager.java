@@ -4,8 +4,11 @@ import com.alibaba.fastjson.JSON;
 import com.ji.jichat.chat.api.vo.UserChatServerVO;
 import com.ji.jichat.client.client.ClientInfo;
 import com.ji.jichat.common.pojo.CommonResult;
+import com.ji.jichat.common.pojo.PageVO;
 import com.ji.jichat.user.api.dto.AuthLoginDTO;
 import com.ji.jichat.user.api.vo.AuthLoginVO;
+import com.ji.jichat.user.api.vo.ChatMessageVO;
+import com.ji.jichat.user.api.vo.UserRelationVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,6 +20,7 @@ import org.springframework.web.client.RestTemplate;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -78,7 +82,7 @@ public class JiChatServerManager {
                 uriVariables);
         final CommonResult<T> body = res.getBody();
         body.checkError();
-        log.info("请求返回值:{}",body.getData());
+        log.info("请求返回值:{}", body.getData());
         return body.getData();
 
     }
@@ -93,5 +97,17 @@ public class JiChatServerManager {
     public void offLine() {
         exchangeResponseResult(chatUrl + "/chatServer/offLine", HttpMethod.POST, null, new ParameterizedTypeReference<CommonResult<Void>>() {
         });
+    }
+
+    public List<UserRelationVO> listUserRelation() {
+        final List<UserRelationVO> userRelationVOS = exchangeResponseResult(userUrl + "/userRelation/listUserRelation", HttpMethod.GET, null, new ParameterizedTypeReference<CommonResult<List<UserRelationVO>>>() {
+        });
+        return userRelationVOS;
+    }
+
+    public PageVO<ChatMessageVO> queryChatMessage(int pageNum, int pageSize) {
+        final PageVO<ChatMessageVO> userRelationVOS = exchangeResponseResult(userUrl + String.format("/chatMessage/query?pageNum=%s&pageSize=%s", pageNum, pageSize), HttpMethod.GET, null, new ParameterizedTypeReference<CommonResult<PageVO<ChatMessageVO>>>() {
+        });
+        return userRelationVOS;
     }
 }
