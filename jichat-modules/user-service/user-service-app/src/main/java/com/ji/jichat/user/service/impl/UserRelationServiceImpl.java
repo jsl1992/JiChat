@@ -36,10 +36,11 @@ public class UserRelationServiceImpl extends ServiceImpl<UserRelationMapper, Use
     @Transactional
     public void addFriend(UserRelationDTO userRelationDTO) {
         final Long userId = UserContext.getUserId();
-        final UserRelation userRelation = UserRelationConvert.INSTANCE.convert(userRelationDTO).toBuilder().userId(userId).relationType(1).build();
+        final String channelKey = MessageIdUtil.getChannelKey(userId, userRelationDTO.getRelationId());
+        final UserRelation userRelation = UserRelationConvert.INSTANCE.convert(userRelationDTO).toBuilder().userId(userId).relationType(1).channelKey(channelKey).build();
         save(userRelation);
         //添加两个，方便将来数据库分片，可以按照用户id分。同时微信也是删除好友，对方还是有自己的好友。
-        final UserRelation userRelation_ = UserRelation.builder().userId(userRelationDTO.getRelationId()).relationId(userId).relationType(userRelation.getRelationType()).build();
+        final UserRelation userRelation_ = UserRelation.builder().userId(userRelationDTO.getRelationId()).relationId(userId).relationType(userRelation.getRelationType()).channelKey(channelKey).build();
         save(userRelation_);
     }
 
@@ -48,8 +49,7 @@ public class UserRelationServiceImpl extends ServiceImpl<UserRelationMapper, Use
         final Long userId = UserContext.getUserId();
         final List<UserRelationVO> userRelations = UserRelationConvert.INSTANCE.convertList(list(new LambdaQueryWrapper<UserRelation>().eq(UserRelation::getUserId, userId)));
         for (UserRelationVO vo : userRelations) {
-            String channelKey = vo.getRelationType() == 1 ? MessageIdUtil.getChannelKey(vo.getUserId(), vo.getRelationId()) : MessageIdUtil.getChannelKey(vo.getRelationId());
-            final Long messageId = redisTemplate.opsForValue().increment(CacheConstant.MESSAGE_ID + channelKey, 0);
+            final Long messageId = redisTemplate.opsForValue().increment(CacheConstant.MESSAGE_ID + vo.getChannelKey(), 0);
             vo.setMessageId(messageId);
         }
         return userRelations;

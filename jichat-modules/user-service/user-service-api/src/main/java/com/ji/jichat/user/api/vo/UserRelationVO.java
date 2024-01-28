@@ -36,6 +36,9 @@ public class UserRelationVO implements Serializable {
     @ApiModelProperty("关联类型(1:用户 2:群)")
     private Integer relationType;
 
+    @ApiModelProperty("频道key")
+    private String channelKey;
+
     @ApiModelProperty("消息id")
     private Long messageId;
 

@@ -5,14 +5,14 @@
             parameterType="com.ji.jichat.user.api.dto.ChatMessageDTO"
             resultType="com.ji.jichat.user.api.vo.ChatMessageVO">
         SELECT
-        message_id,channel_id, message_from, message_to, message_type, message_content, create_time
+        message_id,channel_key, message_from, message_to, message_type, message_content, create_time
         FROM
         t_chat_message
         <where>
             <if test=" channelKey != null ">
                 AND channel_key=#{channelKey}
             </if>
-            <if test=" messageIdStart != null AND messageIdEnd != null ">
+            <if test=" messageIdStart != null and  messageIdEnd != null ">
                 AND message_Id BETWEEN #{messageIdStart} AND #{messageIdEnd}
             </if>
             <if test=" messageType != null ">

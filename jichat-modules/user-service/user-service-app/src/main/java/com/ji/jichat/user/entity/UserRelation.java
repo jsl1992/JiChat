@@ -35,6 +35,9 @@ public class UserRelation extends BaseDO {
     @ApiModelProperty("关联id(用户id/群id)")
     private Long relationId;
 
+    @ApiModelProperty("频道key")
+    private String channelKey;
+
     @ApiModelProperty("关联类型(1:用户 2:群)")
     private Integer relationType;
 

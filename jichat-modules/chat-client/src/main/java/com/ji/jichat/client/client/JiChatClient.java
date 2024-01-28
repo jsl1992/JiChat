@@ -10,10 +10,14 @@ import com.ji.jichat.chat.api.vo.UserChatServerVO;
 import com.ji.jichat.client.dto.AppUpMessage;
 import com.ji.jichat.client.manager.JiChatServerManager;
 import com.ji.jichat.client.netty.ClientChannelInitializer;
+import com.ji.jichat.common.exception.ServiceException;
 import com.ji.jichat.common.pojo.DownMessage;
+import com.ji.jichat.common.pojo.PageDTO;
+import com.ji.jichat.common.pojo.PageVO;
 import com.ji.jichat.common.pojo.UpMessage;
 import com.ji.jichat.common.util.GuardedObject;
-import com.ji.jichat.common.util.MessageIdUtil;
+import com.ji.jichat.user.api.dto.ChatMessageDTO;
+import com.ji.jichat.user.api.vo.ChatMessageVO;
 import com.ji.jichat.user.api.vo.UserRelationVO;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
@@ -68,6 +72,8 @@ public class JiChatClient implements CommandLineRunner {
     private static HashMap<String, Long> chatMessageIdMap = new HashMap<>();
 
 
+    private static HashMap<Long, String> channelKeyMap = new HashMap<>();
+
     /**
      * 重试次数
      */
@@ -88,14 +94,20 @@ public class JiChatClient implements CommandLineRunner {
         final List<UserRelationVO> userRelationVOS = jiChatServerManager.listUserRelation();
         //遍历所有的好友列表
         for (UserRelationVO vo : userRelationVOS) {
-            String channelKey = vo.getRelationType() == 1 ? MessageIdUtil.getChannelKey(vo.getUserId(), vo.getRelationId()) : MessageIdUtil.getChannelKey(vo.getRelationId());
+            final String channelKey = vo.getChannelKey();
+            //绑定好友和群，对应的channelKey
+            channelKeyMap.put(vo.getRelationId(), channelKey);
             if (!chatMessageIdMap.containsKey(channelKey) || chatMessageIdMap.get(channelKey) < vo.getMessageId()) {
                 //不存在当前会话，或者当前会话的curMaxMessageId<服务端里最小，那么拉取数据同步
                 final Long curMaxMessageId = chatMessageIdMap.getOrDefault(channelKey, 0L);
-
+                final ChatMessageDTO chatMessageDTO = ChatMessageDTO.builder().channelKey(channelKey).messageIdStart(curMaxMessageId).messageIdEnd(vo.getMessageId()).build();
+                final PageVO<ChatMessageVO> chatMessageVOPageVO = jiChatServerManager.queryChatMessage(chatMessageDTO, new PageDTO());
+                log.info("将查询到的历史消息，同步到对话列表里{}条数", chatMessageVOPageVO.getTotal());
                 chatMessageIdMap.put(channelKey, vo.getMessageId());
             }
         }
+        log.info("channelKeyMap:{}", channelKeyMap);
+        log.info("chatMessageIdMap:{}", chatMessageIdMap);
     }
 
     /**
@@ -150,9 +162,13 @@ public class JiChatClient implements CommandLineRunner {
      * @param msg
      */
     public void privateMessage(String msg, long userId) {
+        if (channelKeyMap.containsKey(userId)) {
+            throw new ServiceException("和他还不是好友:" + userId);
+        }
         final AppUpMessage appUpMessage = new AppUpMessage(clientInfo);
         final ChatMessageSendDTO chatMessageDTO = ChatMessageSendDTO.builder()
-                .messageFrom(clientInfo.getUserId()).messageTo(userId).messageType(ChatMessageTypeEnum.TEXT.getCode()).messageContent(msg)
+                .messageFrom(clientInfo.getUserId()).messageTo(userId).messageType(ChatMessageTypeEnum.TEXT.getCode())
+                .messageContent(msg).channelKey(channelKeyMap.get(userId))
                 .build();
         appUpMessage.setCode(CommandCodeEnum.PRIVATE_MESSAGE.getCode());
         appUpMessage.setContent(JSON.toJSONString(chatMessageDTO));

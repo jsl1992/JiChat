@@ -6,7 +6,9 @@
 package com.ji.jichat.common.pojo;
 
 import io.swagger.annotations.ApiModel;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.List;
@@ -16,6 +18,8 @@ import java.util.List;
  */
 @ApiModel("分页参数")
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class PageVO<T> implements Serializable {
     private static final long serialVersionUID = 1L;
     private long total;

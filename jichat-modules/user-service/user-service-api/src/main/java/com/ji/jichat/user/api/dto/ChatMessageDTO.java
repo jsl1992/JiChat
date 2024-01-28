@@ -28,15 +28,15 @@ public class ChatMessageDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty("聊天频道id")
+    @ApiModelProperty(value = "聊天频道id",example = "cOvWLMNlsma_cOkLiKpPVqd")
     @NotEmpty
     private String channelKey;
 
-    @ApiModelProperty("信息id-开始")
+    @ApiModelProperty(value = "信息id-开始",example = "0")
     @NotNull
     private Long messageIdStart;
 
-    @ApiModelProperty("信息id-结束")
+    @ApiModelProperty(value = "信息id-结束",example = "1000")
     @NotNull
     private Long messageIdEnd;
 

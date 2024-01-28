@@ -1,27 +1,38 @@
 package com.ji.jichat.client.manager;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.alibaba.fastjson.JSON;
 import com.ji.jichat.chat.api.vo.UserChatServerVO;
 import com.ji.jichat.client.client.ClientInfo;
 import com.ji.jichat.common.pojo.CommonResult;
+import com.ji.jichat.common.pojo.PageDTO;
 import com.ji.jichat.common.pojo.PageVO;
 import com.ji.jichat.user.api.dto.AuthLoginDTO;
+import com.ji.jichat.user.api.dto.ChatMessageDTO;
 import com.ji.jichat.user.api.vo.AuthLoginVO;
 import com.ji.jichat.user.api.vo.ChatMessageVO;
 import com.ji.jichat.user.api.vo.UserRelationVO;
 import lombok.extern.slf4j.Slf4j;
+import org.omg.CORBA.SystemException;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cglib.beans.BeanMap;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
+import java.io.UnsupportedEncodingException;
+import java.lang.reflect.InvocationTargetException;
+import java.net.*;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * @author jisl on 2024/1/23 9:04
@@ -105,9 +116,23 @@ public class JiChatServerManager {
         return userRelationVOS;
     }
 
-    public PageVO<ChatMessageVO> queryChatMessage(int pageNum, int pageSize) {
-        final PageVO<ChatMessageVO> userRelationVOS = exchangeResponseResult(userUrl + String.format("/chatMessage/query?pageNum=%s&pageSize=%s", pageNum, pageSize), HttpMethod.GET, null, new ParameterizedTypeReference<CommonResult<PageVO<ChatMessageVO>>>() {
+    public PageVO<ChatMessageVO> queryChatMessage(ChatMessageDTO chatMessageDTO, PageDTO pageDTO) {
+        final String url = userUrl + "/chatMessage/query" + convertToUrlParams(chatMessageDTO, pageDTO);
+        final PageVO<ChatMessageVO> userRelationVOS = exchangeResponseResult(url, HttpMethod.GET, null, new ParameterizedTypeReference<CommonResult<PageVO<ChatMessageVO>>>() {
         });
         return userRelationVOS;
+    }
+
+    public String convertToUrlParams(Object myBean, PageDTO pageDTO) {
+        final Map<String, Object> map = BeanUtil.beanToMap(myBean);
+        UriComponentsBuilder builder = UriComponentsBuilder.newInstance();
+        for (Map.Entry<String, Object> entry : map.entrySet()) {
+            builder.queryParam(entry.getKey(), entry.getValue());
+        }
+        if (Objects.nonNull(pageDTO)) {
+            builder.queryParam("pageNum", pageDTO.getPageNum());
+            builder.queryParam("pageSize", pageDTO.getPageSize());
+        }
+        return builder.build().encode().toUriString();
     }
 }

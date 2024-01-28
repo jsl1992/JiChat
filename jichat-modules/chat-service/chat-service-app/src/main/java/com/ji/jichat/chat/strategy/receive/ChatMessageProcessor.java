@@ -55,9 +55,9 @@ public class ChatMessageProcessor implements CommandStrategy {
     @Override
     public String execute(UpMessage message) {
         final ChatMessageSendDTO chatMessageDTO = JSON.parseObject(message.getContent(), ChatMessageSendDTO.class);
+        //todo  通过channelKey 校验是否好友关系，没有好友关系。不让发送
         final long messageId = messageIdGenerate.genMessageId(chatMessageDTO.getMessageFrom(), chatMessageDTO.getMessageTo());
         chatMessageDTO.setMessageId(messageId);
-        chatMessageDTO.setChannelKey(MessageIdUtil.getChannelKey(chatMessageDTO.getMessageFrom(), chatMessageDTO.getMessageTo()));
 //        消息时间以服务器时间为准，以防不同客户端时间相差太多
         chatMessageDTO.setCreateTime(new Date());
 
@@ -69,7 +69,6 @@ public class ChatMessageProcessor implements CommandStrategy {
         chatMessageProducer.storeChatMessage(chatMessageDTO);
         final JSONObject jsonObject = new JSONObject();
         jsonObject.put("messageId", messageId);
-        jsonObject.put("channelKey", chatMessageDTO.getChannelKey());
         return jsonObject.toJSONString();
     }
 
