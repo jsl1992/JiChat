@@ -90,7 +90,7 @@ public class JiChatClient implements CommandLineRunner {
         syncHisMsg();
     }
 
-    private void syncHisMsg() {
+    public void syncHisMsg() {
         final List<UserRelationVO> userRelationVOS = jiChatServerManager.listUserRelation();
         //遍历所有的好友列表
         for (UserRelationVO vo : userRelationVOS) {
@@ -162,7 +162,7 @@ public class JiChatClient implements CommandLineRunner {
      * @param msg
      */
     public void privateMessage(String msg, long userId) {
-        if (channelKeyMap.containsKey(userId)) {
+        if (!channelKeyMap.containsKey(userId)) {
             throw new ServiceException("和他还不是好友:" + userId);
         }
         final AppUpMessage appUpMessage = new AppUpMessage(clientInfo);

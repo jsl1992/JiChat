@@ -65,6 +65,13 @@ public class ClientController {
         return CommonResult.success(chatMessageVOPageVO);
     }
 
+    @GetMapping("/syncHisMsg")
+    @ApiOperation("syncHisMsg")
+    public CommonResult<Void> syncHisMsg() {
+        jiChatClient.syncHisMsg();
+        return CommonResult.success();
+    }
+
 
 
 }
