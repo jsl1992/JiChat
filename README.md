@@ -6,6 +6,10 @@
 # 业务流程
 ![image](https://github.com/jsl1992/JiChat/assets/34052259/7ccf4c17-59ef-4eff-991f-41c624812791)
 
+# 系统设计
+统采用了分布式架构，基于 Spring Cloud 实现微服务化，服务注册和发现方面使用 Nacos，消息中间件选择 RabbitMQ，持久性数据存储采用 MySQL 数据库，缓存层使用 Redis。在数据访问层面，使用 MyBatis-Plus 简化数据库操作。服务之间通过 OpenFeign 实现远程调用，以提高服务之间的通信效率。为了满足即时通讯需求，引入了 Netty 框架，以实现高性能、实时的消息传递。
+
+
 ## 消息流程
 1. 用户A向聊天服务器1发送聊天消息。
 2、聊天服务器1从ID生成器获取消息ID。
@@ -111,9 +115,12 @@ public class GlobalResponseBodyHandler implements ResponseBodyAdvice<CommonResul
     </springProfile>
 ```
 ## 项目部署
-(1)安装docker和docker-compose，执行doc目录里docker-compose.yml文件。即可安装rabbitmq，nacos，mysql，reids等组件。如果nacos安装失败，是因为需要在MySQL初始化nacos-db.sql文件数据。
-(2)修改user-service-app和chat-service-app服务配置文件连接rabbitmq，nacos，mysql，reids地址和账号，即可启动user-service-app和chat-service-app服务
-(3)使用swagger注册账号，修改chat-client配置即可启动客户端。为了方便实现通信，这边dev和test配置文件，使用不同端口和用户id
+### (1)安装docker和docker-compose，安装组件
+执行doc目录里docker-compose.yml文件。即可安装rabbitmq，nacos，mysql，reids等组件。如果nacos安装失败，是因为需要在MySQL初始化nacos-db.sql文件数据。
+### (2)启动user-service-app和chat-service-app服务
+修改user-service-app和chat-service-app服务配置文件连接rabbitmq，nacos，mysql，reids地址和账号，即可启动user-service-app和chat-service-app服务
+### (3)启动chat-client客户端
+使用swagger注册账号，修改chat-client配置即可启动客户端。为了方便实现通信，这边dev和test配置文件，使用不同端口和用户id
 
 # 项目业务分析博客
 JiChat GitHub [https://github.com/jsl1992/JiChat ](https://github.com/jsl1992/JiChat)
