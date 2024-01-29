@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.generator.config.ConstVal;
 import com.baomidou.mybatisplus.generator.config.OutputFile;
 import com.baomidou.mybatisplus.generator.config.po.TableInfo;
 import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
-import com.ji.jichat.mybatis.gen.core.MyBatisConstants;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -33,21 +32,26 @@ public final class EnhanceFreemarkerTemplateEngine extends FreemarkerTemplateEng
     }
 
     private String getPath(String parentPackage, String classType) {
-        if (!Objects.equals(classType, MyBatisConstants.Convert)) {
+        if (!Objects.equals(classType, MyBatisConstants.CONVERT)) {
 //            Convert 目录在app，其他都在api里
             parentPackage = parentPackage + ".api";
         }
         String otherPath = joinPath(this.getPathInfo(OutputFile.other), parentPackage);
-        if (classType.equals(MyBatisConstants.DTO)) {
-            otherPath = otherPath + File.separator + "dto";
-        } else if (classType.equals(MyBatisConstants.VO)) {
-            otherPath = otherPath + File.separator + "vo";
-        } else if (classType.equals(MyBatisConstants.RPC)) {
-            otherPath = otherPath + File.separator;
-        } else if (classType.equals(MyBatisConstants.Convert)) {
-            otherPath =this.getPathInfo(OutputFile.entity).replaceAll("entity","") + File.separator + "convert";
-        } else {
-            throw new RuntimeException("当前类型不支持");
+        switch (classType) {
+            case MyBatisConstants.DTO:
+                otherPath = otherPath + File.separator + "dto";
+                break;
+            case MyBatisConstants.VO:
+                otherPath = otherPath + File.separator + "vo";
+                break;
+            case MyBatisConstants.RPC:
+                otherPath = otherPath + File.separator;
+                break;
+            case MyBatisConstants.CONVERT:
+                otherPath = Objects.requireNonNull(this.getPathInfo(OutputFile.entity)).replaceAll("entity", "") + File.separator + "convert";
+                break;
+            default:
+                throw new RuntimeException("当前类型不支持");
         }
         return otherPath;
     }

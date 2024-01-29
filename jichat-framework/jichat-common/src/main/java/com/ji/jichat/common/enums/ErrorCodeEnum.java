@@ -1,5 +1,10 @@
 package com.ji.jichat.common.enums;
 
+/**
+ * CommonResult 错误编码
+ *
+ * @author jisl on 2024/1/29 10:37
+ **/
 public enum ErrorCodeEnum {
     SUCCESS(0, "成功"),
 

@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * @author jisl on 2024/1/28 16:17
  */
-@ApiModel("分页参数")
+@ApiModel("分页VO")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

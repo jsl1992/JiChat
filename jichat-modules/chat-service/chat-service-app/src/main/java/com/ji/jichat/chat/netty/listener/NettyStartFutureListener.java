@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 public class NettyStartFutureListener implements ChannelFutureListener {
 
     @Override
-    public void operationComplete(ChannelFuture future) throws Exception {
+    public void operationComplete(ChannelFuture future) {
         log.info("Netty 成功起飞");
         //性能监控与统计,有空添加
     }

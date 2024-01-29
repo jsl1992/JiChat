@@ -45,7 +45,7 @@ public class ClientController {
     @GetMapping("/privateMessage")
     @ApiOperation("One-on-One Chat / Private Chat: 单聊")
     public CommonResult<Void> privateMessage(String msg, long userId) {
-        jiChatClient.privateMessage(msg,userId);
+        jiChatClient.privateMessage(msg, userId);
         return CommonResult.success();
     }
 
@@ -61,8 +61,7 @@ public class ClientController {
     @GetMapping("/queryChatMessage")
     @ApiOperation("queryChatMessage")
     public CommonResult<PageVO<ChatMessageVO>> queryChatMessage(ChatMessageDTO chatMessageDTO, PageDTO pageDTO) {
-        final PageVO<ChatMessageVO> chatMessageVOPageVO = jiChatServerManager.queryChatMessage(chatMessageDTO, pageDTO);
-        return CommonResult.success(chatMessageVOPageVO);
+        return CommonResult.success(jiChatServerManager.queryChatMessage(chatMessageDTO, pageDTO));
     }
 
     @GetMapping("/syncHisMsg")
@@ -71,7 +70,6 @@ public class ClientController {
         jiChatClient.syncHisMsg();
         return CommonResult.success();
     }
-
 
 
 }

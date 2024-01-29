@@ -55,9 +55,7 @@ public class ProtocolCodec {
             int contentLen = byteBuf.getInt(4);
             byte[] content = new byte[contentLen - 4];
             byteBuf.getBytes(12, content); //从位置4开始读取contentLen个字节的数据
-            final String s = new String(content, StandardCharsets.UTF_8);
-            final UpMessage message = JSON.parseObject(new String(content, StandardCharsets.UTF_8), UpMessage.class);
-            return message;
+            return JSON.parseObject(new String(content, StandardCharsets.UTF_8), UpMessage.class);
         } else {
             throw new ServiceException("当前版本号暂不支持");
         }

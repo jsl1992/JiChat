@@ -1,11 +1,11 @@
 package com.ji.jichat.common.constants;
 
 /**
-  * 服务名称
-  * @author jisl on 2024/1/18 18:07
-  **/
-public class ServiceNameConstants
-{
+ * 服务名称
+ *
+ * @author jisl on 2024/1/18 18:07
+ **/
+public class ServiceNameConstants {
     /**
      * 用户 serviceid
      */

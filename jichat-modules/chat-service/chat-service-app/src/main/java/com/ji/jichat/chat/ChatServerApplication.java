@@ -7,11 +7,10 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 
 /**
- * 启动程序
- * 交调设备项目
+ * ChatServerApplication
  *
- * @author xiangan
- */
+ * @author jisl on 2024/1/29 12:25
+ **/
 @SpringBootApplication
 @EnableDiscoveryClient
 @MapperScan("com.ji.mall.product.mapper")

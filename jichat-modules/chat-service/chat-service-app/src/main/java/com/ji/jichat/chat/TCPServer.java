@@ -52,11 +52,9 @@ public class TCPServer implements CommandLineRunner {
     }
 
     public void start() {
-
         // 默认以cpu核心数*2为工作线程池大小
         final int core = Runtime.getRuntime().availableProcessors();
         tcpServerConfig.setWorkerCount(core * 2);
-
         log.info("Netty 起飞 [{}]", tcpServerConfig);
         // 创建两个线程组，用于接收客户端的连接和处理 I/O 操作
         // 用于接收连接

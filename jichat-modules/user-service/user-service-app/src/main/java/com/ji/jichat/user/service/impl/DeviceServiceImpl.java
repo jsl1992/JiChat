@@ -1,7 +1,7 @@
 package com.ji.jichat.user.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.ji.jichat.common.enums.OnlineStatus;
+import com.ji.jichat.common.enums.OnlineStatusEnum;
 import com.ji.jichat.user.entity.Device;
 import com.ji.jichat.user.mapper.DeviceMapper;
 import com.ji.jichat.user.service.IDeviceService;
@@ -23,6 +23,6 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> impleme
 
     @Override
     public List<Device> getOnlineDevices(Long userId) {
-        return list(new LambdaQueryWrapper<Device>().eq(Device::getUserId, userId).eq(Device::getOnlineStatus, OnlineStatus.ONLINE.getCode()));
+        return list(new LambdaQueryWrapper<Device>().eq(Device::getUserId, userId).eq(Device::getOnlineStatus, OnlineStatusEnum.ONLINE.getCode()));
     }
 }

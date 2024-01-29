@@ -10,8 +10,14 @@ import org.springframework.stereotype.Component;
 import javax.annotation.Resource;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
+/**
+ * 聊天服务器调度
+ *
+ * @author jisl on 2024/1/29 12:13
+ **/
 @Component
 @Slf4j
 public class ServerLoadBalancer {
@@ -25,13 +31,13 @@ public class ServerLoadBalancer {
      * @author jisl on 2024/1/21 22:50
      **/
     public String getServer() {
-        log.info("开始执行getServer");
         String selectedServer = null;
         // 获取所有服务器和连接数
         Set<ZSetOperations.TypedTuple<String>> servers = redisTemplate.opsForZSet().rangeWithScores(CacheConstant.CHAT_SERVER_CLIENT_COUNT, 0, -1);
         log.info("开始执行getServer：{}", JSON.toJSONString(servers));
         // 选择连接数最少的服务器
         double minConnections = Double.MAX_VALUE;
+        assert servers != null;
         for (ZSetOperations.TypedTuple<String> server : servers) {
             if (server.getScore() < minConnections) {
                 minConnections = server.getScore();
@@ -51,9 +57,9 @@ public class ServerLoadBalancer {
     }
 
     public void syncServer(List<String> curServers) {
-        log.info("当前服务列表{}",curServers);
-        Set<String> cacheServers = new HashSet<>(redisTemplate.opsForZSet().range(CacheConstant.CHAT_SERVER_CLIENT_COUNT, 0, -1));
-        log.info("缓存服务列表{}",cacheServers);
+        log.info("当前服务列表{}", curServers);
+        Set<String> cacheServers = new HashSet<>(Objects.requireNonNull(redisTemplate.opsForZSet().range(CacheConstant.CHAT_SERVER_CLIENT_COUNT, 0, -1)));
+        log.info("缓存服务列表{}", cacheServers);
         // 删除在缓存中但不在当前服务器中的元素
         for (String cs : cacheServers) {
             if (!curServers.contains(cs)) {

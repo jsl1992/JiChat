@@ -10,6 +10,9 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 
+/**
+ * @author 纪大侠
+ */
 @Component
 @Slf4j
 public class ChatMessageConsumer {

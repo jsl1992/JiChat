@@ -15,22 +15,22 @@ import java.util.concurrent.ConcurrentHashMap;
 @Slf4j
 public class ChannelRepository {
 
-    private static final Map<String, Channel> channelCache = new ConcurrentHashMap<>(16);
+    private static final Map<String, Channel> CHANNEL_CACHE = new ConcurrentHashMap<>(16);
 
     private ChannelRepository() {
     }
 
     public static Channel put(String userKey, Channel channel) {
         log.debug("[{}]更新channel:[{}]", userKey, channel.remoteAddress().toString());
-        return channelCache.put(userKey, channel);
+        return CHANNEL_CACHE.put(userKey, channel);
     }
 
     public static Channel get(String userKey) {
-        return channelCache.get(userKey);
+        return CHANNEL_CACHE.get(userKey);
     }
 
     public static Channel putIfAbsent(String userKey, Channel newChannel) {
-        Channel channel = channelCache.get(userKey);
+        Channel channel = CHANNEL_CACHE.get(userKey);
         if (Objects.isNull(channel)) {
             log.info("putIfAbsent userKey=[{}]", userKey);
             channel = put(userKey, newChannel);
@@ -39,15 +39,15 @@ public class ChannelRepository {
     }
 
     public static void remove(String userKey) {
-        channelCache.remove(userKey);
+        CHANNEL_CACHE.remove(userKey);
     }
 
     public static int size() {
-        return channelCache.size();
+        return CHANNEL_CACHE.size();
     }
 
     public static String getUserKey(Channel channel) {
-        for (Map.Entry<String, Channel> entry : channelCache.entrySet()) {
+        for (Map.Entry<String, Channel> entry : CHANNEL_CACHE.entrySet()) {
             if (entry.getValue().equals(channel)) {
                 return entry.getKey();
             }
@@ -56,7 +56,7 @@ public class ChannelRepository {
     }
 
     public static Map<String, Channel> getChannelCache() {
-        return channelCache;
+        return CHANNEL_CACHE;
     }
 
 

@@ -1,8 +1,8 @@
 package com.ji.jichat.client.client;
 
 
-import cn.hutool.json.JSONObject;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.ji.jichat.chat.api.dto.ChatMessageSendDTO;
 import com.ji.jichat.chat.api.enums.ChatMessageTypeEnum;
 import com.ji.jichat.chat.api.enums.CommandCodeEnum;
@@ -50,7 +50,7 @@ import java.util.concurrent.CompletableFuture;
 public class JiChatClient implements CommandLineRunner {
 
 
-    private EventLoopGroup group = new NioEventLoopGroup(0, new DefaultThreadFactory("jichat-work"));
+    private final EventLoopGroup group = new NioEventLoopGroup(0, new DefaultThreadFactory("jichat-work"));
 
 
     private SocketChannel channel;
@@ -67,12 +67,12 @@ public class JiChatClient implements CommandLineRunner {
     private ClientInfo clientInfo;
 
 
-    private static ArrayDeque<UpMessage> messagesQueue = new ArrayDeque<>();
+    private static final ArrayDeque<UpMessage> messagesQueue = new ArrayDeque<>();
 
-    private static HashMap<String, Long> chatMessageIdMap = new HashMap<>();
+    public static HashMap<String, Long> chatMessageIdMap = new HashMap<>();
 
 
-    private static HashMap<Long, String> channelKeyMap = new HashMap<>();
+    private static final HashMap<Long, String> channelKeyMap = new HashMap<>();
 
     /**
      * 重试次数
@@ -91,9 +91,9 @@ public class JiChatClient implements CommandLineRunner {
     }
 
     public void syncHisMsg() {
-        final List<UserRelationVO> userRelationVOS = jiChatServerManager.listUserRelation();
+        final List<UserRelationVO> userRelations = jiChatServerManager.listUserRelation();
         //遍历所有的好友列表
-        for (UserRelationVO vo : userRelationVOS) {
+        for (UserRelationVO vo : userRelations) {
             final String channelKey = vo.getChannelKey();
             //绑定好友和群，对应的channelKey
             channelKeyMap.put(vo.getRelationId(), channelKey);
@@ -101,8 +101,8 @@ public class JiChatClient implements CommandLineRunner {
                 //不存在当前会话，或者当前会话的curMaxMessageId<服务端里最小，那么拉取数据同步
                 final Long curMaxMessageId = chatMessageIdMap.getOrDefault(channelKey, 0L);
                 final ChatMessageDTO chatMessageDTO = ChatMessageDTO.builder().channelKey(channelKey).messageIdStart(curMaxMessageId).messageIdEnd(vo.getMessageId()).build();
-                final PageVO<ChatMessageVO> chatMessageVOPageVO = jiChatServerManager.queryChatMessage(chatMessageDTO, new PageDTO());
-                log.info("将查询到的历史消息，同步到对话列表里{}条数", chatMessageVOPageVO.getTotal());
+                final PageVO<ChatMessageVO> chatMessagePage = jiChatServerManager.queryChatMessage(chatMessageDTO, new PageDTO());
+                log.info("将查询到的历史消息，同步到对话列表里{}条数", chatMessagePage.getTotal());
                 chatMessageIdMap.put(channelKey, vo.getMessageId());
             }
         }
@@ -112,8 +112,6 @@ public class JiChatClient implements CommandLineRunner {
 
     /**
      * 启动客户端
-     *
-     * @throws Exception
      */
     public void startClient() {
         Bootstrap bootstrap = new Bootstrap();
@@ -157,10 +155,12 @@ public class JiChatClient implements CommandLineRunner {
     }
 
     /**
-     * 发送消息字符串
+     * 发送私聊消息
      *
-     * @param msg
-     */
+     * @param msg    消息内容
+     * @param userId 发送到用户id
+     * @author jisl on 2024/1/29 10:34
+     **/
     public void privateMessage(String msg, long userId) {
         if (!channelKeyMap.containsKey(userId)) {
             throw new ServiceException("和他还不是好友:" + userId);
@@ -173,7 +173,7 @@ public class JiChatClient implements CommandLineRunner {
         appUpMessage.setCode(CommandCodeEnum.PRIVATE_MESSAGE.getCode());
         appUpMessage.setContent(JSON.toJSONString(chatMessageDTO));
         messagesQueue.add(appUpMessage);
-        CompletableFuture.runAsync(() -> syncSendMsg());
+        CompletableFuture.runAsync(this::syncSendMsg);
     }
 
     /**
@@ -189,6 +189,9 @@ public class JiChatClient implements CommandLineRunner {
             try {
                 final GuardedObject<DownMessage> go = GuardedObject.create(upMessage.getNonce());
                 final DownMessage downMessage = go.getAndThrow(t -> Objects.equals(t.getNonce(), upMessage.getNonce()), 3);
+                final ChatMessageSendDTO messageSendDTO = JSON.parseObject(upMessage.getContent(), ChatMessageSendDTO.class);
+                JSONObject jsonObject = JSON.parseObject(downMessage.getContent());
+                chatMessageIdMap.put(messageSendDTO.getChannelKey(), jsonObject.getLongValue("messageId"));
                 log.info("发送的消息收到messageId:{},{}", downMessage.getContent(), upMessage.getContent());
             } catch (InterruptedException e) {
                 e.printStackTrace();

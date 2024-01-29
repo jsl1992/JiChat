@@ -78,16 +78,16 @@ public class MybatisCodeGenerator {
                             .controllerBuilder().enableRestStyle()
                             .entityBuilder().superClass(BaseDO.class).enableLombok().fileOverride()
                             .addSuperEntityColumns("create_time","create_user","update_time","update_user");
-                    ; // 设置过滤表前缀
+                    // 设置过滤表前缀
                 })
                 .injectionConfig(consumer -> {
                     if (isCustom) {
-                        Map<String, String> customFile = new HashMap<>();
+                        Map<String, String> customFile = new HashMap<>(16);
                         // DTO
                         customFile.put(MyBatisConstants.DTO, "/templates/java/dto.java.ftl");
                         customFile.put(MyBatisConstants.VO, "/templates/java/vo.java.ftl");
 //                        customFile.put(MyBatisConstants.RPC, "/templates/java/vo.java.ftl");
-                        customFile.put(MyBatisConstants.Convert, "/templates/java/convert.java.ftl");
+                        customFile.put(MyBatisConstants.CONVERT, "/templates/java/convert.java.ftl");
                         consumer.customFile(customFile);
                     }
                 })

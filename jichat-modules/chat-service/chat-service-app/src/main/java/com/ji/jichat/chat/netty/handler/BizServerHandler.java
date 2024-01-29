@@ -1,7 +1,6 @@
 package com.ji.jichat.chat.netty.handler;
 
 
-import cn.hutool.core.bean.BeanUtil;
 import com.ji.jichat.chat.api.enums.MessageTypeEnum;
 import com.ji.jichat.chat.convert.MessageConvert;
 import com.ji.jichat.chat.strategy.CommandStrategy;

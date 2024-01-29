@@ -2,7 +2,6 @@ package com.ji.jichat.chat.netty.handler;
 
 import com.ji.jichat.chat.netty.protocol.ProtocolCodec;
 import com.ji.jichat.common.pojo.DownMessage;
-import com.ji.jichat.common.pojo.Message;
 import com.ji.jichat.common.pojo.UpMessage;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandler;
@@ -48,7 +47,6 @@ public class PacketCodecHandler extends MessageToMessageCodec<ByteBuf, Object> {
         upMessage.setClientIp(ProtocolCodec.getClientIp(ctx));
         out.add(upMessage);
     }
-
 
 
 }

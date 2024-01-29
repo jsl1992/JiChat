@@ -52,11 +52,10 @@ public class JwtUtil {
     public static Claims validateJwt(String token) {
         try {
             // 解析JWT
-            Claims claims = Jwts.parser()
+            return Jwts.parser()
                     .setSigningKey(SECRET_KEY)
                     .parseClaimsJws(token)
                     .getBody();
-            return claims;
         } catch (ExpiredJwtException e) {
             throw new ServiceException(ErrorCodeEnum.TOKEN_EXPIRES);
         } catch (Exception e) {

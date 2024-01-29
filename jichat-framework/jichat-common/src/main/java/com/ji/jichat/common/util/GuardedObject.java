@@ -18,31 +18,31 @@ import java.util.function.Predicate;
 public class GuardedObject<T> {
 
 
-    private static final Map<Object, GuardedObject> gos = new ConcurrentHashMap<>();
-    private static final int awaitTimeOut = 100;
+    private static final Map<String, GuardedObject> GOS = new ConcurrentHashMap<>();
+    private static final int AWAIT_TIME_OUT = 100;
     private final Lock lock = new ReentrantLock();
     private final Condition done = lock.newCondition();
     private T obj;
 
-    private Object key;
+    private String key;
 
-    private GuardedObject(Object key) {
+    private GuardedObject(String key) {
         this.key = key;
     }
 
-    public static <T> GuardedObject<T> create(@NotNull Object key) {
+    public static <T> GuardedObject<T> create(@NotNull String key) {
         GuardedObject<T> go = new GuardedObject<>(key);
-        gos.put(key, go);
+        GOS.put(key, go);
         return go;
     }
 
-    public static boolean containsEvent(Object key) {
-        return gos.containsKey(key);
+    public static boolean containsEvent(String key) {
+        return GOS.containsKey(key);
     }
 
-    public static <T> void fireEvent(Object key, T obj) {
-        final GuardedObject go = gos.remove(key);
-        if (go != null) {
+    public static <T> void fireEvent(String key, T obj) {
+        if (GOS.containsKey(key)) {
+            GuardedObject go = GOS.remove(key);
             go.onChange(obj);
         }
     }
@@ -64,7 +64,7 @@ public class GuardedObject<T> {
                     Thread.currentThread().interrupt();
                 }
                 // 等待信号，带有超时时间
-                done.await(awaitTimeOut, TimeUnit.MILLISECONDS);
+                done.await(AWAIT_TIME_OUT, TimeUnit.MILLISECONDS);
             }
             // 当条件满足时返回对象
             return obj;
@@ -72,7 +72,7 @@ public class GuardedObject<T> {
             // 确保释放锁
             lock.unlock();
             // 从映射中移除 GuardedObject 实例
-            gos.remove(this.key);
+            GOS.remove(this.key);
         }
     }
 

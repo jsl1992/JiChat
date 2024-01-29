@@ -3,6 +3,7 @@ package com.ji.jichat.common.pojo;
 
 import cn.hutool.core.lang.Assert;
 import com.alibaba.fastjson.annotation.JSONField;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ji.jichat.common.enums.ErrorCodeEnum;
 import com.ji.jichat.common.exception.ServiceException;
 import io.swagger.annotations.ApiModelProperty;
@@ -89,6 +90,7 @@ public class CommonResult<T> implements Serializable {
 
     @JSONField(serialize = false) // 避免序列化
     @ApiModelProperty(hidden = true)
+    @JsonIgnore //spirngboot默认使用Jackson json
     public T getCheckedData() {
         checkError();
         return data;

@@ -26,7 +26,7 @@ public class NacosServiceListener {
     @Value("${spring.cloud.nacos.discovery.namespace}")
     private String namespace;
 
-    private static final String serviceName = "chat-service";
+    private static final String SERVICE_NAME = "chat-service";
 
     @Resource
     private ServerLoadBalancer serverLoadBalancer;
@@ -40,7 +40,7 @@ public class NacosServiceListener {
         // 创建Nacos NamingService
         NamingService namingService = NamingFactory.createNamingService(properties);
         // 订阅服务变化
-        namingService.subscribe(serviceName, event -> {
+        namingService.subscribe(SERVICE_NAME, event -> {
             if (event instanceof NamingEvent) {
                 final NamingEvent namingEvent = (NamingEvent) event;
                 List<Instance> instances = namingEvent.getInstances();

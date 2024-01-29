@@ -65,11 +65,11 @@ public class TestController {
     @GetMapping("/getKeysWithPrefix")
     @ApiOperation("getKeysWithPrefix")
     public List<String> getKeysWithPrefix(String prefix) {
-        final Set<String> keys = redisTemplate.keys(prefix + "*");
+        final Set keys = redisTemplate.keys(prefix + "*");
         final ArrayList<String> list = new ArrayList<>();
-        for (String key : keys) {
+        for (Object key : keys) {
             final Object o = redisTemplate.opsForValue().get(key);
-            list.add(key + "============" + o.toString());
+            list.add(key + "============" + (o != null ? o.toString() : null));
         }
         return list;
     }

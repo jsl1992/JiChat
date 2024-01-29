@@ -1,5 +1,10 @@
 package com.ji.jichat.common.enums;
 
+/**
+ * 操作系统枚举
+ *
+ * @author jisl on 2024/1/29 10:39
+ **/
 public enum OSEnum {
     ANDROID(101, "Android"),
     IOS(102, "iOS"),

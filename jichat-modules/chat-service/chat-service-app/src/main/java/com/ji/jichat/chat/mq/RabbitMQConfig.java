@@ -18,15 +18,14 @@ public class RabbitMQConfig {
 
     @Bean
     Queue queueChatMsgNetty() {
+        //当当前服务的ip和端口创建，这样避免mq发消息转发到错误的chat服务器上
         String queueName = RabbitMQConstants.QUEUE_CHAT_MSG_NETTY + innerIp + ":" + serverPort;
-        Queue queue = new Queue(queueName, true);
-        return queue;
+        return new Queue(queueName, true);
     }
 
     @Bean
     Queue queueChatMsgStore() {
         String queueName = RabbitMQConstants.QUEUE_CHAT_MSG_STORE;
-        Queue queue = new Queue(queueName, true);
-        return queue;
+        return new Queue(queueName, true);
     }
 }

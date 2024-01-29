@@ -8,7 +8,7 @@ import java.io.IOException;
 /**
  * Cors 过滤器
  *
- * 未来使用 {@link org.springframework.web.filter.CorsFilter} 替换
+ * 未来使用 {@link org.springframework.web.filter.CorsFilter} 替换 (没有使用，暂时先留着)
  */
 public class CorsFilter implements Filter {
 

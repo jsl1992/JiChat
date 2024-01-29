@@ -30,8 +30,9 @@ public class ByteUtil {
 
     /**
      * int转成bytes
+     *
      * @param number 数字
-     * @return  byte[]
+     * @return byte[]
      * @author jishenglong on 2023/8/16 10:39
      **/
     public static byte[] intToBytes(int number) {

@@ -25,8 +25,6 @@ public class ChatMessageVO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty("id主键")
-    private Long id;
 
     @ApiModelProperty("信息id")
     private Long messageId;

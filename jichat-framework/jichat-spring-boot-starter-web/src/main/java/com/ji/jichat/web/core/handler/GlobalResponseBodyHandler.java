@@ -1,30 +1,26 @@
 package com.ji.jichat.web.core.handler;
 
 
-import com.ji.jichat.web.util.CommonWebUtil;
-
 import com.ji.jichat.common.pojo.CommonResult;
+import com.ji.jichat.web.util.CommonWebUtil;
 import com.ji.jichat.web.util.HttpContextUtil;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
+import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
-import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
+import java.util.Objects;
+
 /**
  * 全局响应结果（ResponseBody）处理器
- * <p>
- * 不同于在网上看到的很多文章，会选择自动将 Controller 返回结果包上 {@link CommonResult}，
- * 在 onemall 中，是 Controller 在返回时，主动自己包上 {@link CommonResult}。
- * 原因是，GlobalResponseBodyHandler 本质上是 AOP，它不应该改变 Controller 返回的数据结构
- * <p>
- * 目前，GlobalResponseBodyHandler 的主要作用是，记录 Controller 的返回结果，
- * 方便 {@link } 记录访问日志
- */
+ *
+ * @author jisl on 2024/1/29 11:16
+ **/
 @ControllerAdvice
-public class GlobalResponseBodyHandler implements ResponseBodyAdvice {
+public class GlobalResponseBodyHandler implements ResponseBodyAdvice<CommonResult> {
 
     @Override
     @SuppressWarnings("NullableProblems") // 避免 IDEA 警告
@@ -36,14 +32,11 @@ public class GlobalResponseBodyHandler implements ResponseBodyAdvice {
         return returnType.getMethod().getReturnType() == CommonResult.class;
     }
 
-    @Override
-    @SuppressWarnings("NullableProblems") // 避免 IDEA 警告
-    public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class selectedConverterType,
-                                  ServerHttpRequest request, ServerHttpResponse response) {
-        // 记录 Controller 结果
-        CommonResult commonResult = (CommonResult) body;
-        commonResult.setTraceId(CommonWebUtil.getTraceId(HttpContextUtil.getHttpServletRequest()));
-        return body;
-    }
 
+    @Override
+    public CommonResult beforeBodyWrite(CommonResult commonResult, MethodParameter methodParameter, MediaType mediaType, Class<? extends HttpMessageConverter<?>> aClass, ServerHttpRequest serverHttpRequest, ServerHttpResponse serverHttpResponse) {
+        //每个返回值，都加入traceId，这样方便定位日志
+        commonResult.setTraceId(CommonWebUtil.getTraceId(Objects.requireNonNull(HttpContextUtil.getHttpServletRequest())));
+        return commonResult;
+    }
 }

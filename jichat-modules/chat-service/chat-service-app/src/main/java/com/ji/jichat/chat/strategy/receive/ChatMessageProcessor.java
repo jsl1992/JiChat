@@ -15,7 +15,6 @@ import com.ji.jichat.chat.mq.producer.ChatMessageProducer;
 import com.ji.jichat.chat.strategy.CommandStrategy;
 import com.ji.jichat.common.pojo.DownMessage;
 import com.ji.jichat.common.pojo.UpMessage;
-import com.ji.jichat.common.util.MessageIdUtil;
 import com.ji.jichat.user.api.DeviceRpc;
 import com.ji.jichat.user.api.vo.DeviceVO;
 import lombok.extern.slf4j.Slf4j;
@@ -56,7 +55,7 @@ public class ChatMessageProcessor implements CommandStrategy {
     public String execute(UpMessage message) {
         final ChatMessageSendDTO chatMessageDTO = JSON.parseObject(message.getContent(), ChatMessageSendDTO.class);
         //todo  通过channelKey 校验是否好友关系，没有好友关系。不让发送
-        final long messageId = messageIdGenerate.genMessageId(chatMessageDTO.getMessageFrom(), chatMessageDTO.getMessageTo());
+        final Long messageId = messageIdGenerate.genMessageId(chatMessageDTO.getMessageFrom(), chatMessageDTO.getMessageTo());
         chatMessageDTO.setMessageId(messageId);
 //        消息时间以服务器时间为准，以防不同客户端时间相差太多
         chatMessageDTO.setCreateTime(new Date());

@@ -7,7 +7,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ji.jichat.common.constants.CacheConstant;
 import com.ji.jichat.common.enums.CommonStatusEnum;
-import com.ji.jichat.common.enums.OnlineStatus;
+import com.ji.jichat.common.enums.OnlineStatusEnum;
 import com.ji.jichat.common.exception.ServiceException;
 import com.ji.jichat.security.admin.utils.JwtUtil;
 import com.ji.jichat.user.api.dto.AuthLoginDTO;
@@ -64,7 +64,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         }
         final String clientIp = ServletUtil.getClientIP(HttpContextUtil.getHttpServletRequest());
         final Date now = new Date();
-        user.toBuilder().onlineStatus(OnlineStatus.ONLINE.getCode()).loginIp(clientIp).loginDate(now);
+        user.toBuilder().onlineStatus(OnlineStatusEnum.ONLINE.getCode()).loginIp(clientIp).loginDate(now);
         updateById(user);
         loginDevice(loginDTO, user);
         return buildAuthLoginVO(user, loginDTO.getDeviceType());
@@ -125,7 +125,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         }
         final User user = UserConvert.INSTANCE.convert(dto).toBuilder()
                 .id(IdUtil.getSnowflake(1, 1).nextId()).status(CommonStatusEnum.ENABLE.getStatus())
-                .password(BCrypt.hashpw(dto.getPassword())).onlineStatus(OnlineStatus.OFFLINE.getCode())
+                .password(BCrypt.hashpw(dto.getPassword())).onlineStatus(OnlineStatusEnum.OFFLINE.getCode())
                 .build();
         save(user);
     }
@@ -144,13 +144,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         for (Device device : devices) {
             if (Objects.equals(device.getDeviceType(), loginUser.getDeviceType())) {
 //                和当前用户设备类型一致那么退出
-                device.setOnlineStatus(OnlineStatus.OFFLINE.getCode());
+                device.setOnlineStatus(OnlineStatusEnum.OFFLINE.getCode());
                 deviceService.updateById(device);
             }
         }
         if (devices.size() == 1) {
             //就一个设备登录，那么将用户状态改为下线
-            user.setOnlineStatus(OnlineStatus.OFFLINE.getCode());
+            user.setOnlineStatus(OnlineStatusEnum.OFFLINE.getCode());
             updateById(user);
         }
     }
@@ -160,17 +160,17 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         final String clientIp = ServletUtil.getClientIP(HttpContextUtil.getHttpServletRequest());
         final Date now = new Date();
         final Device onlineDevice = deviceService.getOne(new LambdaQueryWrapper<Device>().eq(Device::getUserId, user.getId())
-                .eq(Device::getDeviceType, loginDTO.getDeviceType()).eq(Device::getOnlineStatus, OnlineStatus.ONLINE.getCode()));
+                .eq(Device::getDeviceType, loginDTO.getDeviceType()).eq(Device::getOnlineStatus, OnlineStatusEnum.ONLINE.getCode()));
         if (Objects.nonNull(onlineDevice)) {
             //同一个设备类型在线，那么要把前面登录的设备下线。
-            onlineDevice.setOnlineStatus(OnlineStatus.OFFLINE.getCode());
+            onlineDevice.setOnlineStatus(OnlineStatusEnum.OFFLINE.getCode());
             deviceService.updateById(onlineDevice);
             // todo netty连接也要断开
         }
         final Device device = Device.builder()
                 .deviceIdentifier(loginDTO.getDeviceIdentifier()).deviceName(loginDTO.getDeviceName())
                 .deviceType(loginDTO.getDeviceType()).onlineStatus(loginDTO.getDeviceType())
-                .onlineStatus(OnlineStatus.ONLINE.getCode()).osType(loginDTO.getOsType()).loginIp(clientIp)
+                .onlineStatus(OnlineStatusEnum.ONLINE.getCode()).osType(loginDTO.getOsType()).loginIp(clientIp)
                 .loginDate(now).userId(user.getId())
                 .build();
         final Device dbDevice = deviceService.getOne(new LambdaQueryWrapper<Device>().eq(Device::getUserId, user.getId()).eq(Device::getDeviceIdentifier, loginDTO.getDeviceIdentifier()));

@@ -13,26 +13,20 @@ import com.ji.jichat.user.api.vo.AuthLoginVO;
 import com.ji.jichat.user.api.vo.ChatMessageVO;
 import com.ji.jichat.user.api.vo.UserRelationVO;
 import lombok.extern.slf4j.Slf4j;
-import org.omg.CORBA.SystemException;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cglib.beans.BeanMap;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.io.UnsupportedEncodingException;
-import java.lang.reflect.InvocationTargetException;
-import java.net.*;
+import javax.annotation.Resource;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 /**
  * @author jisl on 2024/1/23 9:04
@@ -48,16 +42,14 @@ public class JiChatServerManager {
     private String chatUrl;
 
 
-    @Autowired
+    @Resource
     private ClientInfo clientInfo;
 
-
     /**
-     * 登录+路由服务器
+     * 用户登录
      *
-     * @return 路由服务器信息
-     * @throws Exception
-     */
+     * @author jisl on 2024/1/29 12:05
+     **/
     public void userLogin() {
         final AuthLoginDTO loginDTO = AuthLoginDTO.builder()
                 .username(clientInfo.getUserName()).password(clientInfo.getPassword()).deviceIdentifier(clientInfo.getDeviceIdentifier())
@@ -85,7 +77,7 @@ public class JiChatServerManager {
         if (Objects.nonNull(clientInfo.getAuthLoginVO())) {
             headers.set("Authorization", clientInfo.getAuthLoginVO().getAccessToken());
         }
-        HttpEntity httpEntity = new HttpEntity<>(request, headers);
+        HttpEntity<Object> httpEntity = new HttpEntity<>(request, headers);
         ResponseEntity<CommonResult<T>> res = restTemplate.exchange(url,
                 httpMethod,
                 httpEntity,
@@ -111,16 +103,16 @@ public class JiChatServerManager {
     }
 
     public List<UserRelationVO> listUserRelation() {
-        final List<UserRelationVO> userRelationVOS = exchangeResponseResult(userUrl + "/userRelation/listUserRelation", HttpMethod.GET, null, new ParameterizedTypeReference<CommonResult<List<UserRelationVO>>>() {
+        final List<UserRelationVO> userRelations = exchangeResponseResult(userUrl + "/userRelation/listUserRelation", HttpMethod.GET, null, new ParameterizedTypeReference<CommonResult<List<UserRelationVO>>>() {
         });
-        return userRelationVOS;
+        return userRelations;
     }
 
     public PageVO<ChatMessageVO> queryChatMessage(ChatMessageDTO chatMessageDTO, PageDTO pageDTO) {
         final String url = userUrl + "/chatMessage/query" + convertToUrlParams(chatMessageDTO, pageDTO);
-        final PageVO<ChatMessageVO> userRelationVOS = exchangeResponseResult(url, HttpMethod.GET, null, new ParameterizedTypeReference<CommonResult<PageVO<ChatMessageVO>>>() {
+        final PageVO<ChatMessageVO> chatMessagePage = exchangeResponseResult(url, HttpMethod.GET, null, new ParameterizedTypeReference<CommonResult<PageVO<ChatMessageVO>>>() {
         });
-        return userRelationVOS;
+        return chatMessagePage;
     }
 
     public String convertToUrlParams(Object myBean, PageDTO pageDTO) {

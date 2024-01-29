@@ -67,11 +67,11 @@ public class UserChatServerCache {
         return redisTemplate.hasKey(CacheConstant.USER_CHAT_SERVER + userKey);
     }
 
-    public boolean remove(String userKey) {
+    public void remove(String userKey) {
         log.info("开始执行移除{}客户端", userKey);
         serverLoadBalancer.subServerClientCount(tcpServerConfig.getHttpAddress());
         ChannelRepository.remove(userKey);
-        return Boolean.TRUE.equals(redisTemplate.delete(CacheConstant.USER_CHAT_SERVER + userKey));
+        redisTemplate.delete(CacheConstant.USER_CHAT_SERVER + userKey);
     }
 
 

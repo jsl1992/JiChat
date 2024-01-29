@@ -7,10 +7,8 @@ import com.ji.jichat.common.exception.ServiceException;
 import com.ji.jichat.common.pojo.DownMessage;
 import com.ji.jichat.common.pojo.Message;
 import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelHandlerContext;
 import lombok.extern.slf4j.Slf4j;
 
-import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
@@ -21,7 +19,7 @@ import java.util.Objects;
  * @author jishenglong on 2023/8/15 14:08
  **/
 @Slf4j
-public class ClentProtocolCodec {
+public class ClientProtocolCodec {
 
 
     public static final int PACKAGE_HEAD = 0xAAAABBBB;
@@ -56,17 +54,12 @@ public class ClentProtocolCodec {
             byte[] contentBytes = new byte[contentLen - 4];
             byteBuf.getBytes(12, contentBytes); //从位置12开始读取contentLen-4个字节的数据
             final String content = new String(contentBytes, StandardCharsets.UTF_8);
-            final DownMessage message = JSON.parseObject(content, DownMessage.class);
-            return message;
+            return JSON.parseObject(content, DownMessage.class);
         } else {
             throw new ServiceException("当前版本号暂不支持");
         }
     }
 
-    public static String getClientIp(ChannelHandlerContext ctx) {
-        final InetSocketAddress socketAddress = (InetSocketAddress) ctx.channel().remoteAddress();
-        return socketAddress.getAddress().getHostAddress();
-    }
 
     public static void main(String[] args) {
         final byte[] bytes = getBytes();

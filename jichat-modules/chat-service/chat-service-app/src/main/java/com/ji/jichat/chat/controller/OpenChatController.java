@@ -2,13 +2,8 @@ package com.ji.jichat.chat.controller;
 
 
 import com.ji.jichat.chat.kit.UserChatServerCache;
-import com.ji.jichat.common.pojo.CommonResult;
-import com.ji.jichat.security.admin.core.context.UserContext;
-import com.ji.jichat.user.api.vo.LoginUser;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 

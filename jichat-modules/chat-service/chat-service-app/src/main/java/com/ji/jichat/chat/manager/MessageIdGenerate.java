@@ -16,7 +16,7 @@ public class MessageIdGenerate {
     @Resource
     private RedisTemplate<String, Long> redisTemplate;
 
-    public long genMessageId(long userId, long userId2) {
+    public Long genMessageId(long userId, long userId2) {
         return redisTemplate.opsForValue().increment(CacheConstant.MESSAGE_ID + MessageIdUtil.getChannelKey(userId, userId2));
     }
 }

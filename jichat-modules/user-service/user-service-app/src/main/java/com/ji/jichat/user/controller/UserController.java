@@ -9,14 +9,12 @@ import com.ji.jichat.user.api.dto.AuthLoginDTO;
 import com.ji.jichat.user.api.dto.UserRegisterDTO;
 import com.ji.jichat.user.api.vo.AuthLoginVO;
 import com.ji.jichat.user.api.vo.LoginUser;
-import com.ji.jichat.user.convert.UserConvert;
 import com.ji.jichat.user.service.IUserService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 /**
@@ -42,7 +40,6 @@ public class UserController implements UserRpc {
         userService.register(dto);
         return CommonResult.success();
     }
-
 
 
     @PostMapping("/login")

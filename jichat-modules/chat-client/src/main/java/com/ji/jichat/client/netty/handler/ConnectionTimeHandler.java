@@ -1,14 +1,8 @@
 package com.ji.jichat.client.netty.handler;
 
 import cn.hutool.core.date.DateUtil;
-
-import com.ji.jichat.chat.api.enums.CommandCodeEnum;
-import com.ji.jichat.client.dto.AppUpMessage;
-import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
-import io.netty.handler.timeout.IdleState;
-import io.netty.handler.timeout.IdleStateEvent;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.TimeUnit;
