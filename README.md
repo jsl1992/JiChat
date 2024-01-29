@@ -121,6 +121,10 @@ public class GlobalResponseBodyHandler implements ResponseBodyAdvice<CommonResul
 修改user-service-app和chat-service-app服务配置文件连接rabbitmq，nacos，mysql，reids地址和账号，即可启动user-service-app和chat-service-app服务
 ### (3)启动chat-client客户端
 使用swagger注册账号，修改chat-client配置即可启动客户端。为了方便实现通信，这边dev和test配置文件，使用不同端口和用户id
+### (4)访问地址
+    chat-server swagger: http://localhost:18080/chat-api/doc.html#/home
+    user-server swagger: http://localhost:18081/user-api/doc.html#/home
+    chat-client swagger: http://localhost:9192/doc.html#/home
 
 # 项目业务分析博客
-JiChat GitHub [https://github.com/jsl1992/JiChat ](https://github.com/jsl1992/JiChat)
+JiChat 博客地址 [https://blog.csdn.net/weixin_42887222/article/details/135910752 ](https://blog.csdn.net/weixin_42887222/article/details/135910752)
