@@ -32,6 +32,6 @@ jobs:
 
       # 步骤5：上传代码覆盖率到 Codecov
       - name: Upload coverage to Codecov
-        uses: codecov-action@v3
+        uses: codecov/codecov-action@v3
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
