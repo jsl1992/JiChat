@@ -20,6 +20,7 @@ Is It Maintained 徽章：
 -->
 [![CircleCI](https://dl.circleci.com/status-badge/img/circleci/CgWndursnfTN85ScJmBdyi/R7S69YhP9B1F39MDmdLyCB/tree/master.svg?style=svg&circle-token=f619bb84e6e68f060795b1c21a25d39a1c1b0cb4)](https://dl.circleci.com/status-badge/redirect/circleci/CgWndursnfTN85ScJmBdyi/R7S69YhP9B1F39MDmdLyCB/tree/master)
 [![codecov](https://codecov.io/gh/jsl1992/JiChat/graph/badge.svg?token=NVFGT76HQF)](https://codecov.io/gh/jsl1992/JiChat)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/dc30543fa9844f98bc5fa169c97913d9)](https://app.codacy.com/gh/jsl1992/JiChat/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 ![maven](https://img.shields.io/maven-central/v/com.ji.jichat/jichat.svg)
 ![GitHub License](https://img.shields.io/github/license/jsl1992/JiChat)
 [![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/jsl1992/JiChat.svg)](http://isitmaintained.com/project/jsl1992/JiChat "Average time to resolve an issue")
