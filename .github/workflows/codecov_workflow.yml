@@ -1,4 +1,4 @@
-name: Workflow for Codecov example-java-maven
+name: Workflow for Codecov JiChat
 
 # 定义 Workflow 触发的事件
 on:
@@ -32,6 +32,6 @@ jobs:
 
       # 步骤5：上传代码覆盖率到 Codecov
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v4-beta
+        uses: codecov-action@v3
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
