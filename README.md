@@ -18,7 +18,7 @@ Is It Maintained 徽章：
 
 访问 Is It Maintained，搜索你的项目，获取徽章代码并添加到你的 README 文件中。
 -->
-[![build status](https://app.travis-ci.com/jsl1992/JiChat.svg?branch=master)](https://travis-ci.com/jsl1992/jichat)
+[![CircleCI](https://dl.circleci.com/status-badge/img/circleci/CgWndursnfTN85ScJmBdyi/R7S69YhP9B1F39MDmdLyCB/tree/master.svg?style=svg&circle-token=f619bb84e6e68f060795b1c21a25d39a1c1b0cb4)](https://dl.circleci.com/status-badge/redirect/circleci/CgWndursnfTN85ScJmBdyi/R7S69YhP9B1F39MDmdLyCB/tree/master)
 [![codecov](https://codecov.io/gh/jsl1992/JiChat/graph/badge.svg?token=NVFGT76HQF)](https://codecov.io/gh/jsl1992/JiChat)
 ![maven](https://img.shields.io/maven-central/v/com.ji.jichat/jichat.svg)
 ![GitHub License](https://img.shields.io/github/license/jsl1992/JiChat)
