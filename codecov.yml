@@ -1,6 +1,6 @@
 coverage:
   status:
-    # pull-requests only
+    # pull-requests only (还是不行)
     patch:
       default:
         threshold: 0.1%
