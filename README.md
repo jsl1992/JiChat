@@ -1,11 +1,43 @@
 # 【JiChat】基于Netty打造百万级用户IM平台：探索可扩展和高性能通信的威力
 
+<!--
+Travis CI 徽章：
+访问 Travis CI，使用 GitHub 账户登录，并启用你的项目的构建。
+在仓库的 Travis CI 页面找到 "Build Status" 徽章，选择需要的格式，然后将其添加到你的 README 文件中。
+Codecov 徽章：
+
+访问 Codecov，使用 GitHub 账户登录，并启用你的项目的代码覆盖率报告。
+在仓库的 Codecov 页面找到 "Badge" 选项，选择需要的格式，然后将其添加到你的 README 文件中。
+Maven中央仓库版本徽章：
+
+访问 Shields.io，选择 "Maven Central"，输入你的 Maven 仓库坐标（group ID 和 artifact ID），然后生成徽章代码并添加到你的 README 文件中。
+许可证信息徽章：
+
+访问 Shields.io，选择 "License"，输入你的项目的许可证，然后生成徽章代码并添加到你的 README 文件中。
+Is It Maintained 徽章：
+
+访问 Is It Maintained，搜索你的项目，获取徽章代码并添加到你的 README 文件中。
+-->
+[![build status](https://app.travis-ci.com/jsl1992/JiChat.svg?branch=master)](https://travis-ci.com/jsl1992/jichat)
+[![codecov](https://codecov.io/gh/jsl1992/JiChat/graph/badge.svg?token=NVFGT76HQF)](https://codecov.io/gh/jsl1992/JiChat)
+![maven](https://img.shields.io/maven-central/v/com.ji.jichat/jichat.svg)
+![license](https://img.shields.io/github/license/jsl1002/JiChat.svg)
+[![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/jsl1992/JiChat.svg)](http://isitmaintained.com/project/jsl1992/JiChat "Average time to resolve an issue")
+[![Percentage of issues still open](http://isitmaintained.com/badge/open/jsl1992/JiChat.svg)](http://isitmaintained.com/project/jsl1992/JiChat "Percentage of issues still open")
+[![Leaderboard](https://img.shields.io/badge/JiChat-%E6%9F%A5%E7%9C%8B%E8%B4%A1%E7%8C%AE%E6%8E%92%E8%A1%8C%E6%A6%9C-orange)](https://github.com/jsl1992/JiChat)
+
+
 
 # 前言
 不久前，笔者学习了《System Design Interview》中关于即时通讯（IM）系统设计的内容。为了更深入地理解和应用这些概念，我决定亲手实现一个名为 'JiChat' 的IM系统。该项目不仅支持多客户端登录，还实现了历史消息同步、消息顺序一致性和零消息丢失的特性。为确保系统的可扩展性，整个架构按照百万级用户流量的标准进行设计，并支持无缝的横向扩展。在这篇博客中，我将分享这个IM项目的设计和实现过程，希望能够为大家提供有价值的经验和启发。
 
+
+
 # 系统设计
 系统采用了分布式架构，基于 Spring Cloud 实现微服务化，服务注册和发现方面使用 Nacos，消息中间件选择 RabbitMQ，持久性数据存储采用 MySQL 数据库，缓存层使用 Redis。在数据访问层面，使用 MyBatis-Plus 简化数据库操作。服务之间通过 OpenFeign 实现远程调用，以提高服务之间的通信效率。为了满足即时通讯需求，引入了 Netty 框架，以实现高性能、实时的消息传递。
+
+
+
 
 # 业务流程
 ![image](https://github.com/jsl1992/JiChat/assets/34052259/7ccf4c17-59ef-4eff-991f-41c624812791)
@@ -22,18 +54,25 @@
 6. 聊天服务器2将消息转发给用户B。有一个持久的TCP用户 B 和聊天服务器 2 之间的连接。
 
 消息大略流程： 客户端A→服务端a→服务端b→客户端B
+## 目录结构
+
+- `/src`: 项目源代码
+- `/docs`: 文档
+- `/tests`: 测试代码
 
 ## 项目目录
+
 ### doc
 项目启动脚本和数据库脚本
+
 ### jichat-dependencies
 定义 JiChat项目的所有依赖的版本
-### jichat-framework
-所有封装的技术框架都放在这里，基本都是使用spring-boot自动注入功能封装框架代码。
-(1)jichat-common,公共包
-(2)jichat-mybatis-gen:使用mybatis代码生成，封装了DTO，VO，Convert自定义类生成。网上很多都代码自动生成一个压缩包，还要手动复制比较麻烦。这边将代码生成在对应的目录里。因为要使用到mybatis里基类，引用了jichat-spring-boot-starter-mybatis。
-(3)jichat-spring-boot-starter-mybatis:使用了mybatis-puls自动写入新增时间/更新时间/新增用户/更新用字段。之前项目分页用的都是PageHelper，而且这个比较简洁。这边也使用了，但是返回的PageInfo字段又太多了，这边封装了一个方法只返回total和list。
 
+### jichat-framework
+所有封装的技术框架都放在这里，基本都是使用spring-boot-starter自动注入功能封装框架代码。
+- `jichat-common`:公共包
+- `jichat-mybatis-gen`:使用mybatis代码生成，封装了DTO，VO，Convert自定义类生成。网上很多都代码自动生成一个压缩包，还要手动复制比较麻烦。这边将代码生成在对应的目录里。因为要使用到mybatis里基类，引用了jichat-spring-boot-starter-mybatis。
+- `jichat-spring-boot-starter-mybatis`:使用了mybatis-puls自动写入新增时间/更新时间/新增用户/更新用字段。之前项目分页用的都是PageHelper，而且这个比较简洁。这边也使用了，但是返回的PageInfo字段又太多了，这边封装了一个方法只返回total和list。
 ```java
 public class JiPageHelper {
 
@@ -51,8 +90,7 @@ public class JiPageHelper {
     }
 }
 ```
-	
-(4)jichat-spring-boot-starter-web:web服务功能封装，请求日志打印AccessLogAspect，TraceId和SpanId拦截器（这边没有使用第三方Zipkin，个人感觉太重了。这边服务还不是很多），统一异常处理，CommonResult返回给前端TraceId这样方便定位异常日志。
+- `jichat-spring-boot-starter-web`:web服务功能封装，请求日志打印AccessLogAspect，TraceId和SpanId拦截器（这边没有使用第三方Zipkin，个人感觉太重了。这边服务还不是很多），统一异常处理，CommonResult返回给前端TraceId这样方便定位异常日志。
 
 ```java
 public class GlobalResponseBodyHandler implements ResponseBodyAdvice<CommonResult> {
@@ -76,10 +114,8 @@ public class GlobalResponseBodyHandler implements ResponseBodyAdvice<CommonResul
     }
 }
 ```
-(5)jichat-spring-boot-starter-security:用户鉴权，将来考虑使用jichat-gateway来实现。
+- `jichat-spring-boot-starter-security`:用户鉴权，将来考虑使用jichat-gateway来实现。
 
-### jichat-gateway
-网关，还未实现
 
 ### jichat-modules
 所有的业务相关项目放在这个目录里，因为是分布式项目这边统一每个业务项目都有一个api和app。api项目放RPC接口，VO和DTO，枚举等；app是业务具体实现。
