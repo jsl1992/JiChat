@@ -1,0 +1,21 @@
+name: Java Example workflow for Codecov
+on: [push]
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: Set up Java
+      uses: actions/setup-java@v2
+      with:
+        java-version: '8'
+    - name: Run tests and generate coverage report
+      run: |
+        ./mvnw clean test
+        ./mvnw jacoco:report
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        directory: target/site/jacoco/
+        fail_ci_if_error: true
