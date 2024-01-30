@@ -65,6 +65,8 @@
         <org.projectlombok.version>1.18.20</org.projectlombok.version>
         <shardingsphere.version>4.1.1</shardingsphere.version>
         <netty.version>4.1.68.Final</netty.version>
+        <junit.version>5.8.2</junit.version>
+        <jacoco.version>0.8.7</jacoco.version>
     </properties>
 
     <!-- 依赖管理 -->
@@ -273,6 +275,19 @@
                 <groupId>io.netty</groupId>
                 <artifactId>netty-all</artifactId>
                 <version>${netty.version}</version>
+            </dependency>
+            <!--测试-->
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter</artifactId>
+                <version>${junit.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${jacoco.version}</version>
+                <scope>test</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>

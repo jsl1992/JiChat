@@ -1,4 +1,4 @@
-package com.ji.jichat.user;
+package com.ji.jichat.user.test;
 
 import com.alibaba.fastjson.JSON;
 import lombok.*;
