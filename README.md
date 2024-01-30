@@ -21,7 +21,7 @@ Is It Maintained 徽章：
 [![build status](https://app.travis-ci.com/jsl1992/JiChat.svg?branch=master)](https://travis-ci.com/jsl1992/jichat)
 [![codecov](https://codecov.io/gh/jsl1992/JiChat/graph/badge.svg?token=NVFGT76HQF)](https://codecov.io/gh/jsl1992/JiChat)
 ![maven](https://img.shields.io/maven-central/v/com.ji.jichat/jichat.svg)
-![license](https://img.shields.io/github/license/jsl1002/JiChat.svg)
+![GitHub License](https://img.shields.io/github/license/jsl1992/JiChat)
 [![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/jsl1992/JiChat.svg)](http://isitmaintained.com/project/jsl1992/JiChat "Average time to resolve an issue")
 [![Percentage of issues still open](http://isitmaintained.com/badge/open/jsl1992/JiChat.svg)](http://isitmaintained.com/project/jsl1992/JiChat "Percentage of issues still open")
 [![Leaderboard](https://img.shields.io/badge/JiChat-%E6%9F%A5%E7%9C%8B%E8%B4%A1%E7%8C%AE%E6%8E%92%E8%A1%8C%E6%A6%9C-orange)](https://github.com/jsl1992/JiChat)
