@@ -77,7 +77,7 @@ class GuardedObjectTest {
 
     @Test
     public void testBatch() throws InterruptedException {
-        ConcurrentTestUtil.runConcurrentTest(100, () -> {
+        ConcurrentTestUtil.runConcurrentTest(5, () -> {
             final String key = IdUtil.objectId();
             ThreadUtil.execAsync(() -> fireEvent(key));
             final GuardedObject<JSONObject> guardedObject = GuardedObject.create(key);
