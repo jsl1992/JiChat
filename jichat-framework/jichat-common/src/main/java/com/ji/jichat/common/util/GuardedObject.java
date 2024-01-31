@@ -47,9 +47,14 @@ public class GuardedObject<T> {
         }
     }
 
+    public T getAndThrow(Predicate<T> p) throws InterruptedException {
+        return getAndThrow(p, 3, TimeUnit.SECONDS);
+    }
+
     public T getAndThrow(Predicate<T> p, int timeOut) throws InterruptedException {
         return getAndThrow(p, timeOut, TimeUnit.SECONDS);
     }
+
 
     public T getAndThrow(Predicate<T> p, int duration, TimeUnit timeUnit) throws InterruptedException {
         try {

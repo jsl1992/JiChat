@@ -2,7 +2,7 @@ package com.ji.jichat.chat.api.enums;
 
 /**
   *命令编码
-  * @author jishenglong on 2022/12/15 15:44
+  * @author jisl on 2022/12/15 15:44
   **/
 public enum MessageTypeEnum {
     UP(1, "上传" ),

@@ -9,6 +9,8 @@ import com.ji.jichat.common.pojo.PageVO;
 import com.ji.jichat.user.api.dto.ChatMessageDTO;
 import com.ji.jichat.user.api.vo.ChatMessageVO;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -44,8 +46,24 @@ public class ClientController {
 
     @GetMapping("/privateMessage")
     @ApiOperation("One-on-One Chat / Private Chat: 单聊")
-    public CommonResult<Void> privateMessage(String msg, long userId) {
-        jiChatClient.privateMessage(msg, userId);
+    public CommonResult<Void> privateMessage(String msg,  Integer messageType, long userId) {
+        jiChatClient.privateMessage(msg,messageType, userId);
+        return CommonResult.success();
+    }
+
+
+
+    @GetMapping("/openE2EE")
+    @ApiOperation("开启端到端加密(只支持手机端之间)")
+    public CommonResult<Void> openE2EE(long userId) {
+        jiChatClient.openE2EE(userId);
+        return CommonResult.success();
+    }
+
+    @GetMapping("/closeE2EE")
+    @ApiOperation("关闭端到端加密")
+    public CommonResult<Void> closeE2EE(long userId) {
+        jiChatClient.closeE2EE(userId);
         return CommonResult.success();
     }
 

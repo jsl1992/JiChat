@@ -23,7 +23,10 @@ public class ChatMessageSendDTO implements Serializable {
     @ApiModelProperty(value = "用户id", required = true, example = "1")
     private Long messageTo;
 
-    @ApiModelProperty(value = "消息类型 1：文字 2：图片 3：语音 4：视频 5：文件", required = true, example = "1")
+    @ApiModelProperty(value = "消息加密类型 0：无 1：端到端加密E2EE", required = true, example = "1")
+    private Integer encryptType;
+
+    @ApiModelProperty(value = "消息类型 101：文字 102：图片 103：语音 104：视频 105：文件 201:RSA公钥 202:端到端密钥", required = true, example = "1")
     private Integer messageType;
 
 

@@ -5,6 +5,7 @@ import com.ji.jichat.client.client.ClientInfo;
 import com.ji.jichat.common.pojo.UpMessage;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.apache.commons.lang3.RandomStringUtils;
 
 
 /**
@@ -21,7 +22,7 @@ public class AppUpMessage extends UpMessage {
         this.setClientIp(clientInfo.getIp());
         this.setUserKey(clientInfo.getUserKey());
         this.setType(1);
-        this.setNonce(IdUtil.objectId());
+        this.setNonce(RandomStringUtils.randomAlphanumeric(16));
         this.setVersion(clientInfo.getVersion());
     }
 }

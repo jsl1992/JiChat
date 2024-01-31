@@ -16,7 +16,7 @@ import java.util.Objects;
 /**
  * 协议编解码
  *
- * @author jishenglong on 2023/8/15 14:08
+ * @author jisl on 2023/8/15 14:08
  **/
 @Slf4j
 public class ClientProtocolCodec {

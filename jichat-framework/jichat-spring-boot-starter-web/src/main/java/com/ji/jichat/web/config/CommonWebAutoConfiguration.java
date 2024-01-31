@@ -31,7 +31,7 @@ import java.util.List;
 /**
  * web全局配置
  *
- * @author jishenglong on 2021/1/23 15:35
+ * @author jisl on 2021/1/23 15:35
  **/
 @Configuration
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)

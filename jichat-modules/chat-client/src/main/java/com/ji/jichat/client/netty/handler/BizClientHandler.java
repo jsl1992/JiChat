@@ -2,11 +2,17 @@ package com.ji.jichat.client.netty.handler;
 
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.ji.jichat.chat.api.dto.ChatMessageSendDTO;
+import com.ji.jichat.chat.api.enums.ChatMessageTypeEnum;
 import com.ji.jichat.chat.api.enums.CommandCodeEnum;
+import com.ji.jichat.chat.api.enums.DeviceTypeEnum;
 import com.ji.jichat.client.client.ClientInfo;
 import com.ji.jichat.client.client.JiChatClient;
 import com.ji.jichat.client.dto.AppUpMessage;
+import com.ji.jichat.client.dto.ChatChannelDTO;
+import com.ji.jichat.client.utils.JiDigitUtil;
+import com.ji.jichat.common.enums.CommonStatusEnum;
 import com.ji.jichat.common.pojo.DownMessage;
 import com.ji.jichat.common.util.GuardedObject;
 import io.netty.channel.ChannelFutureListener;
@@ -35,6 +41,9 @@ public class BizClientHandler extends SimpleChannelInboundHandler<DownMessage> {
     @Resource
     private ClientInfo clientInfo;
 
+    @Resource
+    private JiChatClient jiChatClient;
+
 
     @Override
     public void channelRead0(ChannelHandlerContext ctx, DownMessage message) {
@@ -53,6 +62,53 @@ public class BizClientHandler extends SimpleChannelInboundHandler<DownMessage> {
             } else {
                 //更新当前的messageId
                 JiChatClient.chatMessageIdMap.put(chatMessageSendDTO.getChannelKey(), chatMessageSendDTO.getMessageId());
+            }
+            final ChatMessageTypeEnum chatMessageTypeEnum = ChatMessageTypeEnum.getEnum(chatMessageSendDTO.getMessageType());
+            final ChatChannelDTO chatChannelDTO = JiChatClient.chatChannelMap.get(chatMessageSendDTO.getMessageFrom());
+            switch (chatMessageTypeEnum) {
+                case TEXT:
+                    if (chatMessageSendDTO.getEncryptType().equals(CommonStatusEnum.ENABLE.getStatus())) {
+                        if (Objects.nonNull(chatChannelDTO.getSecretKey())) {
+                            final JSONObject jsonObject = JSON.parseObject(chatMessageSendDTO.getMessageContent());
+                            final String decryptContent = JiDigitUtil.decryptAes(jsonObject.getString("ciphertext"), chatChannelDTO.getSecretKey(), jsonObject.getString("ivStr"));
+                            log.info("解密后的明文:{}", decryptContent);
+                        } else {
+                            log.info("端到端加密请到手机端查看");
+                        }
+                    }
+                    break;
+                case RSA_PUBLIC_KEY:
+                    if (Objects.equals(clientInfo.getDeviceType(), DeviceTypeEnum.MOBILE.getCode())) {
+                        //                    收到RSA公钥，那么生成E2EE 密钥发给对方。作为通信密钥
+                        final String publicKey = chatMessageSendDTO.getMessageContent();
+                        final String secretKey = JiDigitUtil.genSecretKey(JiDigitUtil.AES_ALGORITHM);
+                        chatChannelDTO.setSecretKey(secretKey);
+                        chatChannelDTO.setEncryptType(CommonStatusEnum.ENABLE.getStatus());
+                        //E2EE密钥用 RSA公钥加密，发给对方
+                        final String encryptRsa = JiDigitUtil.encryptRsa(secretKey, publicKey);
+                        jiChatClient.privateMessage(encryptRsa, ChatMessageTypeEnum.END_TO_END_KEY.getCode(), chatMessageSendDTO.getMessageFrom());
+                    } else {
+                        log.info("密钥连接请求");
+                    }
+                    break;
+                case END_TO_END_KEY:
+                    if (Objects.equals(clientInfo.getDeviceType(), DeviceTypeEnum.MOBILE.getCode())) {
+                        // 收到E2EE 密钥
+                        final String encryptRsa = chatMessageSendDTO.getMessageContent();
+                        final String secretKey = JiDigitUtil.decryptRsa(encryptRsa, chatChannelDTO.getPrivateKey());
+                        chatChannelDTO.setSecretKey(secretKey);
+                        chatChannelDTO.setEncryptType(CommonStatusEnum.ENABLE.getStatus());
+                    } else {
+                        log.info("密钥连接请求");
+                    }
+                    break;
+                case END_TO_END_CLOSE:
+                    if (Objects.equals(clientInfo.getDeviceType(), DeviceTypeEnum.MOBILE.getCode())) {
+                        chatChannelDTO.setEncryptType(CommonStatusEnum.DISABLE.getStatus());
+                    } else {
+                        log.info("收到关闭E2EE");
+                    }
+                    break;
             }
         }
     }

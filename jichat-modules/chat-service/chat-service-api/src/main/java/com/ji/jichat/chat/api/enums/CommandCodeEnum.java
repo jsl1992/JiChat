@@ -5,7 +5,7 @@ import java.util.Objects;
 /**
  * 命令编码
  *
- * @author jishenglong on 2022/12/15 15:44
+ * @author jisl on 2022/12/15 15:44
  **/
 public enum CommandCodeEnum {
     NO_COMMAND(-1, "没有处理Processor"),

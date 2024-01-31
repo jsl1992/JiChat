@@ -18,6 +18,7 @@ import com.ji.jichat.common.pojo.UpMessage;
 import com.ji.jichat.user.api.DeviceRpc;
 import com.ji.jichat.user.api.vo.DeviceVO;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -28,7 +29,7 @@ import java.util.Objects;
 /**
  * 指令回复Processor
  *
- * @author jishenglong on 2023/3/27 10:02
+ * @author jisl on 2023/3/27 10:02
  **/
 @Component
 @Slf4j
@@ -89,7 +90,7 @@ public class ChatMessageProcessor implements CommandStrategy {
         final String userKey = userChatServerCache.getUserKey(deviceVO.getUserId(), deviceVO.getDeviceType());
         final DownMessage downMessage = DownMessage.builder()
                 .userKey(userKey).code(CommandCodeEnum.PRIVATE_MESSAGE_RECEIVE.getCode())
-                .content(JSON.toJSONString(chatMessageDTO)).nonce(IdUtil.objectId()).type(MessageTypeEnum.DOWN.getCode())
+                .content(JSON.toJSONString(chatMessageDTO)).nonce(RandomStringUtils.randomAlphanumeric(16)).type(MessageTypeEnum.DOWN.getCode())
                 .build();
         final UserChatServerVO userChatServerVO = userChatServerCache.get(userKey);
         //在线发送消息

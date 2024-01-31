@@ -32,7 +32,7 @@ public class ByteUtil {
      * int转成bytes
      * @param number 数字
      * @return  byte[]
-     * @author jishenglong on 2023/8/16 10:39
+     * @author jisl on 2023/8/16 10:39
      **/
     public static byte[] intToBytes(int number) {
         return new byte[]{

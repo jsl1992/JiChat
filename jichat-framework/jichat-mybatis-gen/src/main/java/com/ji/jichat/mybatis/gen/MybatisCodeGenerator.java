@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author jishenglong on 2023/2/16 9:05
+ * @author jisl on 2023/2/16 9:05
  */
 public class MybatisCodeGenerator {
 

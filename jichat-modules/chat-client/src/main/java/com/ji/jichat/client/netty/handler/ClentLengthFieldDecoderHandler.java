@@ -6,7 +6,7 @@ import java.nio.ByteOrder;
 
 /**
   * LengthFieldBasedFrameDecoder：自定义长度解码器，通过在消息头中定义消息长度字段来标志消息体的长度，然后根据消息的总长度来读取消息
-  * @author jishenglong on 2023/8/15 13:47
+  * @author jisl on 2023/8/15 13:47
   **/
 public class ClentLengthFieldDecoderHandler extends LengthFieldBasedFrameDecoder {
 
