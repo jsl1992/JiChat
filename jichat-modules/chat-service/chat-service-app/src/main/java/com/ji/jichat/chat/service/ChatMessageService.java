@@ -1,7 +1,6 @@
 package com.ji.jichat.chat.service;
 
 
-import cn.hutool.core.bean.BeanUtil;
 import com.alibaba.fastjson.JSON;
 import com.ji.jichat.chat.api.dto.ChatSendMessage;
 import com.ji.jichat.chat.api.dto.ChatSendReturnMessage;
@@ -15,7 +14,6 @@ import com.ji.jichat.chat.mq.producer.ChatMessageProducer;
 import com.ji.jichat.user.api.DeviceRpc;
 import com.ji.jichat.user.api.vo.DeviceVO;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -58,8 +56,7 @@ public class ChatMessageService {
         syncOtherDevicesMessage(message);
 //      将mq消息入库
         chatMessageProducer.storeChatMessage(message);
-        final ChatSendReturnMessage chatSendReturnMessage = MessageConvert.INSTANCE.convert(message);
-        return chatSendReturnMessage;
+        return MessageConvert.INSTANCE.convertReturn(message);
     }
 
     private void syncOtherDevicesMessage(ChatSendMessage chatMessageDTO) {
@@ -78,10 +75,9 @@ public class ChatMessageService {
 
     private void sendChatMsgToClient(ChatSendMessage message, DeviceVO deviceVO) {
         final String userKey = userChatServerCache.getUserKey(deviceVO.getUserId(), deviceVO.getDeviceType());
-        final ChatSendMessage receiveMessage = BeanUtil.toBean(message, ChatSendMessage.class);
+        final ChatSendMessage receiveMessage = MessageConvert.INSTANCE.convert(message);
         receiveMessage.setUserKey(userKey);
         receiveMessage.setCode(CommandCodeEnum.PRIVATE_MESSAGE_RECEIVE.getCode());
-        receiveMessage.setNonce(RandomStringUtils.randomAlphanumeric(16));
         final UserChatServerVO userChatServerVO = userChatServerCache.get(userKey);
         //在线发送消息
         chatMessageProducer.sendMessage(JSON.toJSONString(receiveMessage), userChatServerVO.getHttpAddress());

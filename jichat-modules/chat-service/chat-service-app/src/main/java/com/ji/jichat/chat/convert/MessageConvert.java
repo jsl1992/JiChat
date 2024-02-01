@@ -2,7 +2,6 @@ package com.ji.jichat.chat.convert;
 
 import com.ji.jichat.chat.api.dto.ChatSendMessage;
 import com.ji.jichat.chat.api.dto.ChatSendReturnMessage;
-import com.ji.jichat.chat.api.dto.UpMessage;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
@@ -12,14 +11,14 @@ import org.mapstruct.factory.Mappers;
  * @author jisl
  * @since 2024-01-24
  */
-@Mapper
+@Mapper(builder = @org.mapstruct.Builder(disableBuilder = true))
 public interface MessageConvert {
 
     MessageConvert INSTANCE = Mappers.getMapper(MessageConvert.class);
 
-    ChatSendReturnMessage convert(ChatSendMessage bean);
+    ChatSendReturnMessage convertReturn(ChatSendMessage bean);
 
-//    ChatSendMessage convert(ChatSendMessage bean);
+    ChatSendMessage convert(ChatSendMessage bean);
 
 
 }

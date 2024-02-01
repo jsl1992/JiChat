@@ -1,8 +1,6 @@
 package com.ji.jichat.client.netty.handler;
 
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.ji.jichat.chat.api.dto.ChatSendMessage;
 import com.ji.jichat.chat.api.dto.ChatSendReturnMessage;
 import com.ji.jichat.chat.api.dto.HeartBeatMessage;
@@ -16,7 +14,10 @@ import com.ji.jichat.client.dto.ChatChannelDTO;
 import com.ji.jichat.client.utils.JiDigitUtil;
 import com.ji.jichat.common.enums.CommonStatusEnum;
 import com.ji.jichat.common.util.GuardedObject;
-import io.netty.channel.*;
+import io.netty.channel.ChannelFutureListener;
+import io.netty.channel.ChannelHandler;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.timeout.IdleState;
 import io.netty.handler.timeout.IdleStateEvent;
 import lombok.extern.slf4j.Slf4j;
@@ -66,13 +67,12 @@ public class BizClientHandler extends ChannelInboundHandlerAdapter {
                 JiChatClient.chatMessageIdMap.put(chatSendMessage.getChannelKey(), chatSendMessage.getMessageId());
             }
             final ChatMessageTypeEnum chatMessageTypeEnum = ChatMessageTypeEnum.getEnum(chatSendMessage.getMessageType());
-            final ChatChannelDTO chatChannelDTO = JiChatClient.chatChannelMap.get(chatSendMessage.getMessageFrom());
+            final ChatChannelDTO chatChannelDTO = JiChatClient.CHAT_CHANNEL_MAP.get(chatSendMessage.getMessageFrom());
             switch (chatMessageTypeEnum) {
                 case TEXT:
                     if (chatSendMessage.getEncryptType().equals(CommonStatusEnum.ENABLE.getStatus())) {
                         if (Objects.nonNull(chatChannelDTO.getSecretKey())) {
-                            final JSONObject jsonObject = JSON.parseObject(chatSendMessage.getMessageContent());
-                            final String decryptContent = JiDigitUtil.decryptAes(jsonObject.getString("ciphertext"), chatChannelDTO.getSecretKey(), jsonObject.getString("ivStr"));
+                            final String decryptContent = JiDigitUtil.decryptAes(chatSendMessage.getMessageContent(), chatChannelDTO.getSecretKey(), chatSendMessage.getNonce());
                             log.info("解密后的明文:{}", decryptContent);
                         } else {
                             log.info("端到端加密请到手机端查看");

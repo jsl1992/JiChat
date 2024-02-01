@@ -1,7 +1,6 @@
 package com.ji.jichat.client.client;
 
 
-import com.alibaba.fastjson.JSONObject;
 import com.ji.jichat.chat.api.dto.ChatSendMessage;
 import com.ji.jichat.chat.api.dto.ChatSendReturnMessage;
 import com.ji.jichat.chat.api.dto.LoginMessage;
@@ -73,7 +72,7 @@ public class JiChatClient implements CommandLineRunner {
     public static HashMap<String, Long> chatMessageIdMap = new HashMap<>();
 
 
-    public static final HashMap<Long, ChatChannelDTO> chatChannelMap = new HashMap<>();
+    public static final HashMap<Long, ChatChannelDTO> CHAT_CHANNEL_MAP = new HashMap<>();
 
 
     /**
@@ -98,7 +97,7 @@ public class JiChatClient implements CommandLineRunner {
         for (UserRelationVO vo : userRelations) {
             final String channelKey = vo.getChannelKey();
             //绑定好友和群，对应的channelKey
-            chatChannelMap.put(vo.getRelationId(), ChatChannelDTO.builder().channelKey(channelKey).encryptType(0).build());
+            CHAT_CHANNEL_MAP.put(vo.getRelationId(), ChatChannelDTO.builder().channelKey(channelKey).encryptType(0).build());
             if (!chatMessageIdMap.containsKey(channelKey) || chatMessageIdMap.get(channelKey) < vo.getMessageId()) {
                 //不存在当前会话，或者当前会话的curMaxMessageId<服务端里最小，那么拉取数据同步
                 final Long curMaxMessageId = chatMessageIdMap.getOrDefault(channelKey, 0L);
@@ -108,7 +107,7 @@ public class JiChatClient implements CommandLineRunner {
                 chatMessageIdMap.put(channelKey, vo.getMessageId());
             }
         }
-        log.info("channelKeyMap:{}", chatChannelMap);
+        log.info("channelKeyMap:{}", CHAT_CHANNEL_MAP);
         log.info("chatMessageIdMap:{}", chatMessageIdMap);
     }
 
@@ -165,10 +164,10 @@ public class JiChatClient implements CommandLineRunner {
      * @author jisl on 2024/1/29 10:34
      **/
     public void privateMessage(String msg, Integer messageType, long userId) {
-        if (!chatChannelMap.containsKey(userId)) {
+        if (!CHAT_CHANNEL_MAP.containsKey(userId)) {
             throw new ServiceException("和他还不是好友:" + userId);
         }
-        final ChatChannelDTO chatChannelDTO = chatChannelMap.get(userId);
+        final ChatChannelDTO chatChannelDTO = CHAT_CHANNEL_MAP.get(userId);
         final ChatSendMessage chatMessage = ChatSendMessage.builder()
                 .messageFrom(clientInfo.getUserId()).messageTo(userId).messageType(messageType)
                 .messageContent(msg).channelKey(chatChannelDTO.getChannelKey()).encryptType(chatChannelDTO.getEncryptType())
@@ -176,11 +175,7 @@ public class JiChatClient implements CommandLineRunner {
         clientInfo.fillMessage(chatMessage);
         if (Objects.equals(ChatMessageTypeEnum.TEXT.getCode(), messageType) && Objects.equals(chatChannelDTO.getEncryptType(), CommonStatusEnum.ENABLE.getStatus())) {
             //E2EE加密会话
-            final JSONObject jsonObject = new JSONObject();
-            final String nonce = JiDigitUtil.createNonce(16);
-            jsonObject.put("ivStr", nonce);
-            jsonObject.put("ciphertext", JiDigitUtil.encryptAes(msg, chatChannelDTO.getSecretKey(), nonce));
-            chatMessage.setMessageContent(jsonObject.toJSONString());
+            chatMessage.setMessageContent(JiDigitUtil.encryptAes(msg, chatChannelDTO.getSecretKey(), chatMessage.getNonce()));
         }
         chatMessage.setCode(CommandCodeEnum.PRIVATE_MESSAGE.getCode());
         MESSAGES_QUEUE.add(chatMessage);
@@ -189,7 +184,7 @@ public class JiChatClient implements CommandLineRunner {
 
 
     public void openE2EE(long userId) {
-        final ChatChannelDTO chatChannelDTO = chatChannelMap.get(userId);
+        final ChatChannelDTO chatChannelDTO = CHAT_CHANNEL_MAP.get(userId);
         final String[] keyPair = JiDigitUtil.genKeyPair(JiDigitUtil.RSA_ALGORITHM);
         String publicKeyBase64 = keyPair[0];
         String privateKeyBase64 = keyPair[1];

@@ -2,6 +2,7 @@ package com.ji.jichat.client.netty.protocol;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.ji.jichat.chat.api.dto.ChatSendReturnMessage;
 import com.ji.jichat.chat.api.dto.Message;
 import com.ji.jichat.chat.api.enums.CommandCodeEnum;
 import com.ji.jichat.client.utils.ByteUtil;
@@ -56,7 +57,10 @@ public class ClientProtocolCodec {
             final int code = byteBuf.getInt(12);
             byte[] content = new byte[contentLen - 8];
             byteBuf.getBytes(16, content); //从位置12开始读取contentLen个字节的数据
-            return JSON.parseObject(new String(content, StandardCharsets.UTF_8),CommandCodeEnum.getClazz(code));
+            if (code == CommandCodeEnum.PRIVATE_MESSAGE.getCode()) {
+                return JSON.parseObject(new String(content, StandardCharsets.UTF_8), ChatSendReturnMessage.class);
+            }
+            return JSON.parseObject(new String(content, StandardCharsets.UTF_8), CommandCodeEnum.getClazz(code));
         } else {
             throw new ServiceException("当前版本号暂不支持");
         }

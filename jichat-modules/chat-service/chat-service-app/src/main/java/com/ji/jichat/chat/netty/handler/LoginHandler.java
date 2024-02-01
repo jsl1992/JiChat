@@ -1,12 +1,10 @@
 package com.ji.jichat.chat.netty.handler;
 
-import com.alibaba.fastjson.JSONObject;
 import com.ji.jichat.chat.api.dto.LoginMessage;
 import com.ji.jichat.chat.api.enums.CommandCodeEnum;
 import com.ji.jichat.chat.kit.UserChatServerCache;
 import com.ji.jichat.chat.netty.ChannelRepository;
 import com.ji.jichat.common.constants.CacheConstant;
-import com.ji.jichat.chat.api.dto.UpMessage;
 import com.ji.jichat.security.admin.utils.JwtUtil;
 import com.ji.jichat.user.api.vo.LoginUser;
 import io.netty.channel.Channel;
