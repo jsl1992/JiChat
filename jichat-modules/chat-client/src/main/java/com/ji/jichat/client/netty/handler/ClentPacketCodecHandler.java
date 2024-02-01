@@ -1,8 +1,7 @@
 package com.ji.jichat.client.netty.handler;
 
+import com.ji.jichat.chat.api.dto.Message;
 import com.ji.jichat.client.netty.protocol.ClientProtocolCodec;
-import com.ji.jichat.common.pojo.DownMessage;
-import com.ji.jichat.common.pojo.UpMessage;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
@@ -23,10 +22,10 @@ public class ClentPacketCodecHandler extends MessageToMessageCodec<ByteBuf, Obje
 
     @Override
     protected void encode(ChannelHandlerContext ctx, Object msg, List<Object> out) {
-        if (msg instanceof UpMessage) {
+        if (msg instanceof Message) {
             ByteBuf byteBuf = ctx.channel().alloc().ioBuffer();
-            UpMessage upMessage = (UpMessage) msg;
-            ClientProtocolCodec.encode(byteBuf, upMessage);
+            Message message = (Message) msg;
+            ClientProtocolCodec.encode(byteBuf, message);
             out.add(byteBuf);
         } else {
             log.error("msg 必须为 UpMessage 类型");
@@ -37,8 +36,8 @@ public class ClentPacketCodecHandler extends MessageToMessageCodec<ByteBuf, Obje
 
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf byteBuf, List<Object> out) {
-        final DownMessage downMessage = ClientProtocolCodec.decode(byteBuf);
-        out.add(downMessage);
+        final Message message = ClientProtocolCodec.decode(byteBuf);
+        out.add(message);
     }
 
 

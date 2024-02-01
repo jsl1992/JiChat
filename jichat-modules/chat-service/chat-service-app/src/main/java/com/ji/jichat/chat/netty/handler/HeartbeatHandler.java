@@ -1,14 +1,13 @@
 package com.ji.jichat.chat.netty.handler;
 
 import cn.hutool.core.date.DateUtil;
+import com.ji.jichat.chat.api.dto.HeartBeatMessage;
 import com.ji.jichat.chat.api.enums.CommandCodeEnum;
 import com.ji.jichat.chat.api.enums.MessageTypeEnum;
 import com.ji.jichat.chat.convert.MessageConvert;
 import com.ji.jichat.chat.kit.UserChatServerCache;
 import com.ji.jichat.chat.netty.ChannelRepository;
 import com.ji.jichat.chat.utils.NettyAttrUtil;
-import com.ji.jichat.common.pojo.DownMessage;
-import com.ji.jichat.common.pojo.UpMessage;
 import io.netty.channel.*;
 import io.netty.handler.timeout.IdleState;
 import io.netty.handler.timeout.IdleStateEvent;
@@ -21,7 +20,7 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 @Component
 @ChannelHandler.Sharable
-public class HeartbeatHandler extends SimpleChannelInboundHandler<UpMessage> {
+public class HeartbeatHandler extends SimpleChannelInboundHandler<HeartBeatMessage> {
 
     @Resource
     private UserChatServerCache userChatServerCache;
@@ -38,21 +37,19 @@ public class HeartbeatHandler extends SimpleChannelInboundHandler<UpMessage> {
     }
 
     @Override
-    public void channelRead0(ChannelHandlerContext ctx, UpMessage msg) {
-        if (!msg.isMatch(CommandCodeEnum.HEARTBEAT.getCode())) {
-            ctx.fireChannelRead(msg);
+    public void channelRead0(ChannelHandlerContext ctx, HeartBeatMessage message) {
+        if (!message.isMatch(CommandCodeEnum.HEARTBEAT.getCode())) {
+            ctx.fireChannelRead(message);
             return;
         }
 //        收到客户端的心跳消息
-        log.info("收到客户端心跳:{},{}", msg.getUserKey(), msg.getContent());
+        log.info("收到客户端心跳:{},{}", message.getUserKey(), message.getContent());
         if (!userChatServerCache.hasKey(ctx.channel())) {
-            log.warn("心跳---客户端连接的信息不存在{},关闭当前客户端", msg.getUserKey());
+            log.warn("心跳---客户端连接的信息不存在{},关闭当前客户端", message.getUserKey());
         }
         NettyAttrUtil.updateReaderTime(ctx.channel(), System.currentTimeMillis());
-        final DownMessage downMessage = MessageConvert.INSTANCE.convert(msg);
-        downMessage.setType(MessageTypeEnum.DOWN.getCode());
-        downMessage.setContent("pong");
-        ctx.writeAndFlush(downMessage).addListeners((ChannelFutureListener) future -> {
+        message.setContent("pong");
+        ctx.writeAndFlush(message).addListeners((ChannelFutureListener) future -> {
             if (!future.isSuccess()) {
                 log.error("IO error,close Channel");
                 future.channel().close();

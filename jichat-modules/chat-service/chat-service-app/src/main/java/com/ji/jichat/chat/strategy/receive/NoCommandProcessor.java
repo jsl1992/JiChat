@@ -3,7 +3,7 @@ package com.ji.jichat.chat.strategy.receive;
 
 import com.ji.jichat.chat.api.enums.CommandCodeEnum;
 import com.ji.jichat.chat.strategy.CommandStrategy;
-import com.ji.jichat.common.pojo.UpMessage;
+import com.ji.jichat.chat.api.dto.UpMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -24,7 +24,7 @@ public class NoCommandProcessor implements CommandStrategy {
 
     @Override
     public String execute(UpMessage message) {
-        log.warn("当前执行:{}没有相关处理类,内容:{}", message.getCode(), message.getContent());
-        return message.getContent();
+        log.warn("当前执行:{}没有相关处理类,内容:{}", message.getCode(), message.getNonce());
+        return message.getNonce();
     }
 }

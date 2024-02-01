@@ -1,7 +1,8 @@
 package com.ji.jichat.chat.convert;
 
-import com.ji.jichat.common.pojo.DownMessage;
-import com.ji.jichat.common.pojo.UpMessage;
+import com.ji.jichat.chat.api.dto.ChatSendMessage;
+import com.ji.jichat.chat.api.dto.ChatSendReturnMessage;
+import com.ji.jichat.chat.api.dto.UpMessage;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
@@ -16,9 +17,9 @@ public interface MessageConvert {
 
     MessageConvert INSTANCE = Mappers.getMapper(MessageConvert.class);
 
-    DownMessage convert(UpMessage bean);
+    ChatSendReturnMessage convert(ChatSendMessage bean);
 
-    UpMessage convert(DownMessage bean);
+//    ChatSendMessage convert(ChatSendMessage bean);
 
 
 }

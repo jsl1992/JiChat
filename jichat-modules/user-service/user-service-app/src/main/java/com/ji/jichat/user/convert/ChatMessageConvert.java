@@ -3,7 +3,7 @@ package com.ji.jichat.user.convert;
 import java.util.*;
 
 
-import com.ji.jichat.chat.api.dto.ChatMessageSendDTO;
+import com.ji.jichat.chat.api.dto.ChatSendMessage;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 import com.ji.jichat.user.entity.ChatMessage;
@@ -29,7 +29,7 @@ public interface ChatMessageConvert {
 
     List<ChatMessageVO> convertList(List<ChatMessage> list);
 
-    ChatMessage convert(ChatMessageSendDTO bean);
+    ChatMessage convert(ChatSendMessage bean);
 
 
 

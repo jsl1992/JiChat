@@ -2,7 +2,7 @@ package com.ji.jichat.chat.strategy;
 
 
 import com.ji.jichat.chat.api.enums.CommandCodeEnum;
-import com.ji.jichat.common.pojo.UpMessage;
+import com.ji.jichat.chat.api.dto.UpMessage;
 
 /**
  * 支付 PayService(统一的支付Service方便将来扩展)

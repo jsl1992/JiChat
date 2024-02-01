@@ -1,6 +1,6 @@
 package com.ji.jichat.user.service;
 
-import com.ji.jichat.chat.api.dto.ChatMessageSendDTO;
+import com.ji.jichat.chat.api.dto.ChatSendMessage;
 import com.ji.jichat.user.api.dto.ChatMessageDTO;
 import com.ji.jichat.user.api.vo.ChatMessageVO;
 import com.ji.jichat.user.entity.ChatMessage;
@@ -21,5 +21,5 @@ public interface IChatMessageService extends IService<ChatMessage> {
 
     List<ChatMessageVO> query(ChatMessageDTO chatMessageDTO);
 
-    void saveMessage(ChatMessageSendDTO chatMessageSendDTO);
+    void saveMessage(ChatSendMessage chatSendMessage);
 }

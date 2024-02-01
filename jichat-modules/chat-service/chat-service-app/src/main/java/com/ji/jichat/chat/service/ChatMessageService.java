@@ -1,20 +1,17 @@
-package com.ji.jichat.chat.strategy.receive;
+package com.ji.jichat.chat.service;
 
 
-import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.bean.BeanUtil;
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import com.ji.jichat.chat.api.dto.ChatMessageSendDTO;
+import com.ji.jichat.chat.api.dto.ChatSendMessage;
+import com.ji.jichat.chat.api.dto.ChatSendReturnMessage;
 import com.ji.jichat.chat.api.enums.CommandCodeEnum;
 import com.ji.jichat.chat.api.enums.DeviceTypeEnum;
-import com.ji.jichat.chat.api.enums.MessageTypeEnum;
 import com.ji.jichat.chat.api.vo.UserChatServerVO;
+import com.ji.jichat.chat.convert.MessageConvert;
 import com.ji.jichat.chat.kit.UserChatServerCache;
 import com.ji.jichat.chat.manager.MessageIdGenerate;
 import com.ji.jichat.chat.mq.producer.ChatMessageProducer;
-import com.ji.jichat.chat.strategy.CommandStrategy;
-import com.ji.jichat.common.pojo.DownMessage;
-import com.ji.jichat.common.pojo.UpMessage;
 import com.ji.jichat.user.api.DeviceRpc;
 import com.ji.jichat.user.api.vo.DeviceVO;
 import lombok.extern.slf4j.Slf4j;
@@ -33,7 +30,7 @@ import java.util.Objects;
  **/
 @Component
 @Slf4j
-public class ChatMessageProcessor implements CommandStrategy {
+public class ChatMessageService {
 
     @Resource
     private MessageIdGenerate messageIdGenerate;
@@ -47,36 +44,29 @@ public class ChatMessageProcessor implements CommandStrategy {
     @Resource
     private UserChatServerCache userChatServerCache;
 
-    @Override
-    public CommandCodeEnum getCommandCode() {
-        return CommandCodeEnum.PRIVATE_MESSAGE;
-    }
 
-    @Override
-    public String execute(UpMessage message) {
-        final ChatMessageSendDTO chatMessageDTO = JSON.parseObject(message.getContent(), ChatMessageSendDTO.class);
+    public ChatSendReturnMessage processMessage(ChatSendMessage message) {
         //todo  通过channelKey 校验是否好友关系，没有好友关系。不让发送
-        final Long messageId = messageIdGenerate.genMessageId(chatMessageDTO.getMessageFrom(), chatMessageDTO.getMessageTo());
-        chatMessageDTO.setMessageId(messageId);
+        final Long messageId = messageIdGenerate.genMessageId(message.getMessageFrom(), message.getMessageTo());
+        message.setMessageId(messageId);
 //        消息时间以服务器时间为准，以防不同客户端时间相差太多
-        chatMessageDTO.setCreateTime(new Date());
+        message.setCreateTime(new Date());
 
         //通过mq转发消息，给消息接收者
-        forwardMessage(chatMessageDTO);
+        forwardMessage(message);
         // 和同一个用户的其他登录设备
-        syncOtherDevicesMessage(chatMessageDTO, message);
+        syncOtherDevicesMessage(message);
 //      将mq消息入库
-        chatMessageProducer.storeChatMessage(chatMessageDTO);
-        final JSONObject jsonObject = new JSONObject();
-        jsonObject.put("messageId", messageId);
-        return jsonObject.toJSONString();
+        chatMessageProducer.storeChatMessage(message);
+        final ChatSendReturnMessage chatSendReturnMessage = MessageConvert.INSTANCE.convert(message);
+        return chatSendReturnMessage;
     }
 
-    private void syncOtherDevicesMessage(ChatMessageSendDTO chatMessageDTO, UpMessage message) {
+    private void syncOtherDevicesMessage(ChatSendMessage chatMessageDTO) {
         final List<DeviceVO> fromOnlineDevices = deviceRpc.getOnlineDevices(chatMessageDTO.getMessageFrom()).getCheckedData();
         for (DeviceVO deviceVO : fromOnlineDevices) {
             final String userKey = userChatServerCache.getUserKey(deviceVO.getUserId(), deviceVO.getDeviceType());
-            if (Objects.equals(userKey, message.getUserKey())) {
+            if (Objects.equals(userKey, chatMessageDTO.getUserKey())) {
                 //同一个设备，那么不用发给自己。直接跳过
                 continue;
             }
@@ -86,18 +76,18 @@ public class ChatMessageProcessor implements CommandStrategy {
         }
     }
 
-    private void sendChatMsgToClient(ChatMessageSendDTO chatMessageDTO, DeviceVO deviceVO) {
+    private void sendChatMsgToClient(ChatSendMessage message, DeviceVO deviceVO) {
         final String userKey = userChatServerCache.getUserKey(deviceVO.getUserId(), deviceVO.getDeviceType());
-        final DownMessage downMessage = DownMessage.builder()
-                .userKey(userKey).code(CommandCodeEnum.PRIVATE_MESSAGE_RECEIVE.getCode())
-                .content(JSON.toJSONString(chatMessageDTO)).nonce(RandomStringUtils.randomAlphanumeric(16)).type(MessageTypeEnum.DOWN.getCode())
-                .build();
+        final ChatSendMessage receiveMessage = BeanUtil.toBean(message, ChatSendMessage.class);
+        receiveMessage.setUserKey(userKey);
+        receiveMessage.setCode(CommandCodeEnum.PRIVATE_MESSAGE_RECEIVE.getCode());
+        receiveMessage.setNonce(RandomStringUtils.randomAlphanumeric(16));
         final UserChatServerVO userChatServerVO = userChatServerCache.get(userKey);
         //在线发送消息
-        chatMessageProducer.sendMessage(JSON.toJSONString(downMessage), userChatServerVO.getHttpAddress());
+        chatMessageProducer.sendMessage(JSON.toJSONString(receiveMessage), userChatServerVO.getHttpAddress());
     }
 
-    private void forwardMessage(ChatMessageSendDTO chatMessageDTO) {
+    private void forwardMessage(ChatSendMessage chatMessageDTO) {
         final List<DeviceVO> toOnlineDevices = deviceRpc.getOnlineDevices(chatMessageDTO.getMessageTo()).getCheckedData();
         for (DeviceVO deviceVO : toOnlineDevices) {
             if (userChatServerCache.hasKey(deviceVO.getUserId(), deviceVO.getDeviceType())) {

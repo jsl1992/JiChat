@@ -1,7 +1,7 @@
 package com.ji.jichat.user.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.ji.jichat.chat.api.dto.ChatMessageSendDTO;
+import com.ji.jichat.chat.api.dto.ChatSendMessage;
 import com.ji.jichat.user.api.dto.ChatMessageDTO;
 import com.ji.jichat.user.api.vo.ChatMessageVO;
 import com.ji.jichat.user.convert.ChatMessageConvert;
@@ -30,9 +30,9 @@ public class ChatMessageServiceImpl extends ServiceImpl<ChatMessageMapper, ChatM
     }
 
     @Override
-    public void saveMessage(ChatMessageSendDTO chatMessageSendDTO) {
-        final ChatMessage chatMessage = ChatMessageConvert.INSTANCE.convert(chatMessageSendDTO);
-        chatMessage.setMessageContent(chatMessageSendDTO.getMessageContent());
+    public void saveMessage(ChatSendMessage chatSendMessage) {
+        final ChatMessage chatMessage = ChatMessageConvert.INSTANCE.convert(chatSendMessage);
+        chatMessage.setMessageContent(chatSendMessage.getMessageContent());
         save(chatMessage);
     }
 }

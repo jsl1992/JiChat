@@ -1,13 +1,15 @@
-package com.ji.jichat.common.pojo;
+package com.ji.jichat.chat.api.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+
+import java.util.Objects;
+
 /**
-  *
-  * @author jisl on 2024/1/29 10:45
-  **/
+ * @author jisl on 2024/1/29 10:45
+ **/
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -27,19 +29,13 @@ public abstract class Message {
 
 
     /**
-     * 消息体内容
-     */
-    private String content;
-
-    /**
-     * 消息类型  1 上传 request , 2 下发 response
-     */
-    private int type = 2;
-
-    /**
      * 随机字符串
      */
     private String nonce;
+
+    public boolean isMatch(Integer code) {
+        return Objects.equals(this.getCode(), code);
+    }
 
 
 }

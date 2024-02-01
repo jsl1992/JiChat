@@ -1,10 +1,12 @@
 package com.ji.jichat.client.client;
 
 
+import com.ji.jichat.chat.api.dto.Message;
 import com.ji.jichat.chat.api.vo.UserChatServerVO;
 import com.ji.jichat.user.api.vo.AuthLoginVO;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
@@ -55,6 +57,12 @@ public class ClientInfo {
 
     public String getUserKey() {
         return userId + "_" + deviceType;
+    }
+
+
+    public void fillMessage(Message message) {
+        message.setUserKey(this.getUserKey());
+        message.setNonce(RandomStringUtils.randomAlphanumeric(16));
     }
 
 

@@ -1,11 +1,12 @@
 package com.ji.jichat.chat.netty.handler;
 
 import com.alibaba.fastjson.JSONObject;
+import com.ji.jichat.chat.api.dto.LoginMessage;
 import com.ji.jichat.chat.api.enums.CommandCodeEnum;
 import com.ji.jichat.chat.kit.UserChatServerCache;
 import com.ji.jichat.chat.netty.ChannelRepository;
 import com.ji.jichat.common.constants.CacheConstant;
-import com.ji.jichat.common.pojo.UpMessage;
+import com.ji.jichat.chat.api.dto.UpMessage;
 import com.ji.jichat.security.admin.utils.JwtUtil;
 import com.ji.jichat.user.api.vo.LoginUser;
 import io.netty.channel.Channel;
@@ -25,7 +26,7 @@ import java.util.Objects;
 @Slf4j
 @ChannelHandler.Sharable
 @Component
-public class LoginHandler extends SimpleChannelInboundHandler<UpMessage> {
+public class LoginHandler extends SimpleChannelInboundHandler<LoginMessage> {
 
 
     private static final int MAX_NO_LOGIN_PROTOCOL_COUNT = 3;
@@ -41,7 +42,7 @@ public class LoginHandler extends SimpleChannelInboundHandler<UpMessage> {
 
 
     @Override
-    public void channelRead0(ChannelHandlerContext ctx, UpMessage msg) throws Exception {
+    public void channelRead0(ChannelHandlerContext ctx, LoginMessage msg) throws Exception {
         final String key = msg.getUserKey();
         final Channel channel = ChannelRepository.get(key);
         if (channel == null && !msg.isMatch(CommandCodeEnum.LOGIN.getCode())) {
@@ -53,7 +54,7 @@ public class LoginHandler extends SimpleChannelInboundHandler<UpMessage> {
             }
             return;
         } else if (!msg.isMatch(CommandCodeEnum.LOGIN.getCode())) {
-            log.debug("收到连接[{}] 请求msg=[{}],remove LoginHandler", msg.getClientIp(), msg);
+            log.debug("收到连接[{}] 请求msg=[{}],remove LoginHandler", msg.getUserKey(), msg);
             ctx.pipeline().remove(this);
             super.channelRead(ctx, msg);
             return;
@@ -72,9 +73,9 @@ public class LoginHandler extends SimpleChannelInboundHandler<UpMessage> {
         log.info("[{}]建立连接登录成功,初始化session", key);
     }
 
-    private LoginUser getLoginUser(UpMessage msg) {
+    private LoginUser getLoginUser(LoginMessage msg) {
         try {
-            String token = JSONObject.parseObject(msg.getContent()).getString("token");
+            String token = msg.getToken();
             final String loginKey = JwtUtil.validateJwtWithGetSubject(token);
             return (LoginUser) redisTemplate.opsForValue().get(CacheConstant.LOGIN_USER + loginKey);
         } catch (Exception e) {

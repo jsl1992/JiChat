@@ -1,8 +1,7 @@
 package com.ji.jichat.chat.netty.handler;
 
 import com.ji.jichat.chat.netty.protocol.ProtocolCodec;
-import com.ji.jichat.common.pojo.DownMessage;
-import com.ji.jichat.common.pojo.UpMessage;
+import com.ji.jichat.chat.api.dto.Message;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
@@ -29,10 +28,10 @@ public class PacketCodecHandler extends MessageToMessageCodec<ByteBuf, Object> {
 
     @Override
     protected void encode(ChannelHandlerContext ctx, Object msg, List<Object> out) {
-        if (msg instanceof DownMessage) {
+        if (msg instanceof Message) {
             ByteBuf byteBuf = ctx.channel().alloc().ioBuffer();
-            DownMessage downMessage = (DownMessage) msg;
-            ProtocolCodec.encode(byteBuf, downMessage);
+            Message message = (Message) msg;
+            ProtocolCodec.encode(byteBuf, message);
             out.add(byteBuf);
         } else {
             log.error("msg 必须为Message类型");
@@ -43,9 +42,8 @@ public class PacketCodecHandler extends MessageToMessageCodec<ByteBuf, Object> {
 
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf byteBuf, List<Object> out) {
-        final UpMessage upMessage = ProtocolCodec.decode(byteBuf);
-        upMessage.setClientIp(ProtocolCodec.getClientIp(ctx));
-        out.add(upMessage);
+        final Message message = ProtocolCodec.decode(byteBuf);
+        out.add(message);
     }
 
 

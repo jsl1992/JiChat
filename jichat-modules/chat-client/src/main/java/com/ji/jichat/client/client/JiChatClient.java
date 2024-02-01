@@ -1,24 +1,21 @@
 package com.ji.jichat.client.client;
 
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.ji.jichat.chat.api.dto.ChatMessageSendDTO;
+import com.ji.jichat.chat.api.dto.ChatSendMessage;
+import com.ji.jichat.chat.api.dto.ChatSendReturnMessage;
+import com.ji.jichat.chat.api.dto.LoginMessage;
 import com.ji.jichat.chat.api.enums.ChatMessageTypeEnum;
 import com.ji.jichat.chat.api.enums.CommandCodeEnum;
-import com.ji.jichat.chat.api.enums.MessageTypeEnum;
 import com.ji.jichat.chat.api.vo.UserChatServerVO;
-import com.ji.jichat.client.dto.AppUpMessage;
 import com.ji.jichat.client.dto.ChatChannelDTO;
 import com.ji.jichat.client.manager.JiChatServerManager;
 import com.ji.jichat.client.netty.ClientChannelInitializer;
 import com.ji.jichat.client.utils.JiDigitUtil;
 import com.ji.jichat.common.enums.CommonStatusEnum;
 import com.ji.jichat.common.exception.ServiceException;
-import com.ji.jichat.common.pojo.DownMessage;
 import com.ji.jichat.common.pojo.PageDTO;
 import com.ji.jichat.common.pojo.PageVO;
-import com.ji.jichat.common.pojo.UpMessage;
 import com.ji.jichat.common.util.GuardedObject;
 import com.ji.jichat.user.api.dto.ChatMessageDTO;
 import com.ji.jichat.user.api.vo.ChatMessageVO;
@@ -71,7 +68,7 @@ public class JiChatClient implements CommandLineRunner {
     private ClientInfo clientInfo;
 
 
-    private static final ArrayDeque<UpMessage> messagesQueue = new ArrayDeque<>();
+    private static final ArrayDeque<ChatSendMessage> MESSAGES_QUEUE = new ArrayDeque<>();
 
     public static HashMap<String, Long> chatMessageIdMap = new HashMap<>();
 
@@ -148,12 +145,12 @@ public class JiChatClient implements CommandLineRunner {
      * 向服务器注册
      */
     public void loginTcpServer() {
-        final AppUpMessage appUpMessage = new AppUpMessage(clientInfo);
-        appUpMessage.setCode(CommandCodeEnum.LOGIN.getCode());
-        final JSONObject jsonObject = new JSONObject();
-        jsonObject.put("token", clientInfo.getAuthLoginVO().getAccessToken());
-        appUpMessage.setContent(jsonObject.toString());
-        ChannelFuture future = channel.writeAndFlush(appUpMessage);
+        LoginMessage loginMessage = new LoginMessage();
+        clientInfo.fillMessage(loginMessage);
+        loginMessage.setToken(clientInfo.getAuthLoginVO().getAccessToken());
+        loginMessage.setCode(CommandCodeEnum.LOGIN.getCode());
+        loginMessage.setIp(clientInfo.getIp());
+        ChannelFuture future = channel.writeAndFlush(loginMessage);
         future.addListener((ChannelFutureListener) channelFuture ->
                 log.info("Registry JiChat server success!")
         );
@@ -172,22 +169,21 @@ public class JiChatClient implements CommandLineRunner {
             throw new ServiceException("和他还不是好友:" + userId);
         }
         final ChatChannelDTO chatChannelDTO = chatChannelMap.get(userId);
-        final AppUpMessage appUpMessage = new AppUpMessage(clientInfo);
-        final ChatMessageSendDTO chatMessageDTO = ChatMessageSendDTO.builder()
+        final ChatSendMessage chatMessage = ChatSendMessage.builder()
                 .messageFrom(clientInfo.getUserId()).messageTo(userId).messageType(messageType)
                 .messageContent(msg).channelKey(chatChannelDTO.getChannelKey()).encryptType(chatChannelDTO.getEncryptType())
                 .build();
+        clientInfo.fillMessage(chatMessage);
         if (Objects.equals(ChatMessageTypeEnum.TEXT.getCode(), messageType) && Objects.equals(chatChannelDTO.getEncryptType(), CommonStatusEnum.ENABLE.getStatus())) {
             //E2EE加密会话
             final JSONObject jsonObject = new JSONObject();
             final String nonce = JiDigitUtil.createNonce(16);
             jsonObject.put("ivStr", nonce);
             jsonObject.put("ciphertext", JiDigitUtil.encryptAes(msg, chatChannelDTO.getSecretKey(), nonce));
-            chatMessageDTO.setMessageContent(jsonObject.toJSONString());
+            chatMessage.setMessageContent(jsonObject.toJSONString());
         }
-        appUpMessage.setCode(CommandCodeEnum.PRIVATE_MESSAGE.getCode());
-        appUpMessage.setContent(JSON.toJSONString(chatMessageDTO));
-        messagesQueue.add(appUpMessage);
+        chatMessage.setCode(CommandCodeEnum.PRIVATE_MESSAGE.getCode());
+        MESSAGES_QUEUE.add(chatMessage);
         CompletableFuture.runAsync(this::syncSendMsg);
     }
 
@@ -212,17 +208,15 @@ public class JiChatClient implements CommandLineRunner {
      * @author jisl on 2024/1/24 16:30
      **/
     private void syncSendMsg() {
-        while (!messagesQueue.isEmpty()) {
-            final UpMessage upMessage = messagesQueue.pop();
-            ChannelFuture future = channel.writeAndFlush(upMessage);
-            future.addListener((ChannelFutureListener) channelFuture -> log.debug("客户端手动发消息成功={}", upMessage.getContent()));
+        while (!MESSAGES_QUEUE.isEmpty()) {
+            final ChatSendMessage chatSendMessage = MESSAGES_QUEUE.pop();
+            ChannelFuture future = channel.writeAndFlush(chatSendMessage);
+            future.addListener((ChannelFutureListener) channelFuture -> log.debug("客户端手动发消息成功={}", chatSendMessage.getMessageContent()));
             try {
-                final GuardedObject<DownMessage> go = GuardedObject.create(upMessage.getNonce());
-                final DownMessage downMessage = go.getAndThrow(t -> Objects.equals(t.getNonce(), upMessage.getNonce()));
-                final ChatMessageSendDTO messageSendDTO = JSON.parseObject(upMessage.getContent(), ChatMessageSendDTO.class);
-                JSONObject jsonObject = JSON.parseObject(downMessage.getContent());
-                chatMessageIdMap.put(messageSendDTO.getChannelKey(), jsonObject.getLongValue("messageId"));
-                log.info("发送的消息收到messageId:{},{}", downMessage.getContent(), upMessage.getContent());
+                final GuardedObject<ChatSendReturnMessage> go = GuardedObject.create(chatSendMessage.getNonce());
+                final ChatSendReturnMessage returnMessage = go.getAndThrow(t -> Objects.equals(t.getNonce(), chatSendMessage.getNonce()));
+                chatMessageIdMap.put(chatSendMessage.getChannelKey(), returnMessage.getMessageId());
+                log.info("发送的消息收到messageId:{},{}", returnMessage.getMessageId(), returnMessage.getNonce());
             } catch (InterruptedException e) {
                 e.printStackTrace();
 //                这边发送失败，可以将消息添加到队首。再进行重试。重试3次失败后。提示网络啥

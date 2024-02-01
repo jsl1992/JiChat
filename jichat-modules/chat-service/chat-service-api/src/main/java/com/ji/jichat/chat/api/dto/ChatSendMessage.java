@@ -1,21 +1,20 @@
 package com.ji.jichat.chat.api.dto;
 
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 
-import java.io.Serializable;
 import java.util.Date;
 
-@ApiModel("用户TCP服务")
 @Data
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
-public class ChatMessageSendDTO implements Serializable {
+@SuperBuilder(toBuilder = true)
+public class ChatSendMessage extends Message {
 
     @ApiModelProperty(value = "用户id", required = true, example = "1")
     private Long messageFrom;

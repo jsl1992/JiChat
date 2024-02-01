@@ -1,5 +1,9 @@
 package com.ji.jichat.chat.api.enums;
 
+import com.ji.jichat.chat.api.dto.ChatSendMessage;
+import com.ji.jichat.chat.api.dto.HeartBeatMessage;
+import com.ji.jichat.chat.api.dto.LoginMessage;
+
 import java.util.Objects;
 
 /**
@@ -8,16 +12,16 @@ import java.util.Objects;
  * @author jisl on 2022/12/15 15:44
  **/
 public enum CommandCodeEnum {
-    NO_COMMAND(-1, "没有处理Processor"),
-    HEARTBEAT(1001, "心跳"),
-    LOGIN(1002, "登录"),
-    PRIVATE_MESSAGE(2001, "私聊消息"),
-    PRIVATE_MESSAGE_RECEIVE(2002, "私聊消息接收"),
-    GROUP_MESSAGE(2102, "群消息"),
+    NO_COMMAND(-1, "没有处理Processor",HeartBeatMessage.class),
+    HEARTBEAT(1001, "心跳", HeartBeatMessage.class),
+    LOGIN(1002, "登录", LoginMessage.class),
+    PRIVATE_MESSAGE(2001, "私聊消息", ChatSendMessage.class),
+    PRIVATE_MESSAGE_RECEIVE(2002, "私聊消息接收", ChatSendMessage.class),
+    GROUP_MESSAGE(2102, "群消息", HeartBeatMessage.class),
 
 
     /*  ================下发指令=================*/
-    SYNC_TIME(5001, "同步时间"),
+    SYNC_TIME(5001, "同步时间", HeartBeatMessage.class),
     ;
 
 
@@ -30,10 +34,13 @@ public enum CommandCodeEnum {
      */
     private final String name;
 
+    private final Class clazz ;
 
-    CommandCodeEnum(Integer code, String name) {
+
+    CommandCodeEnum(Integer code, String name, Class clazz) {
         this.code = code;
         this.name = name;
+        this.clazz = clazz;
     }
 
     public Integer getCode() {
@@ -42,6 +49,10 @@ public enum CommandCodeEnum {
 
     public String getName() {
         return name;
+    }
+
+    public Class getClazz() {
+        return clazz;
     }
 
 
@@ -65,5 +76,9 @@ public enum CommandCodeEnum {
 
     public static String getName(Integer code) {
         return getEnum(code).getName();
+    }
+
+    public static <T> Class<T> getClazz(Integer code) {
+        return getEnum(code).getClazz();
     }
 }

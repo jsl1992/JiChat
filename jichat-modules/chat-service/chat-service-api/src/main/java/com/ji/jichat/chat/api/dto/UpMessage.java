@@ -1,9 +1,7 @@
-package com.ji.jichat.common.pojo;
+package com.ji.jichat.chat.api.dto;
 
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-
-import java.util.Objects;
 
 /**
  * @author jisl on 2024/1/22 15:29
@@ -28,8 +26,5 @@ public class UpMessage extends Message {
     private String version;
 
 
-    public boolean isMatch(Integer code) {
-        return Objects.equals(this.getCode(), code);
-    }
 
 }
