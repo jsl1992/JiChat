@@ -190,11 +190,12 @@ public class JiChatClient implements CommandLineRunner {
         String privateKeyBase64 = keyPair[1];
         chatChannelDTO.setPublicKey(publicKeyBase64);
         chatChannelDTO.setPrivateKey(privateKeyBase64);
+        chatChannelDTO.setEncryptType(CommonStatusEnum.DISABLE.getStatus());
         privateMessage(publicKeyBase64, ChatMessageTypeEnum.RSA_PUBLIC_KEY.getCode(), userId);
     }
 
     public void closeE2EE(long userId) {
-        privateMessage("关闭", ChatMessageTypeEnum.IMAGE.getCode(), userId);
+        privateMessage("关闭", ChatMessageTypeEnum.END_TO_END_CLOSE.getCode(), userId);
     }
 
     /**

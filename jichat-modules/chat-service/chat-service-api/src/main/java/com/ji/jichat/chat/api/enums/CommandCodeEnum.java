@@ -16,14 +16,7 @@ public enum CommandCodeEnum {
     HEARTBEAT(1001, "心跳", HeartBeatMessage.class),
     LOGIN(1002, "登录", LoginMessage.class),
     PRIVATE_MESSAGE(2001, "私聊消息", ChatSendMessage.class),
-    PRIVATE_MESSAGE_RECEIVE(2002, "私聊消息接收", ChatSendMessage.class),
-    GROUP_MESSAGE(2102, "群消息", HeartBeatMessage.class),
-
-
-    /*  ================下发指令=================*/
-    SYNC_TIME(5001, "同步时间", HeartBeatMessage.class),
-    ;
-
+    PRIVATE_MESSAGE_RECEIVE(2002, "私聊消息接收", ChatSendMessage.class);
 
     /**
      * 类型

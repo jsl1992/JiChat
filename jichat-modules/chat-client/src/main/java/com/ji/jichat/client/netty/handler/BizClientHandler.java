@@ -71,9 +71,14 @@ public class BizClientHandler extends ChannelInboundHandlerAdapter {
             switch (chatMessageTypeEnum) {
                 case TEXT:
                     if (chatSendMessage.getEncryptType().equals(CommonStatusEnum.ENABLE.getStatus())) {
-                        if (Objects.nonNull(chatChannelDTO.getSecretKey())) {
-                            final String decryptContent = JiDigitUtil.decryptAes(chatSendMessage.getMessageContent(), chatChannelDTO.getSecretKey(), chatSendMessage.getNonce());
-                            log.info("解密后的明文:{}", decryptContent);
+                        //密文消息
+                        if (Objects.equals(clientInfo.getDeviceType(), DeviceTypeEnum.MOBILE.getCode())) {
+                            if (Objects.equals(chatChannelDTO.getEncryptType(), CommonStatusEnum.ENABLE.getStatus())) {
+                                final String decryptContent = JiDigitUtil.decryptAes(chatSendMessage.getMessageContent(), chatChannelDTO.getSecretKey(), chatSendMessage.getNonce());
+                                log.info("解密后的明文:{}", decryptContent);
+                            } else {
+                                log.warn("当前手机客户端与用户{}的E2EE还没开启，请手动开启", chatSendMessage.getMessageFrom());
+                            }
                         } else {
                             log.info("端到端加密请到手机端查看");
                         }

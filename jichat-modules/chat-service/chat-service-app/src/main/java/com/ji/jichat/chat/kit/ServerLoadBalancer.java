@@ -73,6 +73,8 @@ public class ServerLoadBalancer {
                 redisTemplate.opsForZSet().add(CacheConstant.CHAT_SERVER_CLIENT_COUNT, s, 0);
             }
         }
+        Set<ZSetOperations.TypedTuple<String>> nowServers = redisTemplate.opsForZSet().rangeWithScores(CacheConstant.CHAT_SERVER_CLIENT_COUNT, 0, -1);
+        log.info("同步后的服务:{}", JSON.toJSONString(nowServers));
     }
 
 }

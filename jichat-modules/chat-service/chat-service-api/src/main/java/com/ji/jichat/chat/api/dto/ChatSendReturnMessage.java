@@ -9,6 +9,9 @@ import lombok.experimental.SuperBuilder;
 
 import java.util.Date;
 
+/**
+ * @author jisl on 2024/2/1 9:42
+ */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)

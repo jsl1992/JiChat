@@ -29,9 +29,9 @@ public class ChatMessageConsumer {
         final ChannelFuture channelFuture = channel.writeAndFlush(sendMessage);
         channelFuture.addListener(future -> {
             if (future.isSuccess()) {
-                log.info("转发接收消息到客户端成功:{}", sendMessage.getNonce());
+                log.info("转发接收消息到客户端成功:{},nonce:{}", sendMessage.getUserKey(), sendMessage.getNonce());
             } else {
-                log.warn("转发接收消息到客户端失败:{}", sendMessage.getNonce());
+                log.warn("转发接收消息到客户端失败:{},nonce:{}", sendMessage.getUserKey(), sendMessage.getNonce());
             }
         });
 
