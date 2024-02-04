@@ -1,0 +1,20 @@
+spring:
+  main:
+    allow-circular-references: true # 允许循环依赖，因为项目是三层架构，无法避免这个情况。
+
+  cloud:
+    # Spring Cloud Gateway 配置项，对应 GatewayProperties 类
+    gateway:
+      # 路由配置项，对应 RouteDefinition 数组
+      routes:
+        #        # 服务的ID，唯一即可一般与微服务的service name一致
+        - id: user-service # 路由的编号
+          #          # lb表示负载均衡
+          uri: grayLb://user-service
+          predicates: # 断言，作为路由的匹配条件，对应 RouteDefinition 数组
+            - Path=/user-api/**
+        - id: chat-service # 路由的编号
+          uri: grayLb://chat-service
+          predicates: # 断言，作为路由的匹配条件，对应 RouteDefinition 数组
+            - Path=/chat-api/**
+

@@ -4,7 +4,7 @@
 //import lombok.extern.slf4j.Slf4j;
 //import org.bouncycastle.asn1.ocsp.ResponseData;
 //import org.springframework.cloud.client.ServiceInstance;
-//import org.springframework.cloud.client.loadbalancer.LoadBalancerUriTools;
+//import org.springframework.cloud.client.loadbalancer.*;
 //import org.springframework.cloud.client.loadbalancer.reactive.CompletionContext;
 //import org.springframework.cloud.gateway.config.GatewayLoadBalancerProperties;
 //import org.springframework.cloud.gateway.filter.GatewayFilterChain;
@@ -27,10 +27,10 @@
 //
 ///**
 // * 支持灰度功能的 {@link ReactiveLoadBalancerClientFilter} 实现类
-// *
+// * <p>
 // * 由于 {@link ReactiveLoadBalancerClientFilter#choose(Request, String, Set)} 是 private 方法，无法进行重写。
 // * 因此，这里只好 copy 它所有的代码，手动重写 choose 方法
-// *
+// * <p>
 // * 具体的使用与实现原理，可阅读如下两个文章：
 // * 1. https://www.jianshu.com/p/6db15bc0be8f
 // * 2. https://cloud.tencent.com/developer/article/1620795
@@ -47,9 +47,11 @@
 //
 //    private final GatewayLoadBalancerProperties properties;
 //
+//    private static final int LOAD_BALANCER_CLIENT_FILTER_ORDER = 10150;
+//
 //    @Override
 //    public int getOrder() {
-//        return ReactiveLoadBalancerClientFilter.LOAD_BALANCER_CLIENT_FILTER_ORDER;
+//        return LOAD_BALANCER_CLIENT_FILTER_ORDER;
 //    }
 //
 //    @Override
