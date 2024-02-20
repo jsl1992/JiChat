@@ -71,3 +71,7 @@ Is It Maintained 徽章：
 
 # 项目业务分析博客
 JiChat 博客地址 [https://blog.csdn.net/weixin_42887222/article/details/135910752 ](https://blog.csdn.net/weixin_42887222/article/details/135910752)
+
+# 反馈交流
+邮箱: jishenglong92@gmail.com
+微信:jisl1024
