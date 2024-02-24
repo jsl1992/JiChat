@@ -13,6 +13,12 @@ File Encoding         : 65001
 Date: 2024-01-29 13:43:05
 */
 
+-- 建库
+CREATE DATABASE IF NOT EXISTS jichat_user CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+
+-- 指定要操作的数据库
+USE jichat_user;
+
 SET FOREIGN_KEY_CHECKS=0;
 
 -- ----------------------------

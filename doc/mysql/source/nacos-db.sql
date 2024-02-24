@@ -18,6 +18,13 @@
 /*   数据库全名 = nacos_config   */
 /*   表名称 = config_info   */
 /******************************************/
+
+-- 建库
+CREATE DATABASE IF NOT EXISTS nacos_config CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+
+-- 指定要操作的数据库
+USE nacos_config;
+
 CREATE TABLE `config_info` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'id',
   `data_id` varchar(255) NOT NULL COMMENT 'data_id',
