@@ -1,10 +1,12 @@
-version : '3.8'
+version: '3.8'
 services:
   rabbitmq:
     restart: always
     image: rabbitmq:3.8-management
-    container_name: rabbitmq
+    container_name: ji-chat-rabbitmq
     hostname: dream-vhost
+    networks:
+      - ji-chat
     ports:
       - 5672:5672    #生产者和消费者连接使用的接口
       - 15672:15672   # web UI 管理接口
@@ -13,11 +15,54 @@ services:
       RABBITMQ_DEFAULT_USER: admin
       RABBITMQ_DEFAULT_PASS: 123456
     volumes:
-      - /data/rabbitmq/log:/var/log/rabbitmq #挂载 RabbitMQ日志
-      - /data/rabbitmq/data:/var/lib/rabbitmq #挂载 RabbitMQ数据
+      - /home/wuhunyu/ji-chat/rabbitmq/log:/var/log/rabbitmq #挂载 RabbitMQ日志
+      - /home/wuhunyu/ji-chat/rabbitmq/data:/var/lib/rabbitmq #挂载 RabbitMQ数据
+  mysql:
+    restart: always
+    image: mysql:5.7.35
+    container_name: ji-chat-mysql
+    networks:
+      - ji-chat
+    volumes:
+      - /home/wuhunyu/ji-chat/mysql/mydir:/mydir
+      # mysql 数据文件目录
+      - /home/wuhunyu/ji-chat/mysql/datadir:/var/lib/mysql
+      # mysql 配置目录
+      - /home/wuhunyu/ji-chat/mysql/conf:/etc/mysql/conf.d
+      # 数据库还原目录 可将需要还原的sql文件放在这里
+      - /home/wuhunyu/ji-chat/mysql/source:/docker-entrypoint-initdb.d
+    environment:
+      # root 用户密码
+      - "MYSQL_ROOT_PASSWORD=123456"
+      # 数据库
+      - "MYSQL_DATABASE=orderOnline"
+      # 时区
+      - "TZ=Asia/Shanghai"
+    ports:
+      # 使用宿主机的3306端口映射到容器的3306端口
+      # 宿主机：容器
+      - 3306:3306
+  redis:
+    image: redis:6.2.6
+    container_name: ji-chat-redis
+    networks:
+      - ji-chat
+    ports:
+      - "6379:6379"
+    volumes:
+      - /home/wuhunyu/ji-chat/redis/datadir:/data
+      - /home/wuhunyu/ji-chat/redis/conf/redis.conf:/usr/local/etc/redis/redis.conf
+      - /home/wuhunyu/ji-chat/redis/logs:/logs
+    command: redis-server --requirepass 123456
+    restart: always
   nacos:
     image: nacos/nacos-server:2.0.2
-    container_name: nacos
+    container_name: ji-chat-nacos
+    networks:
+      - ji-chat
+    depends_on:
+      # 依赖于 mysql 服务
+      - mysql
     ports:
       - 8848:8848
       - 9848:9848
@@ -26,41 +71,16 @@ services:
       TZ: Asia/Shanghai
       MODE: standalone
       SPRING_DATASOURCE_PLATFORM: mysql
-      MYSQL_SERVICE_HOST: 192.168.137.130
+      MYSQL_SERVICE_HOST: ji-chat-mysql
       MYSQL_SERVICE_PORT: 3306
       MYSQL_SERVICE_USER: root
-      MYSQL_SERVICE_PASSWORD: root
-      MYSQL_SERVICE_DB_NAME: nacos
+      MYSQL_SERVICE_PASSWORD: 123456
+      MYSQL_SERVICE_DB_NAME: nacos_config
       MYSQL_SERVICE_DB_PARAM: characterEncoding=utf8&connectTimeout=1000&socketTimeout=3000&autoReconnect=true&useUnicode=true&useSSL=false&serverTimezone=Asia/Shanghai
     volumes:
-      - /data/nacos/logs/:/home/nacos/logs
-  mysql:
-    restart: always
-    image: mysql:5.7.35
-    container_name: mysql
-    volumes:
-      - /data/mysql/mydir:/mydir
-      - /data/mysql/datadir:/var/lib/mysql
-      - /data/mysql/conf/my.cnf:/etc/my.cnf
-      # 数据库还原目录 可将需要还原的sql文件放在这里
-      - /data/mysql/source:/docker-entrypoint-initdb.d
-    environment:
-      - "MYSQL_ROOT_PASSWORD=123456"
-      - "MYSQL_DATABASE=orderOnline"
-      - "TZ=Asia/Shanghai"
-    ports:
-      # 使用宿主机的3306端口映射到容器的3306端口
-      # 宿主机：容器
-      - 3306:3306
-  redis:
-    image: redis:6.2.6
-    container_name: redis
-    ports:
-      - "6379:6379"
-    volumes:
-      - /data/redis/datadir:/data
-      - /data/redis/conf/redis.conf:/usr/local/etc/redis/redis.conf
-      - /data/redis/logs:/logs
-    command: redis-server --requirepass 123456
-    restart: always
- 
+      - /home/wuhunyu/ji-chat/nacos/logs/:/home/nacos/logs
+
+# 创建网关
+networks:
+  ji-chat:
+    external: false
