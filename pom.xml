@@ -46,6 +46,7 @@
         <module>jichat-dependencies</module>
         <module>jichat-gateway</module>
         <module>jichat-modules</module>
+        <module>jichat-dependencies-springboot3</module>
     </modules>
 
     <dependencyManagement>
