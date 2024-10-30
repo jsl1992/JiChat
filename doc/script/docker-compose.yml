@@ -1,22 +1,21 @@
-version : '3.8'
+version: '3.8'
 services:
   rabbitmq:
     restart: always
-    image: rabbitmq:3.8-management
+    image: crpi-3424o5h7ohwr3qjk.cn-shanghai.personal.cr.aliyuncs.com/jisl-images/rabbitmq:4.0-management
     container_name: rabbitmq
-    hostname: dream-vhost
     ports:
       - 5672:5672    #生产者和消费者连接使用的接口
       - 15672:15672   # web UI 管理接口
     environment:
       TZ: Asia/Shanghai
       RABBITMQ_DEFAULT_USER: admin
-      RABBITMQ_DEFAULT_PASS: 123456
+      RABBITMQ_DEFAULT_PASS: aB37z.9
     volumes:
       - /data/rabbitmq/log:/var/log/rabbitmq #挂载 RabbitMQ日志
       - /data/rabbitmq/data:/var/lib/rabbitmq #挂载 RabbitMQ数据
   nacos:
-    image: nacos/nacos-server:2.0.2
+    image: crpi-3424o5h7ohwr3qjk.cn-shanghai.personal.cr.aliyuncs.com/jisl-images/nacos-server:2.0.2
     container_name: nacos
     ports:
       - 8848:8848
@@ -26,34 +25,31 @@ services:
       TZ: Asia/Shanghai
       MODE: standalone
       SPRING_DATASOURCE_PLATFORM: mysql
-      MYSQL_SERVICE_HOST: 192.168.137.130
+      MYSQL_SERVICE_HOST: 192.168.137.179
       MYSQL_SERVICE_PORT: 3306
       MYSQL_SERVICE_USER: root
-      MYSQL_SERVICE_PASSWORD: root
+      MYSQL_SERVICE_PASSWORD: aB37z.9
       MYSQL_SERVICE_DB_NAME: nacos
       MYSQL_SERVICE_DB_PARAM: characterEncoding=utf8&connectTimeout=1000&socketTimeout=3000&autoReconnect=true&useUnicode=true&useSSL=false&serverTimezone=Asia/Shanghai
     volumes:
       - /data/nacos/logs/:/home/nacos/logs
   mysql:
     restart: always
-    image: mysql:5.7.35
+    image: crpi-3424o5h7ohwr3qjk.cn-shanghai.personal.cr.aliyuncs.com/jisl-images/mysql:8.0.20
     container_name: mysql
     volumes:
       - /data/mysql/mydir:/mydir
       - /data/mysql/datadir:/var/lib/mysql
-      - /data/mysql/conf/my.cnf:/etc/my.cnf
-      # 数据库还原目录 可将需要还原的sql文件放在这里
-      - /data/mysql/source:/docker-entrypoint-initdb.d
     environment:
-      - "MYSQL_ROOT_PASSWORD=123456"
-      - "MYSQL_DATABASE=orderOnline"
+      - "MYSQL_ROOT_PASSWORD=aB37z.9"
+      - "MYSQL_DATABASE=ji_chat"
       - "TZ=Asia/Shanghai"
     ports:
       # 使用宿主机的3306端口映射到容器的3306端口
       # 宿主机：容器
       - 3306:3306
   redis:
-    image: redis:6.2.6
+    image: crpi-3424o5h7ohwr3qjk.cn-shanghai.personal.cr.aliyuncs.com/jisl-images/redis:6.2.6
     container_name: redis
     ports:
       - "6379:6379"
@@ -61,6 +57,6 @@ services:
       - /data/redis/datadir:/data
       - /data/redis/conf/redis.conf:/usr/local/etc/redis/redis.conf
       - /data/redis/logs:/logs
-    command: redis-server --requirepass 123456
+    command: redis-server --requirepass aB37z.9
     restart: always
  
