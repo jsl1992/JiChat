@@ -18,6 +18,6 @@ jichat:
 
 
 user:
-  url: http://192.168.137.130:18081/user-api
+  url: http://192.168.137.179:18081/user-api
 chat:
-  url: http://192.168.137.130:18080/chat-api
+  url: http://192.168.137.179:18080/chat-api

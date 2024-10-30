@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /**
- * 商品 SPU Rpc 接口
+ * ChatServerInfoRpc 接口
  */
 @FeignClient(path = "/user-api/chatServerInfo", value = ServiceNameConstants.USER_SERVICE)
 public interface ChatServerInfoRpc {

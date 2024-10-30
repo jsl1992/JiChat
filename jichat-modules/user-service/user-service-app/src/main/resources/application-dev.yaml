@@ -1,28 +1,28 @@
 spring:
   # 数据源配置项
   datasource:
-    url: jdbc:mysql://192.168.137.130:3306/jichat_user?useSSL=false&useUnicode=true&characterEncoding=UTF-8&serverTimezone=CTT
+    url: jdbc:mysql://192.168.137.179:3306/ji_chat?useSSL=false&useUnicode=true&characterEncoding=UTF-8&serverTimezone=CTT
     driver-class-name: com.mysql.jdbc.Driver
     username: root
-    password: root
+    password: aB37z.9
 
   cloud:
     nacos:
       # Nacos 服务发现与注册配置
       discovery:
-        namespace: dev_1024 # Nacos 命名空间
-        server-addr: 192.168.137.130:8848
+        namespace: dev # Nacos 命名空间
+        server-addr: 192.168.137.179:8848
 
 
 
   rabbitmq:
-    host: 192.168.137.130
+    host: 192.168.137.179
     port: 5672
-    username: dream
-    password: 123456
+    username: admin
+    password: aB37z.9
 
   redis:
-    host: 192.168.137.130
+    host: 192.168.137.179
     port: 6379
-    password: 123456
+    password: aB37z.9
 

@@ -20,7 +20,7 @@ public class MybatisCodeGenerator {
     private static final String author = "jisl";
 
     //数据库
-    private static final String url = "jdbc:mysql://192.168.137.130:3306/jichat_user?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8";
+    private static final String url = "jdbc:mysql://192.168.137.179:3306/ji_chat_user?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8";
     private static final String userName = "root";
     private static final String password = "root";
     //需要生成的表(多张表用","分隔,例如:"t_user,t_role")

@@ -27,10 +27,10 @@ public class ChatServerInfoDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
 
-    @ApiModelProperty(value = "外网IP", required = true, example = "192.168.137.130")
+    @ApiModelProperty(value = "外网IP", required = true, example = "192.168.137.179")
     private String outsideIp;
 
-    @ApiModelProperty(value = "httpIp", required = true, example = "192.168.137.130")
+    @ApiModelProperty(value = "httpIp", required = true, example = "192.168.137.179")
     private String innerIp;
 
     @ApiModelProperty(value = "http端口", required = true, example ="18080")

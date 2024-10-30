@@ -1,9 +1,9 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : 192.168.137.130_3306(本地)
+Source Server         : 192.168.137.179_3306(本地)
 Source Server Version : 80027
-Source Host           : 192.168.137.130:3306
+Source Host           : 192.168.137.179:3306
 Source Database       : jichat_user
 
 Target Server Type    : MYSQL

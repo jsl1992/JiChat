@@ -28,6 +28,7 @@ public class ChatServerInfoController implements ChatServerInfoRpc {
     private IChatServerInfoService chatServerInfoService;
 
     @PostMapping("/save")
+    @RequiresNone
     @ApiOperation("保存服务信息")
     public CommonResult<Void> save(@RequestBody @Valid ChatServerInfoDTO dto) {
         chatServerInfoService.save(dto);
