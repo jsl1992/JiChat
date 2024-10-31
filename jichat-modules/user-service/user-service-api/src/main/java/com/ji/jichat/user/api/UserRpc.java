@@ -4,7 +4,7 @@ package com.ji.jichat.user.api;
 import com.ji.jichat.common.constants.ServiceNameConstants;
 import com.ji.jichat.common.pojo.CommonResult;
 import com.ji.jichat.user.api.vo.LoginUser;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface UserRpc {
 
 
-    @ApiOperation("获取登录用户")
+    @Operation(summary = "获取登录用户")
     @GetMapping(value = "/getLoginUserByLoginKey")
     CommonResult<LoginUser> getLoginUserByLoginKey(@RequestParam String loginKey);
 

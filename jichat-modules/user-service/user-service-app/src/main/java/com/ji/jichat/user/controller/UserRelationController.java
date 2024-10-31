@@ -4,11 +4,12 @@ import com.ji.jichat.common.pojo.CommonResult;
 import com.ji.jichat.user.api.dto.UserRelationDTO;
 import com.ji.jichat.user.api.vo.UserRelationVO;
 import com.ji.jichat.user.service.IUserRelationService;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.annotation.Resource;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Resource;
-import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -20,6 +21,7 @@ import java.util.List;
  * @since 2024-01-28
  */
 @RestController
+@Tag(name = "UserRelationController")
 @RequestMapping("/userRelation")
 public class UserRelationController {
 
@@ -27,14 +29,14 @@ public class UserRelationController {
     private IUserRelationService userRelationService;
 
     @PostMapping("/addFriend")
-    @ApiOperation("添加朋友")
+    @Operation(summary = "添加朋友")
     public CommonResult<Void> addFriend(@RequestBody @Valid UserRelationDTO userRelationDTO) {
         userRelationService.addFriend(userRelationDTO);
         return CommonResult.success();
     }
 
     @GetMapping("/listUserRelation")
-    @ApiOperation("获取当前好友/群组的最后聊天消息id")
+    @Operation(summary = "获取当前好友/群组的最后聊天消息id")
     public CommonResult<List<UserRelationVO>> listUserRelation() {
         return CommonResult.success(userRelationService.listUserRelation());
     }

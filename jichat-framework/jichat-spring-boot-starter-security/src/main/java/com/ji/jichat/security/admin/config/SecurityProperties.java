@@ -7,7 +7,7 @@ public class SecurityProperties {
 
     private static final String[] DEFAULT_IGNORE_PATHS = new String[]{
             // Swagger 相关
-            "/doc.html", "/swagger-resources", "/swagger-resources/**", "/webjars/**",
+            "/doc.html", "/swagger-resources/**", "/webjars/**","/v3/api-docs/**","/swagger-ui","/swagger-ui/**"
             // Actuator 相关
     };
 

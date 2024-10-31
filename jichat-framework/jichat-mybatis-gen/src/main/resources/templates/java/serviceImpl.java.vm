@@ -15,7 +15,7 @@ import ${packageName}.api.vo.${ClassName}VO;
 import ${packageName}.convert.${ClassName}Convert;
 import ${packageName}.service.I${ClassName}Service;
 import java.util.Arrays;
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 /**
  * ${functionName}Service业务层处理
  *

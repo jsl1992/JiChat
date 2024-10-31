@@ -2,9 +2,10 @@ package com.ji.jichat.user.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.ji.jichat.mybatis.core.dataobject.BaseDO;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
+
+import java.io.Serial;
 
 /**
  * <p>
@@ -21,24 +22,25 @@ import lombok.*;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 @TableName("t_user_relation")
-@ApiModel(value = "UserRelation对象", description = "好友关系表")
+@Schema(description = "好友关系表")
 public class UserRelation extends BaseDO {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty("id主键")
+    @Schema(description = "id主键")
     private Long id;
 
-    @ApiModelProperty("用户id")
+    @Schema(description = "用户id")
     private Long userId;
 
-    @ApiModelProperty("关联id(用户id/群id)")
+    @Schema(description = "关联id(用户id/群id)")
     private Long relationId;
 
-    @ApiModelProperty("频道key")
+    @Schema(description = "频道key")
     private String channelKey;
 
-    @ApiModelProperty("关联类型(1:用户 2:群)")
+    @Schema(description = "关联类型(1:用户 2:群)")
     private Integer relationType;
 
 

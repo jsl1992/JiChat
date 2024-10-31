@@ -13,6 +13,12 @@
     <version>${revision}</version>
 
     <dependencies>
+        <dependency>
+            <groupId>com.ji.jichat</groupId>
+            <artifactId>jichat-common</artifactId>
+            <optional>true</optional>
+        </dependency>
+
         <!-- Spring 核心 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -25,11 +31,24 @@
             <optional>true</optional>
         </dependency>
 
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+
         <!-- Web 相关 -->
         <dependency>
             <groupId>com.github.xiaoymin</groupId>
-            <artifactId>knife4j-spring-boot-starter</artifactId>
+            <artifactId>knife4j-openapi3-jakarta-spring-boot-starter</artifactId>
         </dependency>
+        <!--再添加一个jar-->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-ui</artifactId>
+            <!--保持版本与Knife4j v4.0的版本一致，避免jar包冲突，因为Knife4j-v4.0.0版本依赖的springdoc版本是1.6.9 -->
+            <version>1.6.9</version>
+        </dependency>
+
     </dependencies>
 
 </project>

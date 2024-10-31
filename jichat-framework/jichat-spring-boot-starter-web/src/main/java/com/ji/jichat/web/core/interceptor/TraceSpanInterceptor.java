@@ -3,18 +3,18 @@ package com.ji.jichat.web.core.interceptor;
 
 import com.ji.jichat.web.core.constant.TraceSpanContext;
 import com.ji.jichat.web.util.CommonWebUtil;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.lang.Nullable;
-import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
+import org.springframework.web.servlet.HandlerInterceptor;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  * TraceId和SpanId拦截器
  *
  * @author jisl on 2024/1/29 11:22
  **/
-public class TraceSpanInterceptor extends HandlerInterceptorAdapter {
+public class TraceSpanInterceptor implements HandlerInterceptor {
 
 
     @Override

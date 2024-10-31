@@ -9,21 +9,23 @@ import com.ji.jichat.security.admin.utils.JwtUtil;
 import com.ji.jichat.user.api.UserRpc;
 import com.ji.jichat.user.api.vo.LoginUser;
 import com.ji.jichat.web.core.constant.CommonWebConstants;
+import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.method.HandlerMethod;
-import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
+import org.springframework.web.servlet.HandlerInterceptor;
 
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.Objects;
 
-public class SecurityInterceptor extends HandlerInterceptorAdapter {
+/**
+ * @author 纪大侠
+ */
+public class SecurityInterceptor implements HandlerInterceptor {
 
 
     @Resource
     private UserRpc userRpc;
-
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {

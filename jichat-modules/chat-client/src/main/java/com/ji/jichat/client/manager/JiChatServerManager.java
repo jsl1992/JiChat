@@ -20,7 +20,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Arrays;

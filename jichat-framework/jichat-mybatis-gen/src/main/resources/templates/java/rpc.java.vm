@@ -24,7 +24,7 @@ public interface ${ClassName}Rpc {
     /**
      * 获取${functionName}详细信息
      */
-    @ApiOperation("获取${functionName}详细信息")
+    @Operation(summary ="获取${functionName}详细信息")
     @GetMapping(value = "/{${pkColumn.javaField}}")
     R<${ClassName}VO> getInfo(@PathVariable("${pkColumn.javaField}") ${pkColumn.javaType} ${pkColumn.javaField});
 
@@ -32,7 +32,7 @@ public interface ${ClassName}Rpc {
     /**
      * 新增${functionName}
      */
-    @ApiOperation("新增${functionName}")
+    @Operation(summary ="新增${functionName}")
     @PostMapping
     R<Boolean> add(@RequestBody ${ClassName}DTO ${className}DTO);
 

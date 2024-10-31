@@ -21,11 +21,11 @@ import com.ji.jichat.user.mapper.UserMapper;
 import com.ji.jichat.user.service.IDeviceService;
 import com.ji.jichat.user.service.IUserService;
 import com.ji.jichat.web.util.HttpContextUtil;
+import jakarta.annotation.Resource;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -62,9 +62,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         if (Objects.equals(user.getStatus(), CommonStatusEnum.DISABLE.getStatus())) {
             throw new ServiceException("登录失败，账号被禁用");
         }
-        final String clientIp = ServletUtil.getClientIP(HttpContextUtil.getHttpServletRequest());
+//        final String clientIp = ServletUtil.getClientIP(HttpContextUtil.getHttpServletRequest());
         final Date now = new Date();
-        user.toBuilder().onlineStatus(OnlineStatusEnum.ONLINE.getCode()).loginIp(clientIp).loginDate(now);
+        user.toBuilder().onlineStatus(OnlineStatusEnum.ONLINE.getCode()).loginIp("clientIp").loginDate(now);
         updateById(user);
         loginDevice(loginDTO, user);
         return buildAuthLoginVO(user, loginDTO.getDeviceType());
@@ -157,7 +157,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
 
     private void loginDevice(AuthLoginDTO loginDTO, User user) {
-        final String clientIp = ServletUtil.getClientIP(HttpContextUtil.getHttpServletRequest());
+//        final String clientIp = ServletUtil.getClientIP(HttpContextUtil.getHttpServletRequest());
         final Date now = new Date();
         final Device onlineDevice = deviceService.getOne(new LambdaQueryWrapper<Device>().eq(Device::getUserId, user.getId())
                 .eq(Device::getDeviceType, loginDTO.getDeviceType()).eq(Device::getOnlineStatus, OnlineStatusEnum.ONLINE.getCode()));
@@ -170,7 +170,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         final Device device = Device.builder()
                 .deviceIdentifier(loginDTO.getDeviceIdentifier()).deviceName(loginDTO.getDeviceName())
                 .deviceType(loginDTO.getDeviceType()).onlineStatus(loginDTO.getDeviceType())
-                .onlineStatus(OnlineStatusEnum.ONLINE.getCode()).osType(loginDTO.getOsType()).loginIp(clientIp)
+                .onlineStatus(OnlineStatusEnum.ONLINE.getCode()).osType(loginDTO.getOsType()).loginIp("clientIp")
                 .loginDate(now).userId(user.getId())
                 .build();
         final Device dbDevice = deviceService.getOne(new LambdaQueryWrapper<Device>().eq(Device::getUserId, user.getId()).eq(Device::getDeviceIdentifier, loginDTO.getDeviceIdentifier()));

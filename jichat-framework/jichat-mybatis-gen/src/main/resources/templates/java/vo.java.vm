@@ -9,8 +9,7 @@ import com.dream.common.core.annotation.Excel;
 #elseif($table.tree)
 #end
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -33,7 +32,7 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = false)
 #end
 @Accessors(chain = true)
-@ApiModel(value="${functionName}返回值")
+@Schema(description = value="${functionName}返回值")
 public class ${ClassName}VO extends ${Entity}{
 
     private static final long serialVersionUID = 1L;
@@ -49,7 +48,7 @@ public class ${ClassName}VO extends ${Entity}{
 #set($comment=$column.columnComment)
 #end
 #if("$!comment" != "")
-    @ApiModelProperty(value = "${comment}")
+    @Schema(description =  "${comment}")
 #end
 #if($parentheseIndex != -1)
     @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")

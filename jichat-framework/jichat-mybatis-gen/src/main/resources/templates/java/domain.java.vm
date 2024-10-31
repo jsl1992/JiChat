@@ -11,8 +11,7 @@ import com.dream.common.core.annotation.Excel;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -37,7 +36,7 @@ import lombok.experimental.Accessors;
 #end
 @Accessors(chain = true)
 @TableName("${tableName}")
-@ApiModel(value="${ClassName}对象", description="${functionName}表")
+@Schema(description = value="${ClassName}对象", description="${functionName}表")
 public class ${ClassName} extends ${Entity}{
 
     private static final long serialVersionUID = 1L;
@@ -52,7 +51,7 @@ public class ${ClassName} extends ${Entity}{
 #set($comment=$column.columnComment)
 #end
 #if("$!comment" != "")
-    @ApiModelProperty(value = "${comment}")
+    @Schema(description =  "${comment}")
 #end
 #if(${column.pk})
     @TableId(value = "${pkColumn.columnName}", type = IdType.AUTO)

@@ -5,20 +5,20 @@ import com.ji.jichat.chat.mq.producer.ChatMessageProducer;
 import com.ji.jichat.common.pojo.CommonResult;
 import com.ji.jichat.user.api.UserRpc;
 import com.ji.jichat.user.api.vo.LoginUser;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.annotation.Resource;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 @RestController
-@Api(tags = {"测试Controller "})
+@Tag(name = "测试Controller ")
 @RequestMapping("/test")
 public class TestController {
 
@@ -32,21 +32,21 @@ public class TestController {
     private RedisTemplate redisTemplate;
 
     @GetMapping("/test")
-    @ApiOperation("test")
+    @Operation(summary = "test")
     public CommonResult<String> test() {
         return CommonResult.success("成功");
     }
 
 
     @GetMapping("/sendMessage")
-    @ApiOperation("sendMessage")
+    @Operation(summary = "sendMessage")
     public CommonResult<String> sendMessage(String message) {
         chatMessageProducer.sendMessage(message, "122222");
         return CommonResult.success("成功");
     }
 
     @GetMapping("/rpcTest")
-    @ApiOperation("rpcTest")
+    @Operation(summary = "rpcTest")
     public CommonResult<LoginUser> rpcTest(String loginKey) {
         final CommonResult<LoginUser> loginUserCommonResult = userRpc.getLoginUserByLoginKey(loginKey);
         loginUserCommonResult.checkError();
@@ -55,7 +55,7 @@ public class TestController {
 
 
     @GetMapping("/getRedisCache")
-    @ApiOperation("getRedisCache")
+    @Operation(summary = "getRedisCache")
     public CommonResult<Object> getRedisCache(String key) {
         final Object o = redisTemplate.opsForValue().get(key);
         return CommonResult.success(o);
@@ -63,7 +63,7 @@ public class TestController {
 
 
     @GetMapping("/getKeysWithPrefix")
-    @ApiOperation("getKeysWithPrefix")
+    @Operation(summary = "getKeysWithPrefix")
     public List<String> getKeysWithPrefix(String prefix) {
         final Set keys = redisTemplate.keys(prefix + "*");
         final ArrayList<String> list = new ArrayList<>();

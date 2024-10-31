@@ -105,7 +105,7 @@ public class AccessLogFilter implements GlobalFilter, Ordered {
         AccessLog gatewayLog = new AccessLog();
         gatewayLog.setRoute(WebFrameworkUtils.getGatewayRoute(exchange));
         gatewayLog.setSchema(request.getURI().getScheme());
-        gatewayLog.setRequestMethod(request.getMethodValue());
+        gatewayLog.setRequestMethod(request.getMethod().name());
         gatewayLog.setRequestUrl(request.getURI().getRawPath());
         gatewayLog.setQueryParams(request.getQueryParams());
         gatewayLog.setRequestHeaders(request.getHeaders());
@@ -182,7 +182,7 @@ public class AccessLogFilter implements GlobalFilter, Ordered {
                     gatewayLog.setUserId(SecurityFrameworkUtils.getLoginUserId(exchange));
                     gatewayLog.setUserType(SecurityFrameworkUtils.getLoginUserType(exchange));
                     gatewayLog.setResponseHeaders(response.getHeaders());
-                    gatewayLog.setHttpStatus(response.getStatusCode());
+//                    gatewayLog.setHttpStatus(response.getStatusCode());
 
                     // 获取响应类型，如果是 json 就打印
                     String originalResponseContentType = exchange.getAttribute(ServerWebExchangeUtils.ORIGINAL_RESPONSE_CONTENT_TYPE_ATTR);

@@ -5,7 +5,7 @@
 
 package com.ji.jichat.common.pojo;
 
-import io.swagger.annotations.ApiModel;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * @author jisl on 2024/1/28 16:17
  */
-@ApiModel("分页VO")
+@Schema(description = "分页VO")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

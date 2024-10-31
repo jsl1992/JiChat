@@ -3,9 +3,9 @@ package com.ji.jichat.web.util;
 
 import com.ji.jichat.web.core.constant.CommonWebConstants;
 import com.ji.jichat.web.core.constant.TraceSpanContext;
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
-import javax.servlet.ServletRequest;
-import javax.servlet.http.HttpServletRequest;
 
 public class CommonWebUtil {
 

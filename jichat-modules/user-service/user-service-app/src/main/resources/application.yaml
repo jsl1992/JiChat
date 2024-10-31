@@ -39,6 +39,26 @@ feign:
         readTimeout: 15000
 
 
+
+# springdoc-openapi项目配置
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    tags-sorter: alpha
+  api-docs:
+    path: /v3/api-docs
+  group-configs:
+    - group: 'default'
+      paths-to-match: '/**'
+      packages-to-scan: com.ji.jichat.user
+  default-flat-param-object: true
+
+
+knife4j:
+  enable: true # 2.2 是否开启 Swagger 文档的 Knife4j UI 界面
+  setting:
+    language: zh_cn
+
   # Swagger 配置项
 swagger:
   title: JiChat User-接口

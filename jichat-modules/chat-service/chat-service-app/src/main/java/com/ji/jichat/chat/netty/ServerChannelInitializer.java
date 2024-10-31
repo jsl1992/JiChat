@@ -5,10 +5,10 @@ import com.ji.jichat.chat.netty.handler.*;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.timeout.IdleStateHandler;
+import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
 
 @Component
 @Qualifier("serverChannelInitializer")

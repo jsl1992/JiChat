@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.2.4.RELEASE</version>
+        <version>3.3.5</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -27,18 +27,15 @@
 
     <!-- 属性 -->
     <properties>
-        <revision>1.0-SNAPSHOT</revision>
-        <java.version>1.8</java.version>
+        <revision>2.0-SNAPSHOT</revision>
+        <java.version>17</java.version>
         <!-- Maven 相关 -->
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
-        <maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
-        <maven-compiler-plugin.version>3.8.0</maven-compiler-plugin.version>
-        <!-- 看看咋放到 bom 里 -->
-        <lombok.version>1.18.20</lombok.version>
         <mapstruct.version>1.4.1.Final</mapstruct.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven-jacoco-plugin.version>0.8.3</maven-jacoco-plugin.version>
+        <lombok.version>1.18.34</lombok.version>
+        <spring.boot.version>3.3.3</spring.boot.version>
     </properties>
 
     <modules>
@@ -46,7 +43,6 @@
         <module>jichat-dependencies</module>
         <module>jichat-gateway</module>
         <module>jichat-modules</module>
-        <module>jichat-dependencies-springboot3</module>
     </modules>
 
     <dependencyManagement>
@@ -64,10 +60,14 @@
     <build>
         <pluginManagement>
             <plugins>
+                <!--                <plugin>-->
+                <!--                    <groupId>org.graalvm.buildtools</groupId>-->
+                <!--                    <artifactId>native-maven-plugin</artifactId>-->
+                <!--                </plugin>-->
+
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>${maven-compiler-plugin.version}</version>
                     <configuration>
                         <source>${java.version}</source>
                         <target>${java.version}</target>
@@ -78,7 +78,6 @@
                                 <artifactId>lombok</artifactId>
                                 <version>${lombok.version}</version>
                             </path>
-
                             <!-- MapStruct 注解处理器路径 -->
                             <path>
                                 <groupId>org.mapstruct</groupId>
@@ -92,5 +91,6 @@
             </plugins>
         </pluginManagement>
     </build>
+
 
 </project>

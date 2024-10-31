@@ -4,7 +4,8 @@ package com.ji.jichat.client.client;
 import com.ji.jichat.chat.api.dto.Message;
 import com.ji.jichat.chat.api.vo.UserChatServerVO;
 import com.ji.jichat.user.api.vo.AuthLoginVO;
-import io.swagger.annotations.ApiModelProperty;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -34,16 +35,16 @@ public class ClientInfo {
     private String version;
 
 
-    @ApiModelProperty(value = "设备标识", required = true, example = "jpOKnf5vGaW9IcitjEPrUGINjDSSEvXd")
+    @Schema(description =  "设备标识",  requiredMode = Schema.RequiredMode.REQUIRED, example = "jpOKnf5vGaW9IcitjEPrUGINjDSSEvXd")
     private String deviceIdentifier;
 
-    @ApiModelProperty(value = "设备名称", required = true, example = "iPhoneX")
+    @Schema(description =  "设备名称",  requiredMode = Schema.RequiredMode.REQUIRED, example = "iPhoneX")
     private String deviceName;
 
-    @ApiModelProperty(value = "设备类型 1手机 2电脑 3平板", required = true, example = "1")
+    @Schema(description =  "设备类型 1手机 2电脑 3平板",  requiredMode = Schema.RequiredMode.REQUIRED, example = "1")
     private Integer deviceType;
 
-    @ApiModelProperty(value = "操作系统类型 101安卓，102iOS,201 Windows，202 Linux，301 iPad,302 安卓平板 ", required = true, example = "102")
+    @Schema(description =  "操作系统类型 101安卓，102iOS,201 Windows，202 Linux，301 iPad,302 安卓平板 ",  requiredMode = Schema.RequiredMode.REQUIRED, example = "102")
     private Integer osType;
 
 

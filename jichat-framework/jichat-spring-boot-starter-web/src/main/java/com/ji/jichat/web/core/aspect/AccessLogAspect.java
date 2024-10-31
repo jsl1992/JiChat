@@ -1,9 +1,11 @@
 package com.ji.jichat.web.core.aspect;
 
+import cn.hutool.extra.servlet.JakartaServletUtil;
 import cn.hutool.extra.servlet.ServletUtil;
 import com.alibaba.fastjson.JSON;
 import com.ji.jichat.web.util.CommonWebUtil;
 import com.ji.jichat.web.util.HttpContextUtil;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.JoinPoint;
@@ -15,7 +17,6 @@ import org.springframework.core.annotation.Order;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 
 /**
@@ -41,7 +42,7 @@ public class AccessLogAspect {
     public void before(JoinPoint join) {
         HttpServletRequest request = HttpContextUtil.getHttpServletRequest();
         final String paramStr = isJsonRequest(request) ? JSON.toJSONString(join.getArgs()) : Arrays.toString(join.getArgs());
-        log.info("请求路径:[{}],请求IP:[{}],参数:{}", request.getRequestURL().toString(), ServletUtil.getClientIP(request), paramStr);
+        log.info("请求路径:[{}],请求IP:[{}],参数:{}", request.getRequestURL().toString(), JakartaServletUtil.getClientIP(request), paramStr);
     }
 
     @AfterReturning(pointcut = "point()")

@@ -6,7 +6,8 @@ import com.alibaba.fastjson.annotation.JSONField;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ji.jichat.common.enums.ErrorCodeEnum;
 import com.ji.jichat.common.exception.ServiceException;
-import io.swagger.annotations.ApiModelProperty;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -89,7 +90,7 @@ public class CommonResult<T> implements Serializable {
     }
 
     @JSONField(serialize = false) // 避免序列化
-    @ApiModelProperty(hidden = true)
+    @Schema(hidden = true)
     @JsonIgnore //spirngboot默认使用Jackson json
     public T getCheckedData() {
         checkError();

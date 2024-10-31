@@ -1,14 +1,13 @@
 package com.ji.jichat.client.dto;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * <p>
@@ -22,18 +21,18 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@ApiModel(value = "EncryptDTO")
+@Schema(description = "EncryptDTO")
 public class EncryptDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty("密钥")
+    @Schema(description = "密钥")
     private String secretKey;
 
-    @ApiModelProperty("加密算法版本")
+    @Schema(description = "加密算法版本")
     private String encryptVersion;
 
-    @ApiModelProperty("错误信息")
+    @Schema(description = "错误信息")
     private String errorMessage;
 
 

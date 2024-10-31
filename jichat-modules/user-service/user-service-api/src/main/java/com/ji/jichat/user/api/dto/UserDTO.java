@@ -2,8 +2,8 @@ package com.ji.jichat.user.api.dto;
 
 import java.io.Serializable;
 import java.util.Date;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,39 +21,39 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@ApiModel(value = "UserDTO", description = "用户表DTO")
+@Schema(description = "用户表DTO")
 public class UserDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty("id主键")
+    @Schema( description = "id主键")
     private Long id;
 
-    @ApiModelProperty("用户名")
+    @Schema( description = "用户名")
     private String username;
 
-    @ApiModelProperty("密码")
+    @Schema( description = "密码")
     private String password;
 
-    @ApiModelProperty("用户昵称")
+    @Schema( description = "用户昵称")
     private String nickname;
 
-    @ApiModelProperty("手机号")
+    @Schema( description = "手机号")
     private String mobile;
 
-    @ApiModelProperty("帐号状态（0停用 1正常）")
+    @Schema( description = "帐号状态（0停用 1正常）")
     private Integer status;
 
-    @ApiModelProperty("在线状态（0离线 1在线）")
+    @Schema( description = "在线状态（0离线 1在线）")
     private Integer onlineStatus;
 
-    @ApiModelProperty("最后登录IP")
+    @Schema( description = "最后登录IP")
     private String loginIp;
 
-    @ApiModelProperty("最后登录时间")
+    @Schema( description = "最后登录时间")
     private Date loginDate;
 
-    @ApiModelProperty("是否删除(0存在 null删除,解决唯一索引冲突)")
+    @Schema( description = "是否删除(0存在 null删除,解决唯一索引冲突)")
     private Integer delFlag;
 
 

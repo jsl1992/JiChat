@@ -42,7 +42,6 @@ public class SecurityAutoConfiguration implements WebMvcConfigurer {
                 .excludePathPatterns(properties.getIgnorePaths())
                 .excludePathPatterns(properties.getDefaultIgnorePaths());
         log.info("[addInterceptors][加载 AdminSecurityInterceptor 拦截器完成]");
-
     }
 
 }

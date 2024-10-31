@@ -6,11 +6,12 @@ import com.ji.jichat.user.api.DeviceRpc;
 import com.ji.jichat.user.api.vo.DeviceVO;
 import com.ji.jichat.user.convert.DeviceConvert;
 import com.ji.jichat.user.service.IDeviceService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import java.util.List;
 
 /**
@@ -23,6 +24,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/device")
+@Tag(name = "DeviceController")
 public class DeviceController implements DeviceRpc {
 
     @Resource

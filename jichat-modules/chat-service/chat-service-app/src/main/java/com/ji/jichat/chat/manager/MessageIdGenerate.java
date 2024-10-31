@@ -5,7 +5,7 @@ import com.ji.jichat.common.util.MessageIdUtil;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 
 /**
  * @author jisl on 2024/1/20 13:51

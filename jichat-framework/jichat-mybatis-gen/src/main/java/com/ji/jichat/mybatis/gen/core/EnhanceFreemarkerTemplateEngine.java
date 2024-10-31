@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.generator.config.ConstVal;
 import com.baomidou.mybatisplus.generator.config.OutputFile;
 import com.baomidou.mybatisplus.generator.config.po.TableInfo;
 import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.Map;
@@ -19,7 +18,7 @@ public final class EnhanceFreemarkerTemplateEngine extends FreemarkerTemplateEng
 
 
     @Override
-    protected void outputCustomFile(@NotNull Map<String, String> customFile, @NotNull TableInfo tableInfo, @NotNull Map<String, Object> objectMap) {
+    protected void outputCustomFile(Map<String, String> customFile, TableInfo tableInfo, Map<String, Object> objectMap) {
         final Map aPackage = (Map) objectMap.get("package");
         String parentPackage = (String) aPackage.get("Parent");
         String entityName = tableInfo.getEntityName();

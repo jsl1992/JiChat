@@ -6,8 +6,7 @@ import ${pkg};
     </#if>
 </#list>
 <#if swagger>
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+
 </#if>
 <#if entityLombokModel>
 import lombok.AllArgsConstructor;
@@ -40,7 +39,7 @@ import lombok.experimental.Accessors;
 <#--@TableName("${schemaName}${table.name}")-->
 </#if>
 <#if swagger>
-@ApiModel(value = "${entity}VO", description = "${table.comment!}VO")
+@Schema(description = "${entity}VO", description = "${table.comment!}VO")
 </#if>
 <#--<#if superEntityClass??>-->
 <#--public class ${entity} extends ${superEntityClass}<#if activeRecord><${entity}></#if> {-->
@@ -63,7 +62,7 @@ public class ${entity} {
 
     <#if field.comment!?length gt 0>
         <#if swagger>
-    @ApiModelProperty("${field.comment}")
+    @Schema("${field.comment}")
         <#else>
     /**
      * ${field.comment}

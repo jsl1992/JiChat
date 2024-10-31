@@ -1,7 +1,7 @@
 package com.ji.jichat.user.api.dto;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,22 +21,22 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@ApiModel(value = "ChatServerInfoDTO", description = "聊天服务器信息表DTO")
+@Schema( description = "聊天服务器信息表DTO")
 public class ChatServerInfoDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
 
-    @ApiModelProperty(value = "外网IP", required = true, example = "192.168.137.179")
+    @Schema(description =  "外网IP", required = true, example = "192.168.137.179")
     private String outsideIp;
 
-    @ApiModelProperty(value = "httpIp", required = true, example = "192.168.137.179")
+    @Schema(description =  "httpIp", required = true, example = "192.168.137.179")
     private String innerIp;
 
-    @ApiModelProperty(value = "http端口", required = true, example ="18080")
+    @Schema(description =  "http端口", required = true, example ="18080")
     private Integer httpPort;
 
-    @ApiModelProperty(value = "tcp端口", required = true, example ="7066")
+    @Schema(description =  "tcp端口", required = true, example ="7066")
     private Integer tcpPort;
 
 
