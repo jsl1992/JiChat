@@ -1,7 +1,7 @@
 spring:
   # 数据源配置项
   datasource:
-    url: jdbc:mysql://192.168.137.179:3306/ji_chat?useSSL=false&useUnicode=true&characterEncoding=UTF-8&serverTimezone=CTT
+    url: jdbc:mysql://192.168.137.179:3306/ji_chat?useSSL=false&useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
     driver-class-name: com.mysql.jdbc.Driver
     username: root
     password: aB37z.9
