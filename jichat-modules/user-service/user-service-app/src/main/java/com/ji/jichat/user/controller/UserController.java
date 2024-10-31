@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping("/user")
-@Tag(name = "UserController")
+@Tag(name = "用户管理接口")
 public class UserController implements UserRpc {
 
     @Resource

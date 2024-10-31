@@ -27,3 +27,5 @@ spring:
       port: 6379
       password: aB37z.9
 
+outside-ip: 192.168.203.1
+inner-ip: 192.168.203.1

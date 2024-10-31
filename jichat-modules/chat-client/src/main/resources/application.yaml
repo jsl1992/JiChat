@@ -5,6 +5,8 @@ spring:
     name: chat-client
   profiles:
     active: dev
+  main:
+    allow-circular-references: true
 
 
 
