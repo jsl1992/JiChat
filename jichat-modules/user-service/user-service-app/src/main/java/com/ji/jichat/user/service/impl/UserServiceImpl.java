@@ -2,7 +2,6 @@ package com.ji.jichat.user.service.impl;
 
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.crypto.digest.BCrypt;
-import cn.hutool.extra.servlet.ServletUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ji.jichat.common.constants.CacheConstant;
@@ -20,7 +19,6 @@ import com.ji.jichat.user.entity.User;
 import com.ji.jichat.user.mapper.UserMapper;
 import com.ji.jichat.user.service.IDeviceService;
 import com.ji.jichat.user.service.IUserService;
-import com.ji.jichat.web.util.HttpContextUtil;
 import jakarta.annotation.Resource;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -74,8 +72,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         //        使用loginkey 这样登录用户不容易被猜到和伪造
         final String loginKey = IdUtil.simpleUUID();
         final Date accessTokenExpirationTime = JwtUtil.getAccessTokenExpirationTime();
-        final String accessToken = JwtUtil.generateAccessToken(loginKey);
-        final String refreshToken = JwtUtil.generateRefreshToken(loginKey);
+        final String accessToken = JwtUtil.createAccessToken(loginKey);
+        final String refreshToken = JwtUtil.createRefreshToken(loginKey);
         final AuthLoginVO authLoginVO = AuthLoginVO.builder()
                 .userId(user.getId()).accessToken(accessToken).refreshToken(refreshToken)
                 .expiresTime(accessTokenExpirationTime)

@@ -67,7 +67,7 @@
         <netty.version>4.1.68.Final</netty.version>
         <junit.version>5.8.2</junit.version>
         <jacoco.version>0.8.7</jacoco.version>
-        <jwt.version>0.9.1</jwt.version>
+        <jwt.version>0.12.3</jwt.version>
     </properties>
 
     <!-- 依赖管理 -->

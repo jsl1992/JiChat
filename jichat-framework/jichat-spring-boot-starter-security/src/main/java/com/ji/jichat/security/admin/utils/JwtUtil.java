@@ -6,8 +6,10 @@ import com.ji.jichat.common.exception.ServiceException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.security.SecureDigestAlgorithm;
 
+import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
@@ -21,8 +23,8 @@ public class JwtUtil {
     private static final long ACCESS_TOKEN_EXPIRATION_TIME = TimeUnit.DAYS.toMillis(7);
     private static final long REFRESH_TOKEN_EXPIRATION_TIME = TimeUnit.DAYS.toMillis(8);
 
-    public static String generateAccessToken(String subject) {
-        return generateJwt(subject, getAccessTokenExpirationTime());
+    public static String createAccessToken(String subject) {
+        return createJwt(subject, getAccessTokenExpirationTime());
     }
 
 
@@ -31,20 +33,22 @@ public class JwtUtil {
     }
 
 
-    public static String generateRefreshToken(String subject) {
+    public static String createRefreshToken(String subject) {
         Date expiration = new Date(System.currentTimeMillis() + REFRESH_TOKEN_EXPIRATION_TIME);
-        return generateJwt(subject, expiration);
+        return createJwt(subject, expiration);
     }
 
 
-    public static String generateJwt(String subject, Date expiration) {
+    public static String createJwt(String subject, Date expiration) {
         Date now = new Date();
+        SecureDigestAlgorithm<SecretKey, SecretKey> algorithm = Jwts.SIG.HS256;
+        SecretKey key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
         // 创建JWT并设置Claims
         return Jwts.builder()
-                .setSubject(subject)
-                .setIssuedAt(now)
-                .setExpiration(expiration)
-                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
+                .subject(subject)
+                .issuedAt(now)
+                .expiration(expiration)
+                .signWith(key, algorithm)
                 .compact();
     }
 
@@ -52,10 +56,11 @@ public class JwtUtil {
     public static Claims validateJwt(String token) {
         try {
             // 解析JWT
+            SecretKey key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
             return Jwts.parser()
-                    .setSigningKey(SECRET_KEY)
-                    .parseClaimsJws(token)
-                    .getBody();
+                    .verifyWith(key)
+                    .build()
+                    .parseSignedClaims(token).getPayload();
         } catch (ExpiredJwtException e) {
             throw new ServiceException(ErrorCodeEnum.TOKEN_EXPIRES);
         } catch (Exception e) {
@@ -74,7 +79,7 @@ public class JwtUtil {
 
     public static void main(String[] args) {
         // 示例：创建JWT
-        String jwt = generateAccessToken(IdUtil.fastSimpleUUID());
+        String jwt = createAccessToken(IdUtil.fastSimpleUUID());
         System.out.println("Generated JWT: " + jwt);
 
         // 示例：验证JWT

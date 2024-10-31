@@ -1,10 +1,10 @@
 spring:
   # 数据源配置项
   datasource:
-    url: jdbc:mysql://192.168.137.179:3306/ji_chat_user?useSSL=false&useUnicode=true&characterEncoding=UTF-8&serverTimezone=CTT
+    url: jdbc:mysql://192.168.137.179:3306/ji_chat?useSSL=false&useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
     driver-class-name: com.mysql.jdbc.Driver
     username: root
-    password: root
+    password: aB37z.9
 
   cloud:
     nacos:
@@ -18,14 +18,12 @@ spring:
   rabbitmq:
     host: 192.168.137.179
     port: 5672
-    username: dream
-    password: 123456
+    username: admin
+    password: aB37z.9
 
-  redis:
-    host: 192.168.137.179
-    port: 6379
-    password: 123456
+  data:
+    redis:
+      host: 192.168.137.179
+      port: 6379
+      password: aB37z.9
 
-
-outside-ip: 192.168.137.179
-inner-ip: 192.168.137.179
