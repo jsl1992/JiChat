@@ -1,7 +1,7 @@
 package com.ji.jichat.client.netty.protocol;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
+
+import com.alibaba.fastjson2.JSON;
 import com.ji.jichat.chat.api.dto.ChatSendReturnMessage;
 import com.ji.jichat.chat.api.dto.Message;
 import com.ji.jichat.chat.api.enums.CommandCodeEnum;

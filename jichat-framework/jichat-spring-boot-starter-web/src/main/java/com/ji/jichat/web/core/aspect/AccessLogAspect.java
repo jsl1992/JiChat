@@ -1,8 +1,7 @@
 package com.ji.jichat.web.core.aspect;
 
 import cn.hutool.extra.servlet.JakartaServletUtil;
-import cn.hutool.extra.servlet.ServletUtil;
-import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson2.JSON;
 import com.ji.jichat.web.util.CommonWebUtil;
 import com.ji.jichat.web.util.HttpContextUtil;
 import jakarta.servlet.http.HttpServletRequest;

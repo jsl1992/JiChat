@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface UserRpc {
 
 
-    @Operation(summary = "获取登录用户")
+    @Operation(summary = "getLoginUserByLoginKey")
     @GetMapping(value = "/getLoginUserByLoginKey")
     CommonResult<LoginUser> getLoginUserByLoginKey(@RequestParam String loginKey);
 

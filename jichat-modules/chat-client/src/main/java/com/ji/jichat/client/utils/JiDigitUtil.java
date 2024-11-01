@@ -1,7 +1,8 @@
 package com.ji.jichat.client.utils;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.serializer.SerializerFeature;
+
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONWriter;
 
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
@@ -79,7 +80,7 @@ public class JiDigitUtil {
     }
 
     public static String getBodyDataStr(Map<String, Object> data) {
-        String jsonString = JSON.toJSONString(data, SerializerFeature.MapSortField);
+        String jsonString = JSON.toJSONString(data, JSONWriter.Feature.SortMapEntriesByKeys);
         System.out.println("待加密数据:" + jsonString);
         return jsonString;
     }

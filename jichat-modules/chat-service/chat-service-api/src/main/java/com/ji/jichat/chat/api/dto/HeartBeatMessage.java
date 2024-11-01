@@ -1,12 +1,14 @@
 package com.ji.jichat.chat.api.dto;
 
-import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson2.JSON;
 import com.ji.jichat.chat.api.enums.CommandCodeEnum;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * @author jisl on 2024/2/1 9:42
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 public class HeartBeatMessage extends Message {
 
@@ -28,6 +30,6 @@ public class HeartBeatMessage extends Message {
         heartBeatMessage.setContent("123");
         HeartBeatMessage.encode(heartBeatMessage);
         final Message decode = HeartBeatMessage.decode(heartBeatMessage);
-        System.out.println("HeartBeatMessage.decode(heartBeatMessage)"+JSON.toJSONString(decode));
+        System.out.println("HeartBeatMessage.decode(heartBeatMessage)" + JSON.toJSONString(decode));
     }
 }

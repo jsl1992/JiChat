@@ -1,7 +1,7 @@
 package com.ji.jichat.chat.service;
 
 
-import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson2.JSON;
 import com.ji.jichat.chat.api.dto.ChatSendMessage;
 import com.ji.jichat.chat.api.dto.ChatSendReturnMessage;
 import com.ji.jichat.chat.api.enums.CommandCodeEnum;

@@ -57,9 +57,9 @@
         <!-- poi相关 -->
         <easyexcel.verion>4.0.3</easyexcel.verion>
         <!-- 工具类相关 -->
-        <fastjson.version>1.2.83</fastjson.version>
+        <fastjson2.version>2.0.52</fastjson2.version>
         <hutool.version>5.8.32</hutool.version>
-        <commons-lang3.version>3.10</commons-lang3.version>
+        <commons-lang3.version>3.17.0</commons-lang3.version>
         <guava.version>27.0.1-jre</guava.version>
         <org.mapstruct.version>1.4.1.Final</org.mapstruct.version>
         <lombok.version>1.18.34</lombok.version>
@@ -247,9 +247,9 @@
                 <version>${commons-lang3.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.alibaba</groupId>
-                <artifactId>fastjson</artifactId>
-                <version>${fastjson.version}</version>
+                <groupId>com.alibaba.fastjson2</groupId>
+                <artifactId>fastjson2</artifactId>
+                <version>${fastjson2.version}</version>
             </dependency>
             <dependency>
                 <groupId>cn.hutool</groupId>
