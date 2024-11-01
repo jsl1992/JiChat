@@ -20,12 +20,6 @@
             <optional>true</optional>
         </dependency>
 
-        <!-- Spring 核心 -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-configuration-processor</artifactId>
-            <optional>true</optional>
-        </dependency>
         <!-- Web 相关 -->
         <dependency>
             <groupId>com.ji.jichat</groupId>
@@ -37,7 +31,6 @@
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt</artifactId>
         </dependency>
-
 
 
     </dependencies>

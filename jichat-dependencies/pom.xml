@@ -27,6 +27,7 @@
         <druid.version>1.2.23</druid.version>
         <mybatis.version>3.5.16</mybatis.version>
         <mybatis-plus.version>3.5.9</mybatis-plus.version>
+        <mybatis-pagehelper.version>1.2.3</mybatis-pagehelper.version>
         <mybatis-plus-generator.version>3.5.2</mybatis-plus-generator.version>
         <velocity-engine-core.version>2.2</velocity-engine-core.version>
         <org.freemarker.version>2.3.28</org.freemarker.version>
@@ -59,8 +60,8 @@
         <!-- 工具类相关 -->
         <fastjson2.version>2.0.52</fastjson2.version>
         <hutool.version>5.8.32</hutool.version>
-        <commons-lang3.version>3.17.0</commons-lang3.version>
-        <guava.version>27.0.1-jre</guava.version>
+        <commons-lang3.version>3.14.0</commons-lang3.version>
+        <guava.version>33.3.1-jre</guava.version>
         <org.mapstruct.version>1.4.1.Final</org.mapstruct.version>
         <lombok.version>1.18.34</lombok.version>
         <shardingsphere.version>4.1.1</shardingsphere.version>
@@ -134,6 +135,11 @@
                 <groupId>com.baomidou</groupId>
                 <artifactId>mybatis-plus-spring-boot3-starter</artifactId>
                 <version>${mybatis-plus.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.pagehelper</groupId>
+                <artifactId>pagehelper-spring-boot-starter</artifactId>
+                <version>${mybatis-pagehelper.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.baomidou</groupId>
