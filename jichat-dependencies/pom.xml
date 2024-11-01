@@ -62,7 +62,7 @@
         <hutool.version>5.8.32</hutool.version>
         <commons-lang3.version>3.14.0</commons-lang3.version>
         <guava.version>33.3.1-jre</guava.version>
-        <org.mapstruct.version>1.4.1.Final</org.mapstruct.version>
+        <org.mapstruct.version>1.5.5.Final</org.mapstruct.version>
         <lombok.version>1.18.34</lombok.version>
         <shardingsphere.version>4.1.1</shardingsphere.version>
         <netty.version>4.1.68.Final</netty.version>
@@ -236,11 +236,7 @@
                 <artifactId>mapstruct</artifactId>
                 <version>${org.mapstruct.version}</version>
             </dependency>
-            <dependency>
-                <groupId>org.mapstruct</groupId>
-                <artifactId>mapstruct-jdk8</artifactId>  <!-- use mapstruct-jdk8 for Java 8 or higher -->
-                <version>${org.mapstruct.version}</version>
-            </dependency>
+            <!--            编译时注解处理器，用于生成映射代码-->
             <dependency>
                 <groupId>org.mapstruct</groupId>
                 <artifactId>mapstruct-processor</artifactId>

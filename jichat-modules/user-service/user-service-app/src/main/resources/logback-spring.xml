@@ -57,6 +57,7 @@
     <logger name="org" level="info"/>
     <!-- netflix-ribbon logger -->
     <logger name="com.netflix" level="INFO"/>
+    <logger name="com.zaxxer" level="INFO"/>
 
     <!--开发环境:打印控制台-->
     <springProfile name="dev">

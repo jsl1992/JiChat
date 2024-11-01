@@ -42,7 +42,6 @@
             <artifactId>jichat-spring-boot-starter-swagger</artifactId>
         </dependency>
 
-
         <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-all</artifactId>

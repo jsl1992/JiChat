@@ -18,20 +18,6 @@
             <artifactId>jichat-common</artifactId>
         </dependency>
 
-        <!-- Web 相关 -->
-        <dependency>
-            <groupId>org.springdoc</groupId> <!-- 接口文档：使用最新版本的 Swagger 模型 -->
-            <artifactId>springdoc-openapi-starter-webmvc-api</artifactId>
-            <scope>provided</scope>
-        </dependency>
-
-        <!-- 参数校验 -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-validation</artifactId>
-            <optional>true</optional>
-        </dependency>
-
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-openfeign</artifactId>
