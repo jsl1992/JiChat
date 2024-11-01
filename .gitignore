@@ -34,3 +34,4 @@ build/
 
 ### Log file ###
 *.log
+.flattened-pom.xml
