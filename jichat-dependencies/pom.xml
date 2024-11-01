@@ -45,7 +45,7 @@
         <!-- poi相关 -->
         <easyexcel.verion>4.0.3</easyexcel.verion>
         <!--        netty-->
-        <netty.version>4.1.68.Final</netty.version>
+        <netty.version>4.1.112.Final</netty.version>
         <!-- 工具类相关 -->
         <fastjson2.version>2.0.52</fastjson2.version>
         <hutool.version>5.8.32</hutool.version>
@@ -56,7 +56,7 @@
         <junit.version>5.8.2</junit.version>
         <jacoco.version>0.8.7</jacoco.version>
         <jwt.version>0.12.3</jwt.version>
-
+        <kaptcha.version>2.3.2</kaptcha.version>
     </properties>
 
     <!-- 依赖管理 -->
@@ -231,6 +231,12 @@
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
                 <version>${lombok.version}</version>
+            </dependency>
+            <!-- 验证码 -->
+            <dependency>
+                <groupId>com.github.penggle</groupId>
+                <artifactId>kaptcha</artifactId>
+                <version>${kaptcha.version}</version>
             </dependency>
 
             <!--netty-->

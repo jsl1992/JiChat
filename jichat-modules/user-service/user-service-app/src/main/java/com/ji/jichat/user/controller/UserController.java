@@ -1,6 +1,9 @@
 package com.ji.jichat.user.controller;
 
 
+import cn.hutool.core.codec.Base64;
+import cn.hutool.core.util.IdUtil;
+import com.google.code.kaptcha.Producer;
 import com.ji.jichat.common.annotions.RequiresNone;
 import com.ji.jichat.common.pojo.CommonResult;
 import com.ji.jichat.security.admin.core.context.UserContext;
@@ -8,13 +11,21 @@ import com.ji.jichat.user.api.UserRpc;
 import com.ji.jichat.user.api.dto.AuthLoginDTO;
 import com.ji.jichat.user.api.dto.UserRegisterDTO;
 import com.ji.jichat.user.api.vo.AuthLoginVO;
+import com.ji.jichat.user.api.vo.CaptchaVO;
 import com.ji.jichat.user.api.vo.LoginUser;
 import com.ji.jichat.user.service.IUserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 
 /**
@@ -33,6 +44,9 @@ public class UserController implements UserRpc {
     @Resource
     private IUserService userService;
 
+    @Autowired
+    private Producer kaptchaProducer;
+
 
     @PostMapping("/register")
     @RequiresNone
@@ -48,6 +62,29 @@ public class UserController implements UserRpc {
     @RequiresNone
     public CommonResult<AuthLoginVO> login(@RequestBody @Valid AuthLoginDTO reqVO) {
         return CommonResult.success(userService.login(reqVO));
+    }
+
+    @GetMapping("/getCaptcha")
+    @RequiresNone
+    public CommonResult<CaptchaVO> getCaptcha() {
+        // 生成验证码文本
+        String captchaText = kaptchaProducer.createText();
+        // 生成验证码图片
+        final int indexOf = captchaText.lastIndexOf("?") + 1;
+        String code = captchaText.substring(indexOf);
+        BufferedImage captchaImage = kaptchaProducer.createImage(captchaText.substring(0, indexOf));
+        String imgBase64;
+        try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+            // Write BufferedImage to ByteArrayOutputStream as PNG
+            ImageIO.write(captchaImage, "png", outputStream);
+            // Convert byte array to Base64 string
+            byte[] imageBytes = outputStream.toByteArray();
+            imgBase64 = Base64.encode(imageBytes);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("验证码生成异常");
+        }
+        return CommonResult.success(CaptchaVO.builder().uuid(IdUtil.fastUUID()).imgBase64(imgBase64).build());
     }
 
     @DeleteMapping("/del")
