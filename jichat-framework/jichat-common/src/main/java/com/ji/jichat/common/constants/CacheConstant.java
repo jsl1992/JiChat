@@ -8,6 +8,8 @@ public class CacheConstant {
 
     public static final String LOGIN_USER = "user:loginUser:";
 
+    public static final String CAPTCHA = "user:captcha:";
+
     public static final String USER_CHAT_SERVER = "user:chatServer";
 
     /**

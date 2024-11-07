@@ -69,4 +69,5 @@ swagger:
   license: MIT License
   licenseUrl: https://opensource.org/license/mit
 
-
+captcha:
+  enable: true    #是否开启验证码

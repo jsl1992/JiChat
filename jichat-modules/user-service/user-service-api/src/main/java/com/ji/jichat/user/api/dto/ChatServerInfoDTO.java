@@ -27,16 +27,16 @@ public class ChatServerInfoDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
 
-    @Schema(description =  "外网IP", required = true, example = "192.168.137.179")
+    @Schema(description =  "外网IP", requiredMode = Schema.RequiredMode.REQUIRED, example = "192.168.137.179")
     private String outsideIp;
 
-    @Schema(description =  "httpIp", required = true, example = "192.168.137.179")
+    @Schema(description =  "httpIp", requiredMode = Schema.RequiredMode.REQUIRED, example = "192.168.137.179")
     private String innerIp;
 
-    @Schema(description =  "http端口", required = true, example ="18080")
+    @Schema(description =  "http端口", requiredMode = Schema.RequiredMode.REQUIRED, example ="18080")
     private Integer httpPort;
 
-    @Schema(description =  "tcp端口", required = true, example ="7066")
+    @Schema(description =  "tcp端口", requiredMode = Schema.RequiredMode.REQUIRED, example ="7066")
     private Integer tcpPort;
 
 

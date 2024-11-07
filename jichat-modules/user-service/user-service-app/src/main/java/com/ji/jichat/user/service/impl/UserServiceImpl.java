@@ -20,9 +20,11 @@ import com.ji.jichat.user.mapper.UserMapper;
 import com.ji.jichat.user.service.IDeviceService;
 import com.ji.jichat.user.service.IUserService;
 import jakarta.annotation.Resource;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 import java.util.Date;
 import java.util.List;
@@ -43,13 +45,26 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     @Resource
     private IDeviceService deviceService;
 
+    @Value("${captcha.enable}")
+    private Boolean captchaEnable;
+
     @Resource
-    private RedisTemplate<String, LoginUser> redisTemplate;
+    private RedisTemplate redisTemplate;
 
 
     @Override
     @Transactional
     public AuthLoginVO login(AuthLoginDTO loginDTO) {
+        if (captchaEnable) {
+            //验证 用户输入的验证码
+            Assert.notNull(loginDTO.getCode(), "验证码不能为空");
+            Assert.notNull(loginDTO.getUuid(), "验证码不能为空");
+            final String key = CacheConstant.CAPTCHA + loginDTO.getUuid();
+            final Integer cacheCode = (Integer) redisTemplate.opsForValue().get(key);
+            Assert.notNull(cacheCode, "验证码已过期");
+            Assert.isTrue(Objects.equals(cacheCode, loginDTO.getCode()), "验证码不正确");
+            redisTemplate.delete(key);
+        }
         final User user = getOne(new LambdaQueryWrapper<User>().eq(User::getUsername, loginDTO.getUsername()));
         if (Objects.isNull(user)) {
             throw new ServiceException("账户名或者密码错误");
@@ -100,7 +115,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         if (Objects.isNull(loginKey)) {
             throw new ServiceException("无效的刷新令牌");
         }
-        LoginUser loginUser = redisTemplate.opsForValue().get(CacheConstant.LOGIN_USER + loginKey);
+        LoginUser loginUser = (LoginUser) redisTemplate.opsForValue().get(CacheConstant.LOGIN_USER + loginKey);
         if (Objects.isNull(loginUser)) {
             throw new ServiceException("无效的刷新令牌");
         }
@@ -130,7 +145,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
     @Override
     public LoginUser getLoginUserByLoginKey(String loginKey) {
-        return redisTemplate.opsForValue().get(CacheConstant.LOGIN_USER + loginKey);
+        return (LoginUser) redisTemplate.opsForValue().get(CacheConstant.LOGIN_USER + loginKey);
     }
 
     @Override

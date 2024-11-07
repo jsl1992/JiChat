@@ -5,6 +5,7 @@ import cn.hutool.core.codec.Base64;
 import cn.hutool.core.util.IdUtil;
 import com.google.code.kaptcha.Producer;
 import com.ji.jichat.common.annotions.RequiresNone;
+import com.ji.jichat.common.constants.CacheConstant;
 import com.ji.jichat.common.pojo.CommonResult;
 import com.ji.jichat.security.admin.core.context.UserContext;
 import com.ji.jichat.user.api.UserRpc;
@@ -17,15 +18,15 @@ import com.ji.jichat.user.service.IUserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -47,6 +48,8 @@ public class UserController implements UserRpc {
     @Autowired
     private Producer kaptchaProducer;
 
+    @Resource
+    private RedisTemplate redisTemplate;
 
     @PostMapping("/register")
     @RequiresNone
@@ -71,20 +74,22 @@ public class UserController implements UserRpc {
         String captchaText = kaptchaProducer.createText();
         // 生成验证码图片
         final int indexOf = captchaText.lastIndexOf("?") + 1;
-        String code = captchaText.substring(indexOf);
+        String codeStr = captchaText.substring(indexOf);
+        final CaptchaVO captchaVO = CaptchaVO.builder().uuid(IdUtil.simpleUUID()).build();
+        redisTemplate.opsForValue().set(CacheConstant.CAPTCHA + captchaVO.getUuid(), Integer.valueOf(codeStr), 30, TimeUnit.MINUTES);
         BufferedImage captchaImage = kaptchaProducer.createImage(captchaText.substring(0, indexOf));
-        String imgBase64;
         try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
             // Write BufferedImage to ByteArrayOutputStream as PNG
             ImageIO.write(captchaImage, "png", outputStream);
             // Convert byte array to Base64 string
             byte[] imageBytes = outputStream.toByteArray();
-            imgBase64 = Base64.encode(imageBytes);
+            String imgBase64 = Base64.encode(imageBytes);
+            captchaVO.setImgBase64(imgBase64);
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException("验证码生成异常");
         }
-        return CommonResult.success(CaptchaVO.builder().uuid(IdUtil.fastUUID()).imgBase64(imgBase64).build());
+        return CommonResult.success(captchaVO);
     }
 
     @DeleteMapping("/del")
@@ -105,7 +110,7 @@ public class UserController implements UserRpc {
     @PostMapping("/refresh-token")
     @Operation(summary = "刷新令牌")
     @RequiresNone
-//    @ApiImplicitParam(name = "refreshToken", value = "刷新令牌", required = true, dataTypeClass = String.class)
+//    @ApiImplicitParam(name = "refreshToken", value = "刷新令牌", requiredMode = Schema.RequiredMode.REQUIRED, dataTypeClass = String.class)
     public CommonResult<AuthLoginVO> refreshToken(@RequestParam("refreshToken") String refreshToken) {
         return CommonResult.success(userService.refreshToken(refreshToken));
     }
