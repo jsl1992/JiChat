@@ -1,12 +1,18 @@
 package ${package.Parent}.api.dto;
 
 <#list table.importPackages as pkg>
-    <#if pkg != "com.baomidou.mybatisplus.annotation.TableName" && pkg != "com.ji.jichat.mybatis.core.dataobject.BaseDO">
+    <#if pkg != "com.baomidou.mybatisplus.annotation.TableName"
+    && pkg != "com.baomidou.mybatisplus.annotation.IdType"
+    && pkg != "com.baomidou.mybatisplus.annotation.TableId"
+    && pkg != "com.ji.jichat.mybatis.core.dataobject.BaseDO">
 import ${pkg};
     </#if>
 </#list>
+import java.io.Serial;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 <#if swagger>
-
+import io.swagger.v3.oas.annotations.media.Schema;
 </#if>
 <#if entityLombokModel>
 import lombok.AllArgsConstructor;
@@ -39,7 +45,7 @@ import lombok.experimental.Accessors;
 <#--@TableName("${schemaName}${table.name}")-->
 </#if>
 <#if swagger>
-@Schema(description = "${entity}DTO", description = "${table.comment!}DTO")
+@Schema(description = "${table.comment!}DTO")
 </#if>
 <#--<#if superEntityClass??>-->
 <#--public class ${entity} extends ${superEntityClass}<#if activeRecord><${entity}></#if> {-->
@@ -51,7 +57,7 @@ public class ${entity}DTO implements Serializable {
 public class ${entity} {
 </#if>
 <#if entitySerialVersionUID>
-
+    @Serial
     private static final long serialVersionUID = 1L;
 </#if>
 <#-- ----------  BEGIN 字段循环遍历  ---------->
@@ -62,7 +68,7 @@ public class ${entity} {
 
     <#if field.comment!?length gt 0>
         <#if swagger>
-    @Schema("${field.comment}")
+    @Schema(description = "${field.comment}", requiredMode = Schema.RequiredMode.REQUIRED)
         <#else>
     /**
      * ${field.comment}
@@ -72,9 +78,7 @@ public class ${entity} {
     <#if field.keyFlag>
         <#-- 主键 -->
         <#if field.keyIdentityFlag>
-    @TableId(value = "${field.annotationColumnName}", type = IdType.AUTO)
         <#elseif idType??>
-    @TableId(value = "${field.annotationColumnName}", type = IdType.${idType})
         <#elseif field.convert>
     @TableId("${field.annotationColumnName}")
         </#if>
@@ -96,6 +100,11 @@ public class ${entity} {
     <#-- 逻辑删除注解 -->
     <#if field.logicDeleteField>
     @TableLogic
+    </#if>
+    <#if field.propertyType=='String'>
+    @NotBlank
+    <#else>
+    @NotNull
     </#if>
     private ${field.propertyType} ${field.propertyName};
 </#list>

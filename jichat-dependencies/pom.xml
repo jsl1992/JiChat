@@ -27,7 +27,7 @@
         <mybatis.version>3.5.16</mybatis.version>
         <mybatis-plus.version>3.5.9</mybatis-plus.version>
         <mybatis-pagehelper.version>1.2.3</mybatis-pagehelper.version>
-        <mybatis-plus-generator.version>3.5.2</mybatis-plus-generator.version>
+        <mybatis-plus-generator.version>3.5.9</mybatis-plus-generator.version>
         <velocity-engine-core.version>2.2</velocity-engine-core.version>
         <org.freemarker.version>2.3.28</org.freemarker.version>
         <redisson.version>3.36.0</redisson.version>
