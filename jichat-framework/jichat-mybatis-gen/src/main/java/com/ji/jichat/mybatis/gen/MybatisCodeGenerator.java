@@ -22,18 +22,18 @@ public class MybatisCodeGenerator {
 
     //示例值
     //作者
-    private static final String author = "jisl";
+    private static final String AUTHOR = "jisl";
 
     //数据库
-    private static final String url = "jdbc:mysql://192.168.137.179:3306/ji_chat?useSSL=false&useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai";
-    private static final String userName = "root";
-    private static final String password = "aB37z.9";
+    private static final String URL = "jdbc:mysql://192.168.137.179:3306/ji_chat?useSSL=false&useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai";
+    private static final String USER_NAME = "root";
+    private static final String PASSWORD = "aB37z.9";
     //需要生成的表(多张表用","分隔,例如:"t_user,t_role")
-    private static final String tableNames = "system_sms_code";
+    private static final String TABLE_NAMES = "system_sms_code";
     //模块地址
-    private static final String module_path = "/jichat-modules/user-service/user-service-app";
+    private static final String MODULE_PATH = "/jichat-modules/user-service/user-service-app";
     //包名
-    private static final String package_name = "com.ji.jichat.user";
+    private static final String PACKAGE_NAME = "com.ji.jichat.user";
 
     /**
      * 代码生成
@@ -113,7 +113,7 @@ public class MybatisCodeGenerator {
 
 
     public static void main(String[] args) {
-        MybatisCodeGenerator.generator(url, userName, password, author, module_path, package_name, tableNames);
+        MybatisCodeGenerator.generator(URL, USER_NAME, PASSWORD, AUTHOR, MODULE_PATH, PACKAGE_NAME, TABLE_NAMES);
     }
 
 
