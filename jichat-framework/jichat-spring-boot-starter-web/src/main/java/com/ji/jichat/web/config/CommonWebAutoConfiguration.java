@@ -1,15 +1,20 @@
 package com.ji.jichat.web.config;
 
 
+import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.ji.jichat.web.core.aspect.AccessLogAspect;
 import com.ji.jichat.web.core.handler.GlobalExceptionHandler;
 import com.ji.jichat.web.core.handler.GlobalResponseBodyHandler;
 import com.ji.jichat.web.core.interceptor.FeignRequestInterceptor;
 import com.ji.jichat.web.core.interceptor.TraceSpanInterceptor;
+import com.ji.jichat.web.jackson.CustomDateDeserializer;
+import com.ji.jichat.web.jackson.CustomDateSerializer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
+import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
@@ -18,6 +23,8 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import java.util.Date;
 
 /**
  * web全局配置
@@ -96,22 +103,26 @@ public class CommonWebAutoConfiguration implements WebMvcConfigurer {
         return new CorsFilter(source);
     }
 
-    // ========== MessageConverter 相关 ==========
 
-//    @Override
-//    public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
-//        // 创建 FastJsonHttpMessageConverter 对象
-//        FastJsonHttpMessageConverter fastJsonHttpMessageConverter = new FastJsonHttpMessageConverter();
-//        // 自定义 FastJson 配置
-//        FastJsonConfig fastJsonConfig = new FastJsonConfig();
-//        fastJsonConfig.setCharset(Charset.defaultCharset()); // 设置字符集
-//        fastJsonConfig.setSerializerFeatures(SerializerFeature.DisableCircularReferenceDetect, // 剔除循环引用
-//                SerializerFeature.WriteNonStringKeyAsString); // 解决 Integer 作为 Key 时，转换为 String 类型，避免浏览器报错
-//        fastJsonHttpMessageConverter.setFastJsonConfig(fastJsonConfig);
-//        // 设置支持的 MediaType
-//        fastJsonHttpMessageConverter.setSupportedMediaTypes(Collections.singletonList(MediaType.APPLICATION_JSON));
-//        // 添加到 converters 中
-//        converters.add(0, fastJsonHttpMessageConverter); // 注意，添加到最开头，放在 MappingJackson2XmlHttpMessageConverter 前面
-//    }
+    /**
+     * Jackson全局转化long类型为String，解决jackson序列化时long类型缺失精度问题 * @return Jackson2ObjectMapperBuilderCustomizer 注入的对象
+     */
+    @Bean
+    public Jackson2ObjectMapperBuilderCustomizer jackson2ObjectMapperBuilderCustomizer() {
+
+        return builder -> {
+            // 配置Long类型转换为字符串
+            builder.serializerByType(Long.class, ToStringSerializer.instance);
+//            builder.serializerByType(Long.TYPE, ToStringSerializer.instance);
+
+            // 创建SimpleModule并注册自定义序列化器和反序列化器
+            SimpleModule module = new SimpleModule();
+            module.addSerializer(Date.class, new CustomDateSerializer());
+            module.addDeserializer(Date.class, new CustomDateDeserializer());
+
+            // 注册模块
+            builder.modules(module);
+        };
+    }
 
 }

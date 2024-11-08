@@ -20,8 +20,10 @@ public class JwtUtil {
     private static final String SECRET_KEY = "ABHSAZ80FhXYkINnOmmLmGeWEn0ZSiOIT26mansb8vGSS59HFjoN4B354VMAyCRC";
 
     // JWT过期时间，这里设置为7天
-    private static final long ACCESS_TOKEN_EXPIRATION_TIME = TimeUnit.DAYS.toMillis(7);
-    private static final long REFRESH_TOKEN_EXPIRATION_TIME = TimeUnit.DAYS.toMillis(8);
+    public static final long ACCESS_TOKEN_EXPIRATION_DAY = 1000;
+
+    private static final long ACCESS_TOKEN_EXPIRATION_TIME = TimeUnit.DAYS.toMillis(ACCESS_TOKEN_EXPIRATION_DAY);
+    private static final long REFRESH_TOKEN_EXPIRATION_TIME = TimeUnit.DAYS.toMillis(ACCESS_TOKEN_EXPIRATION_DAY + 1);
 
     public static String createAccessToken(String subject) {
         return createJwt(subject, getAccessTokenExpirationTime());

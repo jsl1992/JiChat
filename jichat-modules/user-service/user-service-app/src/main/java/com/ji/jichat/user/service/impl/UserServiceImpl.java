@@ -104,7 +104,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
                 .deviceType(deviceType).loginKey(loginKey)
                 .build();
 //        用户缓存比accessToken长一点，这样不至于请求刷新token的时候没有了。
-        redisTemplate.opsForValue().set(CacheConstant.LOGIN_USER + loginKey, loginUser, 8, TimeUnit.DAYS);
+        redisTemplate.opsForValue().set(CacheConstant.LOGIN_USER + loginKey, loginUser, JwtUtil.ACCESS_TOKEN_EXPIRATION_DAY + 1, TimeUnit.DAYS);
     }
 
 
@@ -123,7 +123,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         final User user = getById(loginUser.getUserId());
         final AuthLoginVO authLoginVO = buildAuthLoginVO(user, loginUser.getDeviceType());
 //        同时将tcp连接的redis时间也刷新
-        redisTemplate.expire(CacheConstant.USER_CHAT_SERVER + loginUser.getUserId() + "_" + loginUser.getDeviceType(), 8, TimeUnit.DAYS);
+        redisTemplate.expire(CacheConstant.USER_CHAT_SERVER + loginUser.getUserId() + "_" + loginUser.getDeviceType(), JwtUtil.ACCESS_TOKEN_EXPIRATION_DAY + 1, TimeUnit.DAYS);
         //新的token创建完毕，将旧的loginKey作废
         redisTemplate.delete(CacheConstant.LOGIN_USER + loginKey);
         return authLoginVO;
