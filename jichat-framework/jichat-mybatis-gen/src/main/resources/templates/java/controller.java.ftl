@@ -94,7 +94,7 @@ public class ${table.controllerName} {
      */
      @Operation(summary ="新增${table.comment}")
      @PostMapping(value = "/add")
-     public CommonResult<Boolean> add(@RequestBody @Validated ${entity}DTO ${table.entityPath}DTO) {
+     public CommonResult<Void> add(@RequestBody @Validated ${entity}DTO ${table.entityPath}DTO) {
         ${table.entityPath}Service.add(${table.entityPath}DTO);
         return CommonResult.success();
      }
@@ -104,7 +104,7 @@ public class ${table.controllerName} {
     */
     @Operation(summary ="修改${table.comment}")
     @PutMapping(value = "/update")
-    public CommonResult<Boolean> update(@RequestBody @Validated ${entity}DTO ${table.entityPath}DTO) {
+    public CommonResult<Void> update(@RequestBody @Validated ${entity}DTO ${table.entityPath}DTO) {
          Assert.notNull(${table.entityPath}DTO.get${keyField.capitalName}(), "${keyField.propertyName}不能为空");
         ${table.entityPath}Service.update(${table.entityPath}DTO);
         return CommonResult.success();
@@ -115,7 +115,7 @@ public class ${table.controllerName} {
     */
     @Operation(summary ="删除${table.comment}")
     @DeleteMapping("/{id}")
-    public CommonResult<Boolean> delete(@PathVariable ${keyField.propertyType} id) {
+    public CommonResult<Void> delete(@PathVariable ${keyField.propertyType} id) {
         ${table.entityPath}Service.delete(id);
         return CommonResult.success();
     }

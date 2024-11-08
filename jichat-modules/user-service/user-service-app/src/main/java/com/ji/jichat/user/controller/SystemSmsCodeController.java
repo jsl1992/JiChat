@@ -71,7 +71,7 @@ public class SystemSmsCodeController {
      */
      @Operation(summary ="新增手机验证码")
      @PostMapping(value = "/add")
-     public CommonResult<Boolean> add(@RequestBody @Validated SystemSmsCodeDTO systemSmsCodeDTO) {
+     public CommonResult<Void> add(@RequestBody @Validated SystemSmsCodeDTO systemSmsCodeDTO) {
         systemSmsCodeService.add(systemSmsCodeDTO);
         return CommonResult.success();
      }
@@ -81,7 +81,7 @@ public class SystemSmsCodeController {
     */
     @Operation(summary ="修改手机验证码")
     @PutMapping(value = "/update")
-    public CommonResult<Boolean> update(@RequestBody @Validated SystemSmsCodeDTO systemSmsCodeDTO) {
+    public CommonResult<Void> update(@RequestBody @Validated SystemSmsCodeDTO systemSmsCodeDTO) {
          Assert.notNull(systemSmsCodeDTO.getId(), "id不能为空");
         systemSmsCodeService.update(systemSmsCodeDTO);
         return CommonResult.success();
@@ -92,7 +92,7 @@ public class SystemSmsCodeController {
     */
     @Operation(summary ="删除手机验证码")
     @DeleteMapping("/{id}")
-    public CommonResult<Boolean> delete(@PathVariable Long id) {
+    public CommonResult<Void> delete(@PathVariable Long id) {
         systemSmsCodeService.delete(id);
         return CommonResult.success();
     }

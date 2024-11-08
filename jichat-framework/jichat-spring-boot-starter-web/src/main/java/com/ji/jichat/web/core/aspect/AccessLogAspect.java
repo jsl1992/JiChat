@@ -32,6 +32,8 @@ public class AccessLogAspect {
 
     public static final Long LONG_TIME = 3000L;
 
+    public static final String GET_LOGIN_USER_METHOD = "com.ji.jichat.user.controller.UserController.getLoginUserByLoginKey";
+
     @Pointcut("execution(* com.ji.jichat..controller..*.*(..))")
     public void point() {
     }
@@ -39,6 +41,11 @@ public class AccessLogAspect {
 
     @Before("point()")
     public void before(JoinPoint join) {
+        // 方法路径
+        String methodName = join.getTarget().getClass().getName() + "." + join.getSignature().getName();
+        if (methodName.equals(GET_LOGIN_USER_METHOD)) {
+            return;
+        }
         HttpServletRequest request = HttpContextUtil.getHttpServletRequest();
         final String paramStr = isJsonRequest(request) ? JSON.toJSONString(join.getArgs()) : Arrays.toString(join.getArgs());
         log.info("请求路径:[{}],请求IP:[{}],参数:{}", request.getRequestURL().toString(), JakartaServletUtil.getClientIP(request), paramStr);

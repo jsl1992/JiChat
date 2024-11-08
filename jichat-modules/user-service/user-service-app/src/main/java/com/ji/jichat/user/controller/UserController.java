@@ -61,7 +61,7 @@ public class UserController implements UserRpc {
 
 
     @PostMapping("/login")
-    @Operation(summary = "使用账号密码登录")
+    @Operation(summary = "登录")
     @RequiresNone
     public CommonResult<AuthLoginVO> login(@RequestBody @Valid AuthLoginDTO reqVO) {
         return CommonResult.success(userService.login(reqVO));
