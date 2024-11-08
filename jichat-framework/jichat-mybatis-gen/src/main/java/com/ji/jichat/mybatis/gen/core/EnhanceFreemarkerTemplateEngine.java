@@ -20,8 +20,9 @@ public final class EnhanceFreemarkerTemplateEngine extends FreemarkerTemplateEng
         String entityName = tableInfo.getEntityName();
         for (CustomFile customFile : customFiles) {
             String rootPath = customFile.getFilePath();
+//            实体类名+DTO/VO 之类拼上名称
             String fileName = String.format(rootPath + File.separator + entityName + "%s", customFile.getFileName());
-            this.outputFile(new File(fileName), objectMap, customFile.getTemplatePath(), true);
+            this.outputFile(new File(fileName), objectMap, customFile.getTemplatePath(), false);
         }
     }
 

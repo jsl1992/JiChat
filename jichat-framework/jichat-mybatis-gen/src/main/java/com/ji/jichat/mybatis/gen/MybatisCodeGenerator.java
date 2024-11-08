@@ -70,18 +70,12 @@ public class MybatisCodeGenerator {
                     ;
 
                 })
-//                .templateConfig(builder -> builder.entity("/templates/java/entity.java")
-//                        .service("/templates/java/service.java")
-//                        .serviceImpl("/templates/java/serviceImpl.java")
-//                        .mapper("/templates/java/mapper.java")
-//                        .xml("/templates/java/mapper.xml")
-//                        .controller("/templates/java/controller.java")
-//                )
+
                 .strategyConfig(builder -> {
                     //t_cnfeenode,t_etcflag,t_ff_node,t_ff_noderelation,t_flagfee,t_station,
                     builder.addInclude(tableNames) // 设置需要生成的表名
                             .addTablePrefix("t_", "c_")
-                            .controllerBuilder().enableRestStyle().enableFileOverride().template("/templates/java/controller.java")
+                            .controllerBuilder().enableRestStyle().template("/templates/java/controller.java").enableFileOverride()
                             .serviceBuilder().serviceTemplate("/templates/java/service.java").serviceImplTemplate("/templates/java/serviceImpl.java").enableFileOverride()
                             .mapperBuilder().mapperTemplate("/templates/java/mapper.java").mapperXmlTemplate("/templates/java/mapper.xml").enableFileOverride()
                             .entityBuilder().superClass(BaseDO.class).enableLombok().enableFileOverride().javaTemplate("/templates/java/entity.java")
@@ -113,6 +107,7 @@ public class MybatisCodeGenerator {
     }
 
     private static String getFilePath(String rootPath, String packageName) {
+//        将项目文件目录，拼上包名（包名转成文件格式）
         return rootPath + "\\src\\main\\java\\" + packageName.replaceAll("\\.", StringPool.BACK_SLASH + File.separator);
     }
 
