@@ -13,7 +13,7 @@ import com.ji.jichat.user.api.vo.SystemSmsCodeVO;
  * 手机验证码 Convert
  *
  * @author jisl
- * @since 2024-11-07
+ * @since 2024-11-08
  */
 @Mapper
 public interface SystemSmsCodeConvert {

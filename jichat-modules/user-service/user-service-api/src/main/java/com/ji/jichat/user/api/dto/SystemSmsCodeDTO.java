@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
  * </p>
  *
  * @author jisl
- * @since 2024-11-07
+ * @since 2024-11-08
  */
 @Builder(toBuilder = true)
 @AllArgsConstructor
@@ -46,15 +46,15 @@ public class SystemSmsCodeDTO implements Serializable {
 
     @Schema(description = "发送场景", requiredMode = Schema.RequiredMode.REQUIRED)
     @NotNull
-    private Byte scene;
+    private Integer scene;
 
     @Schema(description = "今日发送的第几条", requiredMode = Schema.RequiredMode.REQUIRED)
     @NotNull
-    private Byte todayIndex;
+    private Integer todayIndex;
 
     @Schema(description = "是否使用", requiredMode = Schema.RequiredMode.REQUIRED)
     @NotNull
-    private Byte used;
+    private Integer used;
 
     @Schema(description = "使用时间", requiredMode = Schema.RequiredMode.REQUIRED)
     @NotNull
@@ -63,22 +63,6 @@ public class SystemSmsCodeDTO implements Serializable {
     @Schema(description = "使用 IP", requiredMode = Schema.RequiredMode.REQUIRED)
     @NotBlank
     private String usedIp;
-
-    @Schema(description = "创建者", requiredMode = Schema.RequiredMode.REQUIRED)
-    @NotBlank
-    private String creator;
-
-    @Schema(description = "更新者", requiredMode = Schema.RequiredMode.REQUIRED)
-    @NotBlank
-    private String updater;
-
-    @Schema(description = "是否删除", requiredMode = Schema.RequiredMode.REQUIRED)
-    @NotNull
-    private Boolean deleted;
-
-    @Schema(description = "租户编号", requiredMode = Schema.RequiredMode.REQUIRED)
-    @NotNull
-    private Long tenantId;
 
 
 }

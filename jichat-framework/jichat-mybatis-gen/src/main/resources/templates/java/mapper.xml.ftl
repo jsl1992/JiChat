@@ -41,7 +41,7 @@
             <#assign keyField = field>
         </#if>
     </#list>
-    <select id="page" parameterType="${package.Parent}.dto.${entity}PageDTO" resultType="${package.Parent}.vo.${entity}VO">
+    <select id="page" parameterType="${package.Parent}.api.dto.${entity}PageDTO" resultType="${package.Parent}.api.vo.${entity}VO">
         SELECT
     <#list table.fields as field>
         <#if field.propertyName == "createTime1"
@@ -80,7 +80,6 @@
             </if>
          </#if>
             </#list>
-            AND del_flag='0'
         </where>
         ORDER BY ${keyField.annotationColumnName} DESC
     </select>

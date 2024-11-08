@@ -70,4 +70,4 @@ swagger:
   licenseUrl: https://opensource.org/license/mit
 
 captcha:
-  enable: true    #是否开启验证码
+  enable: false    #是否开启验证码

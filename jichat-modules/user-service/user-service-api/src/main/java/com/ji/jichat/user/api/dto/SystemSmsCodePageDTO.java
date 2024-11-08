@@ -1,34 +1,32 @@
-package com.ji.jichat.user.entity;
+package com.ji.jichat.user.api.dto;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.ji.jichat.mybatis.core.dataobject.BaseDO;
+import java.io.Serializable;
 import java.util.Date;
+import java.io.Serial;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
-* <p>
-    * 手机验证码
-    * </p>
-*
-* @author jisl
-* @since 2024-11-08
-*/
-@EqualsAndHashCode(callSuper = true)
+ * <p>
+ * 手机验证码PageDTO
+ * </p>
+ *
+ * @author jisl
+ * @since 2024-11-08
+ */
 @Builder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@ToString(callSuper = true)
-@TableName("system_sms_code")
-@Schema( description = "手机验证码")
-public class SystemSmsCode extends BaseDO {
+@Schema(description = "手机验证码PageDTO")
+public class SystemSmsCodePageDTO implements Serializable {
 
-
+    @Serial
+    private static final long serialVersionUID = 1L;
     @Schema(description = "编号")
-    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
     @Schema(description = "手机号")
@@ -49,11 +47,16 @@ public class SystemSmsCode extends BaseDO {
     @Schema(description = "是否使用")
     private Integer used;
 
-    @Schema(description = "使用时间")
-    private Date usedTime;
+    @Schema(description = "使用时间-开始")
+    private Date usedTimeStart;
+
+
+    @Schema(description = "使用时间-结束")
+    private Date usedTimeEnd;
 
     @Schema(description = "使用 IP")
     private String usedIp;
+
 
 
 }

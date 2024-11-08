@@ -7,6 +7,7 @@ public class MyBatisConstants {
 
 
     public static final String DTO="DTO.java";
+    public static final String PAGE_DTO="PageDTO.java";
     public static final String VO="VO.java";
     public static final String RPC="Rpc.java";
     public static final String CONVERT ="Convert.java";

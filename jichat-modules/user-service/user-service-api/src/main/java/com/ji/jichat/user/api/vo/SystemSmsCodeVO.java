@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
  * </p>
  *
  * @author jisl
- * @since 2024-11-07
+ * @since 2024-11-08
  */
 @Builder(toBuilder = true)
 @AllArgsConstructor
@@ -46,15 +46,15 @@ public class SystemSmsCodeVO implements Serializable {
 
     @Schema(description = "发送场景")
     @NotNull
-    private Byte scene;
+    private Integer scene;
 
     @Schema(description = "今日发送的第几条")
     @NotNull
-    private Byte todayIndex;
+    private Integer todayIndex;
 
     @Schema(description = "是否使用")
     @NotNull
-    private Byte used;
+    private Integer used;
 
     @Schema(description = "使用时间")
     @NotNull
@@ -63,22 +63,6 @@ public class SystemSmsCodeVO implements Serializable {
     @Schema(description = "使用 IP")
     @NotBlank
     private String usedIp;
-
-    @Schema(description = "创建者")
-    @NotBlank
-    private String creator;
-
-    @Schema(description = "更新者")
-    @NotBlank
-    private String updater;
-
-    @Schema(description = "是否删除")
-    @NotNull
-    private Boolean deleted;
-
-    @Schema(description = "租户编号")
-    @NotNull
-    private Long tenantId;
 
 
 }

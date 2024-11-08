@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.generator.FastAutoGenerator;
 import com.baomidou.mybatisplus.generator.config.OutputFile;
 import com.baomidou.mybatisplus.generator.config.builder.CustomFile;
 import com.baomidou.mybatisplus.generator.config.rules.DateType;
+import com.baomidou.mybatisplus.generator.config.rules.DbColumnType;
+import com.baomidou.mybatisplus.generator.config.rules.IColumnType;
 import com.ji.jichat.mybatis.core.dataobject.BaseDO;
 import com.ji.jichat.mybatis.gen.core.EnhanceFreemarkerTemplateEngine;
 import com.ji.jichat.mybatis.gen.core.MyBatisConstants;
@@ -79,19 +81,32 @@ public class MybatisCodeGenerator {
                     //t_cnfeenode,t_etcflag,t_ff_node,t_ff_noderelation,t_flagfee,t_station,
                     builder.addInclude(tableNames) // 设置需要生成的表名
                             .addTablePrefix("t_", "c_")
-//                            .controllerBuilder().enableRestStyle().enableFileOverride().template("/templates/java/controller.java")
-//                            .serviceBuilder().serviceTemplate("/templates/java/service.java").serviceImplTemplate("/templates/java/serviceImpl.java").enableFileOverride()
+                            .controllerBuilder().enableRestStyle().enableFileOverride().template("/templates/java/controller.java")
+                            .serviceBuilder().serviceTemplate("/templates/java/service.java").serviceImplTemplate("/templates/java/serviceImpl.java").enableFileOverride()
                             .mapperBuilder().mapperTemplate("/templates/java/mapper.java").mapperXmlTemplate("/templates/java/mapper.xml").enableFileOverride()
                             .entityBuilder().superClass(BaseDO.class).enableLombok().enableFileOverride().javaTemplate("/templates/java/entity.java")
-                            .addSuperEntityColumns("create_time", "create_user", "update_time", "update_user");
+                            .addSuperEntityColumns("create_time", "create_user", "update_time", "update_user")
+                            .enableRemoveIsPrefix();
                     // 设置过滤表前缀
                 })
                 .injectionConfig(consumer -> {
                     // DTO
                     consumer.customFile(new CustomFile.Builder().fileName(MyBatisConstants.DTO).filePath(getFilePath(apiPath, package_name + ".api.dto")).templatePath("/templates/java/dto.java.ftl").build());
+                    consumer.customFile(new CustomFile.Builder().fileName(MyBatisConstants.PAGE_DTO).filePath(getFilePath(apiPath, package_name + ".api.dto")).templatePath("/templates/java/page-dto.java.ftl").build());
                     consumer.customFile(new CustomFile.Builder().fileName(MyBatisConstants.VO).filePath(getFilePath(apiPath, package_name + ".api.vo")).templatePath("/templates/java/vo.java.ftl").build());
-//                    consumer.customFile(new  CustomFile.Builder().fileName(MyBatisConstants.DTO).filePath("/templates/java/dto.java.ftl").build());
+//                    consumer.customFile(new  CustomFile.Builder().fileName(MyBatisConstants.RPC).filePath("/templates/java/dto.java.ftl").build());
                     consumer.customFile(new CustomFile.Builder().fileName(MyBatisConstants.CONVERT).filePath(getFilePath(appPath, package_name + ".convert")).templatePath("/templates/java/convert.java.ftl").build());
+                })
+                .dataSourceConfig(builder -> {
+                    // 配置 tinyint 转换
+                    builder.typeConvertHandler((globalConfig, typeRegistry, metaInfo) -> {
+                        // 包装类转基本数据类型
+                        IColumnType columnType = typeRegistry.getColumnType(metaInfo);
+                        if (DbColumnType.BYTE.equals(columnType)) {
+                            return DbColumnType.INTEGER;
+                        }
+                        return columnType;
+                    });
                 })
                 .templateEngine(new EnhanceFreemarkerTemplateEngine()) // 使用Freemarker引擎模板(ftl)，默认的是Velocity引擎模板(vm)
                 .execute();

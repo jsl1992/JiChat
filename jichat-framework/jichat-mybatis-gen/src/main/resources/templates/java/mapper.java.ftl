@@ -1,8 +1,8 @@
 package ${package.Mapper};
 
 import ${package.Entity}.${entity};
-import ${package.Parent}.dto.${entity}PageDTO;
-import ${package.Parent}.vo.${entity}VO;
+import ${package.Parent}.api.dto.${entity}PageDTO;
+import ${package.Parent}.api.vo.${entity}VO;
 import java.util.List;
 import ${superMapperClassPackage};
 <#if mapperAnnotation>

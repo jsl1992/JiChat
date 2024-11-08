@@ -2,4 +2,47 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ji.jichat.user.mapper.SystemSmsCodeMapper">
 
+    <select id="page" parameterType="com.ji.jichat.user.api.dto.SystemSmsCodePageDTO" resultType="com.ji.jichat.user.api.vo.SystemSmsCodeVO">
+        SELECT
+        id,
+        mobile,
+        code,
+        create_ip,
+        scene,
+        today_index,
+        used,
+        used_time,
+        used_ip
+        FROM system_sms_code
+        <where>
+            <if test="id != null">
+                AND id= #{id}
+            </if>
+            <if test="mobile != null and mobile != ''">
+                AND mobile LIKE concat('%', #{mobile}, '%')
+            </if>
+            <if test="code != null and code != ''">
+                AND code LIKE concat('%', #{code}, '%')
+            </if>
+            <if test="createIp != null and createIp != ''">
+                AND create_ip LIKE concat('%', #{createIp}, '%')
+            </if>
+            <if test="scene != null">
+                AND scene= #{scene}
+            </if>
+            <if test="todayIndex != null">
+                AND today_index= #{todayIndex}
+            </if>
+            <if test="used != null">
+                AND used= #{used}
+            </if>
+            <if test="usedTimeStart != null and usedTimeEnd != null">
+                AND used_time BETWEEN #{usedTimeStart} AND #{usedTimeEnd}
+            </if>
+            <if test="usedIp != null and usedIp != ''">
+                AND used_ip LIKE concat('%', #{usedIp}, '%')
+            </if>
+        </where>
+        ORDER BY id DESC
+    </select>
 </mapper>
