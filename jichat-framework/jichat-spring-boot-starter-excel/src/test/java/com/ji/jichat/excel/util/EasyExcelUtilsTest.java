@@ -47,7 +47,7 @@ public class EasyExcelUtilsTest {
         // 使用 Files.newInputStream() 读取文件内容
         final InputStream inputStream = Files.newInputStream(path);
         MultipartFile file = new MockMultipartFile("ji", inputStream);
-        final ExcelImportResult<TestDTO> excelImportResult = EasyExcelUtils.readExcel(file, TestDTO.class);
+        final ExcelImportResult excelImportResult = EasyExcelUtils.readExcel(file, TestDTO.class);
         final List<TestDTO> successList = excelImportResult.getSuccessList();
         System.out.println(JSON.toJSONString(successList));
         return successList;
