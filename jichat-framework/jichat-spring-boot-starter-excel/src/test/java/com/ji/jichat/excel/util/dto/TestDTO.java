@@ -26,6 +26,10 @@ import java.util.Date;
 public class TestDTO {
 
 
+    @Schema(description = "id")
+    private Integer id;
+
+
     @Schema(description = "购买方式，1：后台发放、2：自助购买  3:清除发券")
     @ExcelProperty(value = "购买方式", converter = TypeEnumConverter.class)
     @TypeEnumProperty(TestCommonEnum.class)
