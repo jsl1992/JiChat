@@ -1,4 +1,4 @@
-package com.ji.jichat.excel.util;
+package com.ji.jichat.excel.util.dto;
 
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.ji.jichat.excel.util.annotations.KeyValueConverterProperty;
@@ -23,12 +23,12 @@ import java.util.Date;
 @NoArgsConstructor
 @Builder
 @AllArgsConstructor
-public class CouponPurchaseDTO {
+public class TestDTO {
 
 
     @Schema(description = "购买方式，1：后台发放、2：自助购买  3:清除发券")
     @ExcelProperty(value = "购买方式", converter = TypeEnumConverter.class)
-    @TypeEnumProperty(CommonEnum.class)
+    @TypeEnumProperty(TestCommonEnum.class)
     private Integer purchaseType;
 
     @Schema(description = "支付方式:2=支付宝,3=微信")
@@ -43,10 +43,6 @@ public class CouponPurchaseDTO {
     @Schema(description = "购买时间")
     @ExcelProperty("购买时间")
     private Date paymentTime;
-
-    @Schema(description = "单价")
-    @ExcelProperty(value = "单价", converter = MoneyConverter.class)
-    private Integer unitPrice;
 
 
 }

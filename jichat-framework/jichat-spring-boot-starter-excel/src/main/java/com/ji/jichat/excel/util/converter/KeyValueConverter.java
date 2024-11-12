@@ -39,7 +39,7 @@ public class KeyValueConverter implements Converter<Integer> {
         final String value = cellData.getStringValue();
         String converterExp = getConverterExp(excelContentProperty);
         final Object key = convertByExp(value, converterExp, VALUE_TO_KEY);
-        return value.equals(key) ? null : (Integer) key;
+        return value.equals(key) ? null : Integer.valueOf(key.toString());
     }
 
 

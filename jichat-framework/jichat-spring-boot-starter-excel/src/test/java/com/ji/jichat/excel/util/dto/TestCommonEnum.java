@@ -1,26 +1,26 @@
-package com.ji.jichat.excel.util;
+package com.ji.jichat.excel.util.dto;
 
 /**
  * 公用enum
  *
  * @author jishenglong on 2019/11/19 18:42
  **/
-public enum CommonEnum {
+public enum TestCommonEnum {
 
-    DISABLE(0, "禁用"),
-    ENABLE(1, "启用"),
-    DELETE(2, "删除");
+    BACKEND_ISSUANCE(1, "后台发放"),
+    SELF_PURCHASE(2, "自助购买"),
+    CLEAR_VOUCHER(3, "清除发券");
 
     private final Integer code;
     private final String name;
 
-    CommonEnum(Integer code, String name) {
+    TestCommonEnum(Integer code, String name) {
         this.code = code;
         this.name = name;
     }
 
     public static String getName(Integer index) {
-        for (CommonEnum value : CommonEnum.values()) {
+        for (TestCommonEnum value : TestCommonEnum.values()) {
             if (value.getCode().equals(index)) {
                 return value.getName();
             }
@@ -29,7 +29,7 @@ public enum CommonEnum {
     }
 
     public static Integer getCode(String name) {
-        for (CommonEnum value : CommonEnum.values()) {
+        for (TestCommonEnum value : TestCommonEnum.values()) {
             if (value.getName().equals(name)) {
                 return value.getCode();
             }
@@ -37,8 +37,8 @@ public enum CommonEnum {
         return null;
     }
 
-    public static CommonEnum getEnum(Integer index) {
-        for (CommonEnum value : CommonEnum.values()) {
+    public static TestCommonEnum getEnum(Integer index) {
+        for (TestCommonEnum value : TestCommonEnum.values()) {
             if (value.getCode().equals(index)) {
                 return value;
             }
