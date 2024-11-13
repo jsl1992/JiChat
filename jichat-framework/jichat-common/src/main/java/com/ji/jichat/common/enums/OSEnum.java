@@ -38,4 +38,5 @@ public enum OSEnum {
         }
         throw new IllegalArgumentException("Invalid OS code: " + code);
     }
+
 }

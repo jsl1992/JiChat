@@ -23,7 +23,7 @@ import java.util.Date;
 @NoArgsConstructor
 @Builder
 @AllArgsConstructor
-public class TestDTO {
+public class TestImportDTO {
 
 
     @Schema(description = "id")

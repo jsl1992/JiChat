@@ -3,6 +3,9 @@ package com.ji.jichat.user.api.dto;
 import java.io.Serializable;
 import java.util.Date;
 import java.io.Serial;
+
+import com.ji.jichat.common.validation.InEnum;
+import com.ji.jichat.user.api.enums.SmsSceneEnum;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -46,6 +49,7 @@ public class SystemSmsCodeDTO implements Serializable {
 
     @Schema(description = "发送场景", requiredMode = Schema.RequiredMode.REQUIRED)
     @NotNull
+    @InEnum(SmsSceneEnum.class)
     private Integer scene;
 
     @Schema(description = "今日发送的第几条", requiredMode = Schema.RequiredMode.REQUIRED)
