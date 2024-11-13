@@ -5,6 +5,7 @@ import java.util.Date;
 import java.io.Serial;
 
 import com.ji.jichat.common.validation.InEnum;
+import com.ji.jichat.common.validation.Mobile;
 import com.ji.jichat.user.api.enums.SmsSceneEnum;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -35,19 +36,20 @@ public class SystemSmsCodeDTO implements Serializable {
     @NotNull
     private Long id;
 
-    @Schema(description = "手机号", requiredMode = Schema.RequiredMode.REQUIRED)
+    @Schema(description = "手机号", requiredMode = Schema.RequiredMode.REQUIRED,example = "18065132323")
     @NotBlank
+    @Mobile
     private String mobile;
 
-    @Schema(description = "验证码", requiredMode = Schema.RequiredMode.REQUIRED)
+    @Schema(description = "验证码", requiredMode = Schema.RequiredMode.REQUIRED,example = "123456")
     @NotBlank
     private String code;
 
-    @Schema(description = "创建 IP", requiredMode = Schema.RequiredMode.REQUIRED)
+    @Schema(description = "创建 IP", requiredMode = Schema.RequiredMode.REQUIRED,example = "192.168.137.88")
     @NotBlank
     private String createIp;
 
-    @Schema(description = "发送场景", requiredMode = Schema.RequiredMode.REQUIRED)
+    @Schema(description = "发送场景", requiredMode = Schema.RequiredMode.REQUIRED,example = "1")
     @NotNull
     @InEnum(SmsSceneEnum.class)
     private Integer scene;
@@ -61,11 +63,9 @@ public class SystemSmsCodeDTO implements Serializable {
     private Integer used;
 
     @Schema(description = "使用时间", requiredMode = Schema.RequiredMode.REQUIRED)
-    @NotNull
     private Date usedTime;
 
     @Schema(description = "使用 IP", requiredMode = Schema.RequiredMode.REQUIRED)
-    @NotBlank
     private String usedIp;
 
 
