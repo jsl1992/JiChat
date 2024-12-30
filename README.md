@@ -59,7 +59,7 @@ Is It Maintained 徽章：
 
 ## 项目部署
 ### (1)安装docker和docker-compose，安装组件
-请执行doc目录中的docker-compose.yml文件，以安装RabbitMQ、Nacos、MySQL、Redis等组件。如果Nacos安装失败，请确保在MySQL中初始化Nacos所需的nacos-db.sql文件数据。
+请执行doc目录中的docker-compose.yml文件，以安装RabbitMQ、Nacos、MySQL、Redis等组件。如果Nacos安装失败，请确保在MySQL中初始化Nacos所需的nacos-db.sql文件数据。(为解决docker镜像国内无法下载问题，这边镜像地址使用阿里云的个人仓库地址，个人仓库镜像公开都可以下载)
 ### (2)启动user-service-app和chat-service-app服务
 进行JiChat数据库的初始化，执行jichat_user.sql脚本。然后，修改user-service-app和chat-service-app服务的配置文件，确保连接到正确的RabbitMQ、Nacos、MySQL和Redis地址以及账号信息。最后，启动user-service-app和chat-service-app服务。
 ### (3)启动chat-client客户端
