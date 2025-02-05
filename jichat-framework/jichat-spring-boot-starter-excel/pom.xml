@@ -5,14 +5,13 @@
     <parent>
         <artifactId>jichat-framework</artifactId>
         <groupId>com.ji.jichat</groupId>
-        <version>2.0-SNAPSHOT</version>
+        <version>${revision}</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>jichat-spring-boot-starter-excel</artifactId>
     <version>${revision}</version>
     <dependencies>
-
 
         <!-- lombok 简化代码-->
         <dependency>
@@ -23,8 +22,7 @@
 
         <dependency>
             <groupId>com.ji.jichat</groupId>
-            <artifactId>user-service-api</artifactId>
-            <version>${revision}</version>
+            <artifactId>jichat-spring-boot-starter-mybatis</artifactId>
             <optional>true</optional>
         </dependency>
 
@@ -36,7 +34,6 @@
             <groupId>jakarta.servlet</groupId>
             <artifactId>jakarta.servlet-api</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>

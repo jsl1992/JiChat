@@ -116,7 +116,11 @@
                 <artifactId>jichat-spring-boot-starter-web</artifactId>
                 <version>${revision}</version>
             </dependency>
-
+            <dependency>
+                <groupId>com.ji.jichat</groupId>
+                <artifactId>jichat-spring-boot-starter-excel</artifactId>
+                <version>${revision}</version>
+            </dependency>
 
             <!-- DB 相关 -->
             <dependency>

@@ -37,6 +37,11 @@
             <groupId>com.ji.jichat</groupId>
             <artifactId>jichat-spring-boot-starter-mybatis</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>com.ji.jichat</groupId>
+            <artifactId>jichat-spring-boot-starter-excel</artifactId>
+        </dependency>
         <dependency>
             <groupId>com.ji.jichat</groupId>
             <artifactId>jichat-spring-boot-starter-swagger</artifactId>
@@ -46,6 +51,8 @@
             <artifactId>jichat-mybatis-gen</artifactId>
             <scope>test</scope>
         </dependency>
+
+
 
         <!-- Spring AMQP -->
         <dependency>
@@ -89,6 +96,7 @@
             <artifactId>mockito-core</artifactId>
             <scope>test</scope>
         </dependency>
+
 
     </dependencies>
 

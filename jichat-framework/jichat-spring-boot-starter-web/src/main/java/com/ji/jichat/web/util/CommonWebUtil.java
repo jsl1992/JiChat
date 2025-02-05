@@ -6,6 +6,8 @@ import com.ji.jichat.web.core.constant.TraceSpanContext;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.http.HttpServletRequest;
 
+import java.util.Objects;
+
 
 public class CommonWebUtil {
 
@@ -24,7 +26,8 @@ public class CommonWebUtil {
     }
 
     public static long getAccessStartTime(HttpServletRequest request) {
-        return (long) request.getAttribute(CommonWebConstants.REQUEST_ATTR_ACCESS_START_TIME);
+        final Object requestAttribute = request.getAttribute(CommonWebConstants.REQUEST_ATTR_ACCESS_START_TIME);
+        return Objects.isNull(requestAttribute) ? System.currentTimeMillis() : (long) requestAttribute;
     }
 
 
