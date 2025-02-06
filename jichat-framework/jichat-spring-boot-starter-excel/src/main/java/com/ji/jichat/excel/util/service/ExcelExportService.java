@@ -20,7 +20,7 @@ public class ExcelExportService<T> {
     /**
      * 每次查询的默认分页大小
      **/
-    private static final int DEFAULT_PAGE_SIZE = 3000;
+    private static final int DEFAULT_PAGE_SIZE = 5000;
 
     /**
      * 导出excel
@@ -34,7 +34,7 @@ public class ExcelExportService<T> {
         // 获取总记录数
         final StopWatch stopWatch = new StopWatch("导出开始:" + fileName);
         stopWatch.start("总数查询");
-        final long totalRecords = JiPageHelper.doSelectPageInfo(new PageDTO(1, DEFAULT_PAGE_SIZE), query).getTotal();
+        final long totalRecords = JiPageHelper.doSelectPageInfo(new PageDTO(1, 10), query).getTotal();
         final long totalPages = (totalRecords + DEFAULT_PAGE_SIZE - 1) / DEFAULT_PAGE_SIZE;
         log.info("导出totalRecords=%s,totalPages=%s", totalRecords, totalPages);
         stopWatch.stop();
