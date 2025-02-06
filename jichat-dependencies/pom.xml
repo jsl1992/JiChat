@@ -44,6 +44,7 @@
         <sentry.version>1.7.30</sentry.version>
         <!-- poi相关 -->
         <easyexcel.verion>4.0.3</easyexcel.verion>
+        <commons-io.verion>2.14.0</commons-io.verion>
         <!--        netty-->
         <netty.version>4.1.112.Final</netty.version>
         <!-- 工具类相关 -->
@@ -201,7 +202,11 @@
                 <artifactId>easyexcel</artifactId>
                 <version>${easyexcel.verion}</version>
             </dependency>
-
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${commons-io.verion}</version>
+            </dependency>
 
             <!-- 工具类相关 -->
             <dependency>
