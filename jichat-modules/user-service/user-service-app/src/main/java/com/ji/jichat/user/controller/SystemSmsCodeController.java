@@ -3,7 +3,10 @@ package com.ji.jichat.user.controller;
 import com.ji.jichat.common.pojo.CommonResult;
 import com.ji.jichat.common.pojo.PageDTO;
 import com.ji.jichat.common.pojo.PageVO;
+import com.ji.jichat.excel.util.service.ExcelExportService;
 import com.ji.jichat.mybatis.util.JiPageHelper;
+import com.ji.jichat.user.excel.SystemSmsCodeExcelVO;
+import com.ji.jichat.web.util.HttpContextUtil;
 import org.springframework.web.bind.annotation.RequestMapping;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -45,6 +48,14 @@ public class SystemSmsCodeController {
     public CommonResult<PageVO<SystemSmsCodeVO>> page(SystemSmsCodePageDTO dto, PageDTO pageDTO) {
         final PageVO<SystemSmsCodeVO> pageVO = JiPageHelper.doSelectPageInfo(pageDTO, () -> systemSmsCodeService.page(dto));
         return CommonResult.success(pageVO);
+    }
+
+    @Operation(summary ="导出")
+    @GetMapping("/exportDataToExcel")
+    public void exportDataToExcel() {
+        ExcelExportService excelExportService=new ExcelExportService();
+        final SystemSmsCodePageDTO dto = SystemSmsCodePageDTO.builder().build();
+        excelExportService.exportToExcel(HttpContextUtil.getHttpServletResponse(),"手机验证码导出测试", () -> systemSmsCodeService.page(dto), SystemSmsCodeExcelVO.class);
     }
 
     /**

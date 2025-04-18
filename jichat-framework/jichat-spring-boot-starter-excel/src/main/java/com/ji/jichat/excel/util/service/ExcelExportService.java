@@ -8,9 +8,13 @@ import com.github.pagehelper.ISelect;
 import com.ji.jichat.common.pojo.PageDTO;
 import com.ji.jichat.common.pojo.PageVO;
 import com.ji.jichat.mybatis.util.JiPageHelper;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.net.URLEncoder;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -31,6 +35,12 @@ public class ExcelExportService<T> {
      * @author jisl on 2025/2/6 14:58
      **/
     public void exportToExcel(String fileName, ISelect query, Class<T> dataModelClass) {
+        exportToExcel(null, fileName, query, dataModelClass);
+    }
+
+
+    public void exportToExcel(HttpServletResponse response, String fileName, ISelect query, Class<T> dataModelClass) {
+
         // 获取总记录数
         final StopWatch stopWatch = new StopWatch("导出开始:" + fileName);
         stopWatch.start("总数查询");
@@ -40,7 +50,7 @@ public class ExcelExportService<T> {
         stopWatch.stop();
         stopWatch.start("分页导出");
         // 创建 ExcelWriter 对象
-        final ExcelWriter excelWriter = EasyExcel.write(fileName).build();
+        final ExcelWriter excelWriter = getExcelWriter(response, fileName);
         // 分页查询并写入数据
         for (int currentPage = 1; currentPage <= totalPages; currentPage++) {
             // 分页查询数据
@@ -53,5 +63,17 @@ public class ExcelExportService<T> {
         excelWriter.finish();
         stopWatch.stop();
         log.info("导出用时:" + stopWatch.prettyPrint(TimeUnit.MILLISECONDS));
+    }
+
+    @SneakyThrows
+    private ExcelWriter getExcelWriter(HttpServletResponse response, String fileName) {
+        if (Objects.nonNull(response)) {
+            response.setContentType("application/vnd.ms-excel");
+            response.setCharacterEncoding("utf-8");
+            response.setHeader("Content-disposition", "attachment;filename=" + URLEncoder.encode(fileName, "UTF-8") + ".xlsx");
+            return EasyExcel.write(response.getOutputStream()).build();
+        } else {
+            return EasyExcel.write(fileName).build();
+        }
     }
 }
