@@ -18,12 +18,12 @@ public class ExcelExportServiceTest {
     @Autowired
     private ISystemSmsCodeService systemSmsCodeService;
 
-//    @Autowired
-//    private ExcelExportService excelExportService;
+    @Autowired
+    private ExcelExportService excelExportService;
 
     @Test
     public void exportDataToExcel() {
-        ExcelExportService excelExportService=new ExcelExportService();
+//        ExcelExportService excelExportService=new ExcelExportService();
         final SystemSmsCodePageDTO dto = SystemSmsCodePageDTO.builder().build();
         excelExportService.exportToExcel("C:\\Newand\\file\\导出测试.xlsx", () -> systemSmsCodeService.page(dto), SystemSmsCodeExcelVO.class);
     }
