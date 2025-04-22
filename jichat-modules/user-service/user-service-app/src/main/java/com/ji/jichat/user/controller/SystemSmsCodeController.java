@@ -1,27 +1,25 @@
 package com.ji.jichat.user.controller;
 
+import cn.hutool.core.lang.Assert;
 import com.ji.jichat.common.pojo.CommonResult;
 import com.ji.jichat.common.pojo.PageDTO;
 import com.ji.jichat.common.pojo.PageVO;
-import com.ji.jichat.excel.util.EasyExcelUtils;
 import com.ji.jichat.excel.util.service.ExcelExportService;
 import com.ji.jichat.mybatis.util.JiPageHelper;
+import com.ji.jichat.user.api.dto.SystemSmsCodeDTO;
+import com.ji.jichat.user.api.dto.SystemSmsCodePageDTO;
+import com.ji.jichat.user.api.vo.SystemSmsCodeVO;
+import com.ji.jichat.user.convert.SystemSmsCodeConvert;
 import com.ji.jichat.user.excel.SystemSmsCodeExcelVO;
+import com.ji.jichat.user.service.ISystemSmsCodeService;
 import com.ji.jichat.web.util.HttpContextUtil;
-import org.springframework.web.bind.annotation.RequestMapping;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import com.ji.jichat.user.service.ISystemSmsCodeService;
-import com.ji.jichat.user.api.dto.SystemSmsCodeDTO;
-import com.ji.jichat.user.api.dto.SystemSmsCodePageDTO;
-import com.ji.jichat.user.api.vo.SystemSmsCodeVO;
-import com.ji.jichat.user.convert.SystemSmsCodeConvert;
+
 import java.util.List;
-import cn.hutool.core.lang.Assert;
-import org.springframework.web.bind.annotation.RestController;
 
 /**
  * <p>
@@ -37,7 +35,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class SystemSmsCodeController {
 
 
-
     @Resource
     private ISystemSmsCodeService systemSmsCodeService;
 
@@ -45,37 +42,28 @@ public class SystemSmsCodeController {
     private ExcelExportService excelExportService;
 
     /**
-    * 分页查询手机验证码
-    */
-    @Operation(summary ="分页查询手机验证码")
+     * 分页查询手机验证码
+     */
+    @Operation(summary = "分页查询手机验证码")
     @GetMapping("/page")
     public CommonResult<PageVO<SystemSmsCodeVO>> page(SystemSmsCodePageDTO dto, PageDTO pageDTO) {
         final PageVO<SystemSmsCodeVO> pageVO = JiPageHelper.doSelectPageInfo(pageDTO, () -> systemSmsCodeService.page(dto));
         return CommonResult.success(pageVO);
     }
 
-    @Operation(summary ="导出")
+    @Operation(summary = "导出")
     @GetMapping("/exportDataToExcel")
     public void exportDataToExcel() {
 //        ExcelExportService excelExportService=new ExcelExportService();
         final SystemSmsCodePageDTO dto = SystemSmsCodePageDTO.builder().build();
-        excelExportService.exportToExcel(HttpContextUtil.getHttpServletResponse(),"手机验证码导出测试", () -> systemSmsCodeService.page(dto), SystemSmsCodeExcelVO.class);
+        excelExportService.exportToExcel(HttpContextUtil.getHttpServletResponse(), "手机验证码导出测试", () -> systemSmsCodeService.page(dto), SystemSmsCodeExcelVO.class);
     }
 
-    @Operation(summary ="导出Util")
-    @GetMapping("/exportDataToExcelUtil")
-    public void exportDataToExcelUtil() {
-//        ExcelExportService excelExportService=new ExcelExportService();
-        final SystemSmsCodePageDTO dto = SystemSmsCodePageDTO.builder().build();
-//        excelExportService.exportToExcel(HttpContextUtil.getHttpServletResponse(),"手机验证码导出测试", () -> systemSmsCodeService.page(dto), SystemSmsCodeExcelVO.class);
-
-        EasyExcelUtils.download(HttpContextUtil.getHttpServletResponse(), "手机验证码导出测试Util", systemSmsCodeService.page(dto));
-    }
 
     /**
-    * 列表查询手机验证码
-    */
-    @Operation(summary ="列表查询手机验证码")
+     * 列表查询手机验证码
+     */
+    @Operation(summary = "列表查询手机验证码")
     @GetMapping("/list")
     public CommonResult<List<SystemSmsCodeVO>> list(SystemSmsCodeDTO dto) {
         return CommonResult.success(SystemSmsCodeConvert.INSTANCE.convertList(systemSmsCodeService.list(dto)));
@@ -83,39 +71,39 @@ public class SystemSmsCodeController {
 
 
     /**
-    * 获取手机验证码详情
-    */
-    @Operation(summary ="获取手机验证码详情")
+     * 获取手机验证码详情
+     */
+    @Operation(summary = "获取手机验证码详情")
     @GetMapping(value = "/{id}")
     public CommonResult<SystemSmsCodeVO> getDetail(@PathVariable("id") Long id) {
         return CommonResult.success(systemSmsCodeService.getDetail(id));
     }
 
-     /**
+    /**
      * 新增手机验证码
      */
-     @Operation(summary ="新增手机验证码")
-     @PostMapping(value = "/add")
-     public CommonResult<Void> add(@RequestBody @Validated SystemSmsCodeDTO systemSmsCodeDTO) {
+    @Operation(summary = "新增手机验证码")
+    @PostMapping(value = "/add")
+    public CommonResult<Void> add(@RequestBody @Validated SystemSmsCodeDTO systemSmsCodeDTO) {
         systemSmsCodeService.add(systemSmsCodeDTO);
         return CommonResult.success();
-     }
+    }
 
     /**
-    * 修改手机验证码
-    */
-    @Operation(summary ="修改手机验证码")
+     * 修改手机验证码
+     */
+    @Operation(summary = "修改手机验证码")
     @PutMapping(value = "/update")
     public CommonResult<Void> update(@RequestBody @Validated SystemSmsCodeDTO systemSmsCodeDTO) {
-         Assert.notNull(systemSmsCodeDTO.getId(), "id不能为空");
+        Assert.notNull(systemSmsCodeDTO.getId(), "id不能为空");
         systemSmsCodeService.update(systemSmsCodeDTO);
         return CommonResult.success();
     }
 
     /**
-    * 删除手机验证码
-    */
-    @Operation(summary ="删除手机验证码")
+     * 删除手机验证码
+     */
+    @Operation(summary = "删除手机验证码")
     @DeleteMapping("/{id}")
     public CommonResult<Void> delete(@PathVariable Long id) {
         systemSmsCodeService.delete(id);
