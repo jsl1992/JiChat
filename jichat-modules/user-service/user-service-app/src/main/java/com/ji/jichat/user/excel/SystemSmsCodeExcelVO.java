@@ -2,8 +2,10 @@ package com.ji.jichat.user.excel;
 
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.ji.jichat.common.annotions.RequiresNone;
+import com.ji.jichat.excel.util.annotations.DictFormat;
 import com.ji.jichat.excel.util.annotations.KeyValueConverterProperty;
 import com.ji.jichat.excel.util.annotations.TypeEnumProperty;
+import com.ji.jichat.excel.util.converter.DictConvert;
 import com.ji.jichat.excel.util.converter.KeyValueConverter;
 import com.ji.jichat.excel.util.converter.TypeEnumConverter;
 import com.ji.jichat.user.api.enums.SmsSceneEnum;
@@ -60,7 +62,9 @@ public class SystemSmsCodeExcelVO implements Serializable {
     @TypeEnumProperty(value = SmsSceneEnum.class)
     @Schema(description = "发送场景")
     @NotNull
-    @ExcelProperty(converter = TypeEnumConverter.class)
+//    @ExcelProperty(converter = DictConvert.class)
+//    @ExcelProperty(value = "回款方式", converter = DictConvert.class)
+//    @DictFormat(DictTypeConstants.CRM_RECEIVABLE_RETURN_TYPE)
     private Integer scene;
 
     @Schema(description = "今日发送的第几条")
@@ -71,7 +75,8 @@ public class SystemSmsCodeExcelVO implements Serializable {
 
     @Schema(description = "是否使用")
     @NotNull
-    @ExcelProperty
+    @ExcelProperty(value = "是否使用", converter = DictConvert.class)
+    @DictFormat("system_sms_send_status")
     private Integer used;
 
     @Schema(description = "使用时间")

@@ -1,5 +1,6 @@
 package com.ji.jichat.user.service;
 
+import com.ji.jichat.common.pojo.CommonResult;
 import com.ji.jichat.user.entity.SystemDictData;
 import com.ji.jichat.user.api.dto.SystemDictDataDTO;
 import com.ji.jichat.user.api.dto.SystemDictDataPageDTO;
@@ -62,4 +63,6 @@ public interface ISystemDictDataService extends IService<SystemDictData> {
     * @param  id 主键
     */
     void delete(Long id);
+
+   SystemDictDataVO getDictData(String dictType, String value);
 }

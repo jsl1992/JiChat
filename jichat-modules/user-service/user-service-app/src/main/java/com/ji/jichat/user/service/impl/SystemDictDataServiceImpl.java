@@ -11,7 +11,9 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.util.Assert;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+
 import java.util.List;
+
 /**
  * <p>
  * 字典数据表 服务实现类
@@ -33,27 +35,34 @@ public class SystemDictDataServiceImpl extends ServiceImpl<SystemDictDataMapper,
         return list(new LambdaQueryWrapper<>(SystemDictDataConvert.INSTANCE.convert(dto)));
     }
 
-   @Override
-   public SystemDictDataVO getDetail(Long id) {
-       return SystemDictDataConvert.INSTANCE.convert(getById(id));
-   }
+    @Override
+    public SystemDictDataVO getDetail(Long id) {
+        return SystemDictDataConvert.INSTANCE.convert(getById(id));
+    }
 
-   @Override
-   public void add(SystemDictDataDTO systemDictDataDTO) {
+    @Override
+    public void add(SystemDictDataDTO systemDictDataDTO) {
         final SystemDictData systemDictData = SystemDictDataConvert.INSTANCE.convert(systemDictDataDTO);
         save(systemDictData);
-   }
+    }
 
-   @Override
-   public void update(SystemDictDataDTO systemDictDataDTO) {
+    @Override
+    public void update(SystemDictDataDTO systemDictDataDTO) {
         final SystemDictData systemDictData = SystemDictDataConvert.INSTANCE.convert(systemDictDataDTO);
         final SystemDictData oldSystemDictData = getById(systemDictDataDTO.getId());
         Assert.notNull(oldSystemDictData, "对象不存在");
         updateById(systemDictData);
-   }
+    }
 
-   @Override
-   public void delete(Long id) {
+    @Override
+    public void delete(Long id) {
         removeById(id);
-   }
+    }
+
+    @Override
+    public SystemDictDataVO getDictData(String dictType, String value) {
+        final SystemDictData systemDictData = getOne(new LambdaQueryWrapper<>(SystemDictData.builder()
+                .dictType(dictType).value(value).build()));
+        return SystemDictDataConvert.INSTANCE.convert(systemDictData);
+    }
 }
