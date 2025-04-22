@@ -31,7 +31,7 @@ public class ExcelExportServiceTest {
 
     @Test
     public void add() {
-        for (int i=0;i<100000;i++){
+        for (int i=0;i<100;i++){
             final SystemSmsCodeDTO dto = SystemSmsCodeDTO.builder()
                     .mobile("1"+RandomUtil.randomNumbers(10)).code(RandomUtil.randomNumbers(6))
                     .createIp("192.168.137.88").scene(RandomUtil.randomInt(6)).todayIndex(1)

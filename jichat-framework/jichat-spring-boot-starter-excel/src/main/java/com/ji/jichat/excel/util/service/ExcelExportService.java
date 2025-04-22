@@ -1,5 +1,6 @@
 package com.ji.jichat.excel.util.service;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.date.StopWatch;
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.ExcelWriter;
@@ -14,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.net.URLEncoder;
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
@@ -57,7 +59,8 @@ public class ExcelExportService<T> {
             final PageVO<T> pageVO = JiPageHelper.doSelectPageInfo(new PageDTO(currentPage, DEFAULT_PAGE_SIZE), query);
             // 写入数据到当前页的Sheet
             WriteSheet writeSheet = EasyExcel.writerSheet("Sheet " + currentPage).head(dataModelClass).build();
-            excelWriter.write(pageVO.getList(), writeSheet);
+            final List<T> list = BeanUtil.copyToList(pageVO.getList(), dataModelClass);
+            excelWriter.write(list, writeSheet);
         }
         // 完成写入
         excelWriter.finish();

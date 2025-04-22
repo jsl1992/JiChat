@@ -1,6 +1,12 @@
 package com.ji.jichat.user.excel;
 
 import com.alibaba.excel.annotation.ExcelProperty;
+import com.ji.jichat.common.annotions.RequiresNone;
+import com.ji.jichat.excel.util.annotations.KeyValueConverterProperty;
+import com.ji.jichat.excel.util.annotations.TypeEnumProperty;
+import com.ji.jichat.excel.util.converter.KeyValueConverter;
+import com.ji.jichat.excel.util.converter.TypeEnumConverter;
+import com.ji.jichat.user.api.enums.SmsSceneEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -50,14 +56,17 @@ public class SystemSmsCodeExcelVO implements Serializable {
     @ExcelProperty
     private String createIp;
 
+
+    @TypeEnumProperty(value = SmsSceneEnum.class)
     @Schema(description = "发送场景")
     @NotNull
-    @ExcelProperty
+    @ExcelProperty(converter = TypeEnumConverter.class)
     private Integer scene;
 
     @Schema(description = "今日发送的第几条")
     @NotNull
-    @ExcelProperty
+//    @ExcelProperty(converter = KeyValueConverter.class)
+//    @KeyValueConverterProperty(value = "1=一、2=二")
     private Integer todayIndex;
 
     @Schema(description = "是否使用")

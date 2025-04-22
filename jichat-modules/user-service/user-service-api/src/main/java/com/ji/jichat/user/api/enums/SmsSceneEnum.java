@@ -5,8 +5,7 @@ public enum SmsSceneEnum {
     MEMBER_UPDATE_MOBILE(2,  "会员用户 - 修改手机"),
     MEMBER_UPDATE_PASSWORD(3, "会员用户 - 修改密码"),
     MEMBER_RESET_PASSWORD(4,  "会员用户 - 忘记密码"),
-
-    ADMIN_MEMBER_LOGIN(21,  "后台用户 - 手机号登录");
+    ADMIN_MEMBER_LOGIN(5,  "后台用户 - 手机号登录");
 
     private final int code;
     private final String name;

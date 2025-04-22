@@ -3,6 +3,7 @@ package com.ji.jichat.user.controller;
 import com.ji.jichat.common.pojo.CommonResult;
 import com.ji.jichat.common.pojo.PageDTO;
 import com.ji.jichat.common.pojo.PageVO;
+import com.ji.jichat.excel.util.EasyExcelUtils;
 import com.ji.jichat.excel.util.service.ExcelExportService;
 import com.ji.jichat.mybatis.util.JiPageHelper;
 import com.ji.jichat.user.excel.SystemSmsCodeExcelVO;
@@ -59,6 +60,16 @@ public class SystemSmsCodeController {
 //        ExcelExportService excelExportService=new ExcelExportService();
         final SystemSmsCodePageDTO dto = SystemSmsCodePageDTO.builder().build();
         excelExportService.exportToExcel(HttpContextUtil.getHttpServletResponse(),"手机验证码导出测试", () -> systemSmsCodeService.page(dto), SystemSmsCodeExcelVO.class);
+    }
+
+    @Operation(summary ="导出Util")
+    @GetMapping("/exportDataToExcelUtil")
+    public void exportDataToExcelUtil() {
+//        ExcelExportService excelExportService=new ExcelExportService();
+        final SystemSmsCodePageDTO dto = SystemSmsCodePageDTO.builder().build();
+//        excelExportService.exportToExcel(HttpContextUtil.getHttpServletResponse(),"手机验证码导出测试", () -> systemSmsCodeService.page(dto), SystemSmsCodeExcelVO.class);
+
+        EasyExcelUtils.download(HttpContextUtil.getHttpServletResponse(), "手机验证码导出测试Util", systemSmsCodeService.page(dto));
     }
 
     /**

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ji.jichat.user.mapper.SystemDictDataMapper">
+
+    <select id="page" parameterType="com.ji.jichat.user.api.dto.SystemDictDataPageDTO" resultType="com.ji.jichat.user.api.vo.SystemDictDataVO">
+        SELECT
+        id,
+        sort,
+        label,
+        value,
+        dict_type,
+        status,
+        color_type,
+        css_class,
+        remark,
+        creator,
+        updater,
+        deleted
+        FROM system_dict_data
+        <where>
+            <if test="id != null">
+                AND id= #{id}
+            </if>
+            <if test="sort != null">
+                AND sort= #{sort}
+            </if>
+            <if test="label != null and label != ''">
+                AND label LIKE concat('%', #{label}, '%')
+            </if>
+            <if test="value != null and value != ''">
+                AND value LIKE concat('%', #{value}, '%')
+            </if>
+            <if test="dictType != null and dictType != ''">
+                AND dict_type LIKE concat('%', #{dictType}, '%')
+            </if>
+            <if test="status != null">
+                AND status= #{status}
+            </if>
+            <if test="colorType != null and colorType != ''">
+                AND color_type LIKE concat('%', #{colorType}, '%')
+            </if>
+            <if test="cssClass != null and cssClass != ''">
+                AND css_class LIKE concat('%', #{cssClass}, '%')
+            </if>
+            <if test="remark != null and remark != ''">
+                AND remark LIKE concat('%', #{remark}, '%')
+            </if>
+            <if test="creator != null and creator != ''">
+                AND creator LIKE concat('%', #{creator}, '%')
+            </if>
+            <if test="updater != null and updater != ''">
+                AND updater LIKE concat('%', #{updater}, '%')
+            </if>
+            <if test="deleted != null">
+                AND deleted= #{deleted}
+            </if>
+        </where>
+        ORDER BY id DESC
+    </select>
+</mapper>
