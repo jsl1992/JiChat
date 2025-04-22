@@ -19,6 +19,7 @@ import java.util.Optional;
  *
  * @author jishenglong on 2019/11/28 16:14
  **/
+@Deprecated
 public class TypeEnumConverter implements Converter<Integer> {
 
 
