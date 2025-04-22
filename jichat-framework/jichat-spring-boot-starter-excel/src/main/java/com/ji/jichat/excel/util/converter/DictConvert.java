@@ -34,7 +34,7 @@ public class DictConvert implements Converter<Object> {
     public Object convertToJavaData(ReadCellData readCellData, ExcelContentProperty contentProperty,
                                     GlobalConfiguration globalConfiguration) {
         // 使用字典解析
-        String type = getType(contentProperty);
+        String type = getDictType(contentProperty);
         String label = readCellData.getStringValue();
         String value = DictFrameworkUtils.parseDictDataValue(type, label);
         if (value == null) {
@@ -55,18 +55,18 @@ public class DictConvert implements Converter<Object> {
         }
 
         // 使用字典格式化
-        String type = getType(contentProperty);
+        String dictType = getDictType(contentProperty);
         String value = String.valueOf(object);
-        String label = DictFrameworkUtils.getDictDataLabel(type, value);
+        String label = DictFrameworkUtils.getDictDataLabel(dictType, value);
         if (label == null) {
-            log.error("[convertToExcelData][type({}) 转换不了 label({})]", type, value);
+            log.error("[convertToExcelData][type({}) 转换不了 label({})]", dictType, value);
             return new WriteCellData<>("");
         }
         // 生成 Excel 小表格
         return new WriteCellData<>(label);
     }
 
-    private static String getType(ExcelContentProperty contentProperty) {
+    private static String getDictType(ExcelContentProperty contentProperty) {
         return contentProperty.getField().getAnnotation(DictFormat.class).value();
     }
 
