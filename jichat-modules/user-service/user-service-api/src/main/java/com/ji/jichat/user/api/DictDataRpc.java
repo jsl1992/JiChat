@@ -21,8 +21,8 @@ public interface DictDataRpc {
     @GetMapping("/getDictData")
     @Operation(summary = "获得指定的字典数据")
     @Parameters({
-            @Parameter(name = "dictType", description = "字典类型", example = "SEX", required = true),
-            @Parameter(name = "description", description = "字典数据值", example = "1", required = true)
+            @Parameter(name = "dictType", description = "字典类型", example = "system_user_sex", required = true),
+            @Parameter(name = "value", description = "字典数据值", example = "1", required = true)
     })
     CommonResult<SystemDictDataVO> getDictData(@RequestParam("dictType") String dictType,
                                                @RequestParam("value") String value);

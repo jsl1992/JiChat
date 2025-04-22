@@ -9,8 +9,6 @@
         type,
         status,
         remark,
-        creator,
-        updater,
         deleted,
         deleted_time
         FROM system_dict_type
@@ -29,12 +27,6 @@
             </if>
             <if test="remark != null and remark != ''">
                 AND remark LIKE concat('%', #{remark}, '%')
-            </if>
-            <if test="creator != null and creator != ''">
-                AND creator LIKE concat('%', #{creator}, '%')
-            </if>
-            <if test="updater != null and updater != ''">
-                AND updater LIKE concat('%', #{updater}, '%')
             </if>
             <if test="deleted != null">
                 AND deleted= #{deleted}

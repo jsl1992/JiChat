@@ -13,8 +13,6 @@
         color_type,
         css_class,
         remark,
-        creator,
-        updater,
         deleted
         FROM system_dict_data
         <where>
@@ -44,12 +42,6 @@
             </if>
             <if test="remark != null and remark != ''">
                 AND remark LIKE concat('%', #{remark}, '%')
-            </if>
-            <if test="creator != null and creator != ''">
-                AND creator LIKE concat('%', #{creator}, '%')
-            </if>
-            <if test="updater != null and updater != ''">
-                AND updater LIKE concat('%', #{updater}, '%')
             </if>
             <if test="deleted != null">
                 AND deleted= #{deleted}

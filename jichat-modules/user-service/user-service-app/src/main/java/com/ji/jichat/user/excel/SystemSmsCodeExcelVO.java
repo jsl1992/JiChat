@@ -63,7 +63,6 @@ public class SystemSmsCodeExcelVO implements Serializable {
     @Schema(description = "发送场景")
     @NotNull
 //    @ExcelProperty(converter = DictConvert.class)
-//    @ExcelProperty(value = "回款方式", converter = DictConvert.class)
 //    @DictFormat(DictTypeConstants.CRM_RECEIVABLE_RETURN_TYPE)
     private Integer scene;
 

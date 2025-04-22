@@ -43,12 +43,6 @@ public class SystemDictType extends BaseDO {
     @Schema(description = "备注")
     private String remark;
 
-    @Schema(description = "创建者")
-    private String creator;
-
-    @Schema(description = "更新者")
-    private String updater;
-
     @Schema(description = "是否删除")
     private Boolean deleted;
 
