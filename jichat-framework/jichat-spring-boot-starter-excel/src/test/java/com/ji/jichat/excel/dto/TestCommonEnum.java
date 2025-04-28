@@ -1,4 +1,4 @@
-package com.ji.jichat.excel.util.dto;
+package com.ji.jichat.excel.dto;
 
 /**
  * 公用enum

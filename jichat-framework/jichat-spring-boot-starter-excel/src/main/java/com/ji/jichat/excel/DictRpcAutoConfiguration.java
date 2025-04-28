@@ -1,4 +1,4 @@
-package com.ji.jichat.excel.util;
+package com.ji.jichat.excel;
 
 import com.ji.jichat.user.api.DictDataRpc;
 import org.springframework.boot.autoconfigure.AutoConfiguration;

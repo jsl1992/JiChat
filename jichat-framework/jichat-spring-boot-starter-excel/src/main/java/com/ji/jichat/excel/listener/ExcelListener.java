@@ -1,11 +1,11 @@
-package com.ji.jichat.excel.util.listener;
+package com.ji.jichat.excel.listener;
 
 
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.alibaba.excel.context.AnalysisContext;
 import com.alibaba.excel.event.AnalysisEventListener;
 import com.google.common.collect.Maps;
-import com.ji.jichat.excel.util.dto.ExcelImportResult;
+import com.ji.jichat.excel.dto.ExcelImportResult;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;

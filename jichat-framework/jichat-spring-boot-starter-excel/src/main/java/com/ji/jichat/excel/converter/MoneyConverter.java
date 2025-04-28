@@ -1,4 +1,4 @@
-package com.ji.jichat.excel.util.converter;
+package com.ji.jichat.excel.converter;
 
 import com.alibaba.excel.converters.Converter;
 import com.alibaba.excel.enums.CellDataTypeEnum;

@@ -1,11 +1,11 @@
-package com.ji.jichat.excel.util.dto;
+package com.ji.jichat.excel.dto;
 
 import com.alibaba.excel.annotation.ExcelProperty;
-import com.ji.jichat.excel.util.annotations.KeyValueConverterProperty;
-import com.ji.jichat.excel.util.annotations.TypeEnumProperty;
-import com.ji.jichat.excel.util.converter.KeyValueConverter;
-import com.ji.jichat.excel.util.converter.MoneyConverter;
-import com.ji.jichat.excel.util.converter.TypeEnumConverter;
+import com.ji.jichat.excel.annotations.KeyValueConverterProperty;
+import com.ji.jichat.excel.annotations.TypeEnumProperty;
+import com.ji.jichat.excel.converter.KeyValueConverter;
+import com.ji.jichat.excel.converter.MoneyConverter;
+import com.ji.jichat.excel.converter.TypeEnumConverter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,1 +1,2 @@
-com.ji.jichat.excel.util.ExcelExportAutoConfiguration
+com.ji.jichat.excel.ExcelExportAutoConfiguration
+com.ji.jichat.excel.DictRpcAutoConfiguration

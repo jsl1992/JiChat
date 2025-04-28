@@ -4,7 +4,7 @@ import cn.hutool.core.lang.Assert;
 import com.ji.jichat.common.pojo.CommonResult;
 import com.ji.jichat.common.pojo.PageDTO;
 import com.ji.jichat.common.pojo.PageVO;
-import com.ji.jichat.excel.util.service.ExcelExportService;
+import com.ji.jichat.excel.util.ExcelUtil;
 import com.ji.jichat.mybatis.util.JiPageHelper;
 import com.ji.jichat.user.api.dto.SystemSmsCodeDTO;
 import com.ji.jichat.user.api.dto.SystemSmsCodePageDTO;
@@ -38,8 +38,6 @@ public class SystemSmsCodeController {
     @Resource
     private ISystemSmsCodeService systemSmsCodeService;
 
-    @Resource
-    private ExcelExportService excelExportService;
 
     /**
      * 分页查询手机验证码
@@ -54,9 +52,8 @@ public class SystemSmsCodeController {
     @Operation(summary = "导出")
     @GetMapping("/exportDataToExcel")
     public void exportDataToExcel() {
-//        ExcelExportService excelExportService=new ExcelExportService();
         final SystemSmsCodePageDTO dto = SystemSmsCodePageDTO.builder().build();
-        excelExportService.exportToExcel(HttpContextUtil.getHttpServletResponse(), "手机验证码导出测试", () -> systemSmsCodeService.page(dto), SystemSmsCodeExcelVO.class);
+        ExcelUtil.exportToExcel(HttpContextUtil.getHttpServletResponse(), "手机验证码导出测试", () -> systemSmsCodeService.page(dto), SystemSmsCodeExcelVO.class);
     }
 
 

@@ -1,13 +1,9 @@
 package com.ji.jichat.user.excel;
 
 import com.alibaba.excel.annotation.ExcelProperty;
-import com.ji.jichat.common.annotions.RequiresNone;
-import com.ji.jichat.excel.util.annotations.DictFormat;
-import com.ji.jichat.excel.util.annotations.KeyValueConverterProperty;
-import com.ji.jichat.excel.util.annotations.TypeEnumProperty;
-import com.ji.jichat.excel.util.converter.DictConvert;
-import com.ji.jichat.excel.util.converter.KeyValueConverter;
-import com.ji.jichat.excel.util.converter.TypeEnumConverter;
+import com.ji.jichat.excel.annotations.DictFormat;
+import com.ji.jichat.excel.annotations.TypeEnumProperty;
+import com.ji.jichat.excel.converter.DictConvert;
 import com.ji.jichat.user.api.enums.SmsSceneEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;

@@ -1,4 +1,4 @@
-package com.ji.jichat.excel.util.annotations;
+package com.ji.jichat.excel.annotations;
 
 import java.lang.annotation.*;
 

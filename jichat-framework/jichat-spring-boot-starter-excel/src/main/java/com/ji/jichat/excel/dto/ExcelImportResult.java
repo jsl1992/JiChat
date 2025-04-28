@@ -1,4 +1,4 @@
-package com.ji.jichat.excel.util.dto;
+package com.ji.jichat.excel.dto;
 
 import com.google.common.collect.Lists;
 import lombok.AllArgsConstructor;

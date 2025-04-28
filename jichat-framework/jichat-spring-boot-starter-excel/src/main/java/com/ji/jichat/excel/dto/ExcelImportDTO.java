@@ -1,4 +1,4 @@
-package com.ji.jichat.excel.util.dto;
+package com.ji.jichat.excel.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
