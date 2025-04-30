@@ -4,6 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.date.StopWatch;
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.ExcelWriter;
+import com.alibaba.excel.annotation.ExcelProperty;
 import com.alibaba.excel.write.metadata.WriteSheet;
 import com.github.pagehelper.ISelect;
 import com.ji.jichat.common.pojo.PageDTO;
@@ -14,7 +15,9 @@ import lombok.SneakyThrows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.lang.reflect.Field;
 import java.net.URLEncoder;
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
@@ -55,7 +58,9 @@ public class ExcelUtil {
         StopWatch stopWatch = new StopWatch("导出开始: " + fileName);
         stopWatch.start("总数查询");
 
-        final long totalRecords = JiPageHelper.doSelectPageInfo(new PageDTO(1, 10), query).getTotal();
+        final PageVO<Object> objectPageVO = JiPageHelper.doSelectPageInfo(new PageDTO(1, 10), query);
+        final long totalRecords = objectPageVO.getTotal();
+        boolean hasExcelPropertyFlag = hasExcelProperty(objectPageVO);
         final long totalPages = (totalRecords + DEFAULT_PAGE_SIZE - 1) / DEFAULT_PAGE_SIZE;
 
         log.info("导出 totalRecords={}, totalPages={}", totalRecords, totalPages);
@@ -68,7 +73,8 @@ public class ExcelUtil {
         for (int currentPage = 1; currentPage <= totalPages; currentPage++) {
             PageVO<T> pageVO = JiPageHelper.doSelectPageInfo(new PageDTO(currentPage, DEFAULT_PAGE_SIZE), query);
             WriteSheet writeSheet = EasyExcel.writerSheet("Sheet " + currentPage).head(dataModelClass).build();
-            excelWriter.write(BeanUtil.copyToList(pageVO.getList(), dataModelClass), writeSheet);
+            final List<T> list = hasExcelPropertyFlag ? pageVO.getList() : BeanUtil.copyToList(pageVO.getList(), dataModelClass);
+            excelWriter.write(list, writeSheet);
         }
 
         excelWriter.finish();
@@ -87,5 +93,18 @@ public class ExcelUtil {
         } else {
             return EasyExcel.write(fileName).build();
         }
+    }
+
+    private static boolean hasExcelProperty(PageVO<Object> objectPageVO) {
+        if (objectPageVO.getTotal() < 1) {
+            return false;
+        }
+        Class<?> clazz = objectPageVO.getList().get(0).getClass();
+        for (Field field : clazz.getDeclaredFields()) {
+            if (field.isAnnotationPresent(ExcelProperty.class)) {
+                return true; // 一旦发现有注解，立即返回 true
+            }
+        }
+        return false; // 所有字段都没有注解
     }
 }
