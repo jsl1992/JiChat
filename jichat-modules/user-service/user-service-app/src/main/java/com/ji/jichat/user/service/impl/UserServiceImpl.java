@@ -130,7 +130,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     }
 
     @Override
-    @Transactional
     public void register(UserRegisterDTO dto) {
         final User dbUser = getOne(new LambdaQueryWrapper<User>().eq(User::getUsername, dto.getUsername()));
         if (Objects.nonNull(dbUser)) {

@@ -1,6 +1,7 @@
 package com.ji.jichat.user.controller;
 
 import com.ji.jichat.common.pojo.CommonResult;
+import com.ji.jichat.security.admin.core.context.UserContext;
 import com.ji.jichat.user.api.dto.UserRelationDTO;
 import com.ji.jichat.user.api.vo.UserRelationVO;
 import com.ji.jichat.user.service.IUserRelationService;
@@ -31,6 +32,7 @@ public class UserRelationController {
     @PostMapping("/addFriend")
     @Operation(summary = "添加朋友")
     public CommonResult<Void> addFriend(@RequestBody @Valid UserRelationDTO userRelationDTO) {
+        userRelationDTO.setUserId( UserContext.getUserId());
         userRelationService.addFriend(userRelationDTO);
         return CommonResult.success();
     }
