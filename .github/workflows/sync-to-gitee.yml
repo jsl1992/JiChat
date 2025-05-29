@@ -1,0 +1,27 @@
+name: Sync to Gitee
+
+on:
+  push:
+    branches:
+      - master  # 看你主分支名称
+  workflow_dispatch:  # 添加手动触发支持
+  
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repo
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # 关键点：禁用 shallow clone
+        
+      - name: Mirror push to Gitee
+        env:
+          GITEE_USERNAME: ${{ secrets.GITEE_USERNAME }}
+          GITEE_TOKEN: ${{ secrets.GITEE_TOKEN }}
+          GITEE_REPO: ${{ secrets.GITEE_REPO }}
+        run: |
+          git config --global user.name "${GITEE_USERNAME}"
+          git config --global user.email "${GITEE_USERNAME}@users.noreply.gitee.com"
+          git remote add gitee https://${GITEE_USERNAME}:${GITEE_TOKEN}@gitee.com/${GITEE_REPO}.git
+          git push gitee HEAD:master --force
